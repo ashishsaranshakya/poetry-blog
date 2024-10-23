@@ -4,26 +4,17 @@ import { db } from '../firebaseConfig';
 
 const AddPoemPage = () => {
   const [title, setTitle] = useState('');
-  const [lines, setLines] = useState(['']);
+  const [poemContent, setPoemContent] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const handleLineChange = (index, value) => {
-    const newLines = [...lines];
-    newLines[index] = value;
-    setLines(newLines);
-  };
-
-  const addNewLine = () => {
-    setLines([...lines, '']);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      const lines = poemContent.split('\n');
+
       const newPoem = {
-        id: Date.now().toString(),
         title,
         content: lines,
       };
@@ -32,7 +23,7 @@ const AddPoemPage = () => {
       await addDoc(poemsCollectionRef, newPoem);
 
       setTitle('');
-      setLines(['']);
+      setPoemContent('');
       alert('Poem added successfully!');
     } catch (error) {
       console.error('Error adding poem: ', error);
@@ -62,23 +53,14 @@ const AddPoemPage = () => {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Poem Content
           </label>
-          {lines.map((line, index) => (
-            <input
-              key={index}
-              type="text"
-              value={line}
-              onChange={(e) => handleLineChange(index, e.target.value)}
-              placeholder={`Line ${index + 1}`}
-              className="input-field w-full p-2 mb-2 border border-gray-300 rounded"
-            />
-          ))}
-          <button
-            type="button"
-            onClick={addNewLine}
-            className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-          >
-            Add Another Line
-          </button>
+          <textarea
+            value={poemContent}
+            onChange={(e) => setPoemContent(e.target.value)}
+            placeholder="Enter the poem content here, each line on a new line."
+            rows={6}
+            className="textarea-field w-full p-2 border border-gray-300 rounded"
+            required
+          />
         </div>
 
         <button
