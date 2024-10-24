@@ -3,7 +3,7 @@ import { PoemsContext } from '../context/PoemsContext';
 import LoadingSpinner from './LoadingSpinner';
 import { ThemeContext } from '../context/ThemeContext';
 
-const PoemDetail = ({ poem }) => {
+const PoemLongBox = ({ poem }) => {
   const { favorites, toggleFavorite, loading } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
 
@@ -23,10 +23,17 @@ const PoemDetail = ({ poem }) => {
         {isFavorite ? '❤️' : '🤍'}
       </button>
 
-      <h2 className="text-xl font-bold mb-4">{poem.title}</h2>
+      <h2 className="text-xl font-bold mb-2">{poem.title}</h2>
+
+      {!!poem.themes && poem.themes.length > 0 && (
+        <div className="mb-2">
+          <span className="font-bold">Themes:</span> {poem.themes.join(', ')}
+        </div>
+      )}
+
       <pre className="whitespace-pre-wrap">{poem.content.join('\n')}</pre>
     </div>
   );
 };
 
-export default PoemDetail;
+export default PoemLongBox;

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ThemeContext } from '../context/ThemeContext';
 import { PoemsContext } from '../context/PoemsContext';
 
-export const PoemBox = ({ poem }) => {
+export const PoemShortBox = ({ poem }) => {
   const { isDarkMode } = useContext(ThemeContext);
   const { favorites, toggleFavorite } = useContext(PoemsContext);
 
