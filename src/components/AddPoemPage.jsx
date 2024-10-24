@@ -9,6 +9,7 @@ const AddPoemPage = () => {
   const { theme } = useContext(ThemeContext);
   const [title, setTitle] = useState('');
   const [poemContent, setPoemContent] = useState('');
+  const [isFeatured, setIsFeatured] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -22,6 +23,8 @@ const AddPoemPage = () => {
       const newPoem = {
         title,
         content: lines,
+        isFeatured,
+        createdAt: new Date()
       };
 
       const poemsCollectionRef = collection(db, 'poems');
@@ -31,6 +34,7 @@ const AddPoemPage = () => {
 
       setTitle('');
       setPoemContent('');
+      setIsFeatured(false);
       alert('Poem added successfully!');
     } catch (error) {
       console.error('Error adding poem: ', error);
@@ -78,6 +82,18 @@ const AddPoemPage = () => {
             }`}
             required
           />
+        </div>
+
+        <div className="mb-4">
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              checked={isFeatured}
+              onChange={(e) => setIsFeatured(e.target.checked)}
+              className="mr-2"
+            />
+            <span>Mark as Featured Poem</span>
+          </label>
         </div>
 
         <button
