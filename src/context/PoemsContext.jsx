@@ -1,6 +1,6 @@
-import React, { createContext, useEffect, useState } from 'react';
-import { collection, getDocs, setDoc, doc, deleteDoc, onSnapshot } from 'firebase/firestore';
-import { db, auth } from '../firebaseConfig';
+import React, { createContext, useState, useEffect } from 'react';
+import { db } from '../firebaseConfig';
+import { collection, onSnapshot } from 'firebase/firestore';
 
 export const PoemsContext = createContext();
 
@@ -10,56 +10,34 @@ export const PoemsProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchPoems = async () => {
-      const poemsCollectionRef = collection(db, 'poems');
-      const unsubscribe = onSnapshot(poemsCollectionRef, (snapshot) => {
-        const poemsList = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setPoems(poemsList);
-        setLoading(false);
-      });
+    const unsubscribe = onSnapshot(collection(db, 'poems'), (snapshot) => {
+      const fetchedPoems = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setPoems(fetchedPoems);
+      setLoading(false);
+    });
 
-      return () => unsubscribe();
-    };
-
-    fetchPoems();
+    return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (auth.currentUser) {
-      const fetchFavorites = async () => {
-        const userFavoritesRef = collection(db, `users/${auth.currentUser.uid}/favorites`);
-        const unsubscribe = onSnapshot(userFavoritesRef, (snapshot) => {
-          const favoritesList = snapshot.docs.map((doc) => doc.id);
-          setFavorites(favoritesList);
-        });
+  const addPoem = (poem) => {
+    setPoems((prevPoems) => [...prevPoems, poem]);
+  };
 
-        return () => unsubscribe();
-      };
-
-      fetchFavorites();
-    }
-  }, [auth.currentUser]);
-
-  const toggleFavorite = async (poemId) => {
-    const user = auth.currentUser;
-    if (!user) return;
-
-    const favoriteRef = doc(db, `users/${user.uid}/favorites`, poemId);
-
-    if (favorites.includes(poemId)) {
-      await deleteDoc(favoriteRef);
-      setFavorites(favorites.filter((id) => id !== poemId));
-    } else {
-      await setDoc(favoriteRef, { poemId });
-      setFavorites([...favorites, poemId]);
-    }
+  const toggleFavorite = (poemId) => {
+    setFavorites((prevFavorites) => {
+      if (prevFavorites.includes(poemId)) {
+        return prevFavorites.filter(id => id !== poemId);
+      } else {
+        return [...prevFavorites, poemId];
+      }
+    });
   };
 
   return (
-    <PoemsContext.Provider value={{ poems, favorites, toggleFavorite, loading }}>
+    <PoemsContext.Provider value={{ poems, loading, favorites, toggleFavorite, addPoem }}>
       {children}
     </PoemsContext.Provider>
   );

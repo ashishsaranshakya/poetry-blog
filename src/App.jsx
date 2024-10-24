@@ -8,25 +8,29 @@ import './styles/global.css';
 import ProtectedRoute from './components/ProtectedRoute';
 import Favorites from './components/FavoritesPage';
 import { PoemsProvider } from './context/PoemsContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 const App = () => {
+  
   return (
-    <PoemsProvider>
-      <Router>
-        <div className="app flex flex-col min-h-screen">
-          <Header />
-          <div className="content flex-grow p-4">
-            <Routes>
-              <Route path="/" element={<PoemList />} />
-              <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
-              <Route path="/add-poem" element={<ProtectedRoute><AddPoemPage /></ProtectedRoute>} />
-            </Routes>
+    <ThemeProvider>
+      <PoemsProvider>
+        <Router>
+          <div className="app flex flex-col min-h-screen">
+            <Header />
+            <div className="content flex-grow p-4">
+              <Routes>
+                <Route path="/" element={<PoemList />} />
+                <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
+                <Route path="/add-poem" element={<ProtectedRoute><AddPoemPage /></ProtectedRoute>} />
+              </Routes>
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
-      </Router>
-    </PoemsProvider>
+        </Router>
+      </PoemsProvider>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
