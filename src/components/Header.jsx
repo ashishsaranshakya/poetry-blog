@@ -1,13 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { auth, googleProvider } from '../firebaseConfig';
+import { signInWithPopup, signOut } from 'firebase/auth';
 
 const Header = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogin = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
+  };
+
+  const handleLogout = () => {
+    signOut(auth).catch((error) => console.error('Logout failed:', error));
+  };
+
   return (
     <header className="bg-gray-800 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-2xl font-bold">
-          My Writing Palace
-        </h1>
+        <h1 className="text-2xl font-bold">My Writing Palace</h1>
+
         <nav>
           <ul className="flex space-x-4">
             <li>
@@ -17,10 +39,31 @@ const Header = () => {
               <Link to="/favorites" className="hover:text-gray-300">Favorites</Link>
             </li>
             <li>
-              <Link to="/add-poem" className="hover:text-gray-300">Add Poem</Link>
+              {(!!user && user.uid === import.meta.env.VITE_USER_ID) && <Link to="/add-poem" className="hover:text-gray-300">Add Poem</Link>}
             </li>
           </ul>
         </nav>
+
+        <div>
+          {user ? (
+            <div className="flex items-center space-x-4">
+              <span className="text-gray-200">Hello, {user.displayName}</span>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={handleLogin}
+              className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+            >
+              Login with Google
+            </button>
+          )}
+        </div>
       </div>
     </header>
   );

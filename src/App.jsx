@@ -7,6 +7,7 @@ import AddPoemPage from './components/AddPoemPage';
 import { fetchPoems } from './controllers/poemController';
 import LoadingSpinner from './components/LoadingSpinner';
 import './styles/global.css';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
   const [poems, setPoems] = useState([]);
@@ -30,7 +31,7 @@ const App = () => {
         <div className="content flex-grow p-4">
           <Routes>
             <Route path="/" element={loading ? <LoadingSpinner /> : <PoemList poems={poems} />} />
-            <Route path="/add-poem" element={<AddPoemPage />} />
+            <Route path="/add-poem" element={<ProtectedRoute><AddPoemPage /></ProtectedRoute>} />
           </Routes>
         </div>
         <Footer />
