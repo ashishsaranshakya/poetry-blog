@@ -8,30 +8,23 @@ const PoemDetail = ({ poem }) => {
   const { isDarkMode } = useContext(ThemeContext);
 
   if (loading) {
-    return <LoadingSpinner/>;
+    return <LoadingSpinner />;
   }
 
   const isFavorite = favorites.includes(poem.id);
 
   return (
-    <div className={`py-4 border-b ${isFavorite ? 'border-red-500' : 'border-gray-300'} ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'} transition-all duration-300`}>
-      <h2 className="text-xl font-bold mb-4">{poem.title}</h2>
-      <div className={`mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-        {poem.content.map((line, index) =>
-          line ? (
-            <p key={index}>{line}</p>
-          ) : (
-            <br key={index} />
-          )
-        )}
-      </div>
-
+    <div className={`relative py-4 border-b ${isFavorite ? 'border-red-500' : 'border-gray-300'} ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'} transition-all duration-300`}>
+      
       <button
         onClick={() => toggleFavorite(poem.id)}
-        className={`favorite-btn ${isFavorite ? 'text-red-500' : 'text-gray-400'} transition-colors duration-300`}
+        className="absolute top-4 right-2 text-xl"
       >
-        {isFavorite ? '❤️ Unfavorite' : '♡ Favorite'}
+        {isFavorite ? '❤️' : '🤍'}
       </button>
+
+      <h2 className="text-xl font-bold mb-4">{poem.title}</h2>
+      <pre className="whitespace-pre-wrap">{poem.content.join('\n')}</pre>
     </div>
   );
 };

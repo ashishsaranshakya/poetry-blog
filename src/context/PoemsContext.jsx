@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { db } from '../firebaseConfig';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot, doc } from 'firebase/firestore';
+import { auth } from '../firebaseConfig';
+import { deleteDoc, setDoc, getDocs } from 'firebase/firestore';
 
 export const PoemsContext = createContext();
 
@@ -22,18 +24,53 @@ export const PoemsProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const loadFavorites = async (userId) => {
+      const favoritesRef = collection(db, `users/${userId}/favorites`);
+      const favoriteDocs = await getDocs(favoritesRef);
+      const favoriteIds = favoriteDocs.docs.map((doc) => doc.id);
+      setFavorites(favoriteIds);      
+    };
+
+    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+      if (user) {
+        loadFavorites(user.uid);
+      } else {
+        setFavorites([]);
+      }
+    });
+
+    return () => unsubscribeAuth();
+  }, []);
+
   const addPoem = (poem) => {
     setPoems((prevPoems) => [...prevPoems, poem]);
   };
 
-  const toggleFavorite = (poemId) => {
-    setFavorites((prevFavorites) => {
-      if (prevFavorites.includes(poemId)) {
-        return prevFavorites.filter(id => id !== poemId);
-      } else {
-        return [...prevFavorites, poemId];
-      }
-    });
+  const toggleFavorite = async (poemId) => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const favoriteRef = doc(db, `users/${user.uid}/favorites`, poemId);
+
+    if (favorites.includes(poemId)) {
+      await deleteDoc(favoriteRef);
+      setFavorites(favorites.filter((id) => id !== poemId));
+      setPoems((prevPoems) =>
+        prevPoems.map((poem) =>
+          poem.id === poemId ? { ...poem, isFavorite: false } : poem
+        )
+      );
+    }
+    else {
+      await setDoc(favoriteRef, { poemId });
+      setFavorites([...favorites, poemId]);
+      setPoems((prevPoems) =>
+        prevPoems.map((poem) =>
+          poem.id === poemId ? { ...poem, isFavorite: true } : poem
+        )
+      );
+    }
   };
 
   return (
