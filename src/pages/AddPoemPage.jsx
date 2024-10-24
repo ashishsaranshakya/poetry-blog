@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import { PoemsContext } from '../context/PoemsContext';
 import { ThemeContext } from '../context/ThemeContext';
 import Select from 'react-select';
 
@@ -22,7 +21,6 @@ const themes = [
 ];
 
 const AddPoemPage = () => {
-  const { addPoem } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
   const [title, setTitle] = useState('');
   const [poemContent, setPoemContent] = useState('');
@@ -50,13 +48,10 @@ const AddPoemPage = () => {
       const poemsCollectionRef = collection(db, 'poems');
       const docRef = await addDoc(poemsCollectionRef, newPoem);
 
-      addPoem({ id: docRef.id, ...newPoem });
-
       setTitle('');
       setPoemContent('');
       setIsFeatured(false);
       setSelectedThemes([]);
-      alert('Poem added successfully!');
     } catch (error) {
       console.error('Error adding poem: ', error);
       setError('Failed to add poem. Please try again.');

@@ -38,24 +38,23 @@ const Header = () => {
           <h1 className="text-2xl font-bold">My Writing Palace</h1>
         </div>
 
-        <nav>
-          <ul className="flex space-x-4">
-            <li>
-              <Link to="/" className="hover:text-gray-300">Home</Link>
-            </li>
-            <li>
-              <Link to="/explore" className="hover:text-gray-300">Explore</Link>
-            </li>
-            <li>
-              <Link to="/favorites" className="hover:text-gray-300">Favorites</Link>
-            </li>
-            <li>
-              {(!!user && user.uid === import.meta.env.VITE_USER_ID) && <Link to="/add-poem" className="hover:text-gray-300">Add Poem</Link>}
-            </li>
-          </ul>
-        </nav>
-
         <div className="flex items-center space-x-4">
+          <nav className='mr-4'>
+            <ul className="flex space-x-4">
+              <li>
+                <Link to="/" className="hover:text-gray-300">Home</Link>
+              </li>
+              <li>
+                <Link to="/explore" className="hover:text-gray-300">Explore</Link>
+              </li>
+              <li>
+                <Link to="/favorites" className="hover:text-gray-300">Favorites</Link>
+              </li>
+              <li>
+                {(!!user && user.uid === import.meta.env.VITE_USER_ID) && <Link to="/add-poem" className="hover:text-gray-300">Add Poem</Link>}
+              </li>
+            </ul>
+          </nav>
           <button
             onClick={toggleTheme}
             className=" w-12 h-12 rounded-full hover:bg-gray-700 flex justify-center items-center"

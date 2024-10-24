@@ -30,6 +30,11 @@ const PoemPage = () => {
       </button>
 
       <h1 className="text-3xl font-bold mb-4">{poem.title}</h1>
+      {!!poem.themes && poem.themes.length > 0 && (
+        <div className="mb-2">
+          <span className="font-bold">Themes:</span> {poem.themes.join(', ')}
+        </div>
+      )}
       <pre className="whitespace-pre-wrap">{poem.content.join('\n')}</pre>
     </div>
   );

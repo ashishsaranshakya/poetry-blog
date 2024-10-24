@@ -43,13 +43,12 @@ export const PoemsProvider = ({ children }) => {
     return () => unsubscribeAuth();
   }, []);
 
-  const addPoem = (poem) => {
-    setPoems((prevPoems) => [...prevPoems, poem]);
-  };
-
   const toggleFavorite = async (poemId) => {
     const user = auth.currentUser;
-    if (!user) return;
+    if (!user) {
+      alert('You must be logged in to favorite a poem.');
+      return;
+    }
 
     const favoriteRef = doc(db, `users/${user.uid}/favorites`, poemId);
 
@@ -74,7 +73,7 @@ export const PoemsProvider = ({ children }) => {
   };
 
   return (
-    <PoemsContext.Provider value={{ poems, loading, favorites, toggleFavorite, addPoem }}>
+    <PoemsContext.Provider value={{ poems, loading, favorites, toggleFavorite }}>
       {children}
     </PoemsContext.Provider>
   );
