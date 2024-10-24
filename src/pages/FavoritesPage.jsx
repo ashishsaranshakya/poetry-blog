@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { PoemsContext } from '../context/PoemsContext';
-import PoemDetail from '../components/PoemDetail';
+import PoemDetail from '../components/PoemLongBox';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { ThemeContext } from '../context/ThemeContext';
 

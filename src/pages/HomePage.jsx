@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { PoemsContext } from '../context/PoemsContext';
 import { ThemeContext } from '../context/ThemeContext';
-import { PoemBox } from './PoemBox';
+import { PoemBox } from '../components/PoemShortBox';
 import { auth } from '../firebaseConfig';
 
 const HomePage = () => {

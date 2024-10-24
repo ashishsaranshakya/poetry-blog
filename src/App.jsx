@@ -2,15 +2,15 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import PoemList from './components/PoemList';
-import AddPoemPage from './components/AddPoemPage';
+import ExplorePage from './pages/ExplorePage';
+import AddPoemPage from './pages/AddPoemPage';
 import './styles/global.css';
 import ProtectedRoute from './components/ProtectedRoute';
-import Favorites from './components/FavoritesPage';
+import Favorites from './pages/FavoritesPage';
 import { PoemsProvider } from './context/PoemsContext';
 import { ThemeProvider } from './context/ThemeContext';
-import HomePage from './components/HomePage';
-import PoemPage from './components/PoemPage';
+import HomePage from './pages/HomePage';
+import PoemPage from './pages/PoemPage';
 
 const App = () => {
   
@@ -23,7 +23,7 @@ const App = () => {
             <div className="content flex-grow p-4">
               <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/poems" element={<PoemList />} />
+                <Route path="/explore" element={<ExplorePage />} />
                 <Route path="/poems/:id" element={<PoemPage />} />
                 <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
                 <Route path="/add-poem" element={<ProtectedRoute><AddPoemPage /></ProtectedRoute>} />

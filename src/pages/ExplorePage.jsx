@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { PoemsContext } from '../context/PoemsContext';
-import PoemDetail from './PoemDetail';
-import LoadingSpinner from './LoadingSpinner';
+import PoemDetail from '../components/PoemLongBox';
+import LoadingSpinner from '../components/LoadingSpinner';
 import { ThemeContext } from '../context/ThemeContext';
 
-const PoemList = () => {
+const ExplorePage = () => {
   const { poems, loading } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
 
@@ -21,4 +21,4 @@ const PoemList = () => {
   );
 };
 
-export default PoemList;
+export default ExplorePage;
