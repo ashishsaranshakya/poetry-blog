@@ -37,22 +37,18 @@ const Header = () => {
   };
 
   return (
-    <header className={`p-4 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+    <header className={`bg-gray-800 text-white p-4 ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Left Section: Logo */}
         <div className="flex items-center space-x-2">
           <img src={icon} alt="icon" className="w-8 h-8" />
           <h1 className="text-2xl font-bold">My Writing Palace</h1>
         </div>
 
-        {/* Right Section: Theme Toggle, Login/Logout */}
         <div className="flex items-center space-x-4">
-          {/* Hamburger Menu Button for Small Screens */}
           <button onClick={toggleMenu} className="md:hidden">
             <img src={hamburger_icon} alt="menu" className="w-8 h-8" />
           </button>
 
-          {/* Full NavBar for Medium & Larger Screens */}
           <nav className="hidden md:flex space-x-4">
             <Link to="/" className="hover:text-gray-500">Home</Link>
             <Link to="/explore" className="hover:text-gray-500">Explore</Link>
@@ -62,7 +58,6 @@ const Header = () => {
             )}
           </nav>
 
-          {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
             className="w-12 h-12 rounded-full hover:bg-gray-700 flex justify-center items-center"
@@ -72,7 +67,6 @@ const Header = () => {
             </p>
           </button>
 
-          {/* Login/Logout Button */}
           {user ? (
             <div className="flex items-center space-x-4">
               <button
@@ -93,7 +87,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Hamburger Menu Links (Small Screens Only) */}
       <nav className={`md:hidden ${menuOpen ? 'block' : 'hidden'} mt-4`}>
         <ul className="flex flex-col space-y-2">
           <li>
