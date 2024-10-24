@@ -6,7 +6,7 @@ import { ThemeContext } from '../context/ThemeContext';
 
 const AddPoemPage = () => {
   const { addPoem } = useContext(PoemsContext);
-  const { theme } = useContext(ThemeContext);
+  const { isDarkMode } = useContext(ThemeContext);
   const [title, setTitle] = useState('');
   const [poemContent, setPoemContent] = useState('');
   const [isFeatured, setIsFeatured] = useState(false);
@@ -45,7 +45,7 @@ const AddPoemPage = () => {
   };
 
   return (
-    <div className={`add-poem-page p-4 ${theme !== "light" ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`}>
+    <div className={`add-poem-page p-4 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`}>
       <h2 className="text-xl font-bold mb-4">Add New Poem</h2>
       {error && <p className="text-red-500">{error}</p>}
       <form onSubmit={handleSubmit}>
@@ -58,7 +58,7 @@ const AddPoemPage = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className={`input-field w-full p-2 border rounded ${
-              theme !== "light"
+              isDarkMode
                 ? 'border-gray-700 bg-gray-700 text-white'
                 : 'border-gray-300 bg-white text-black'
             }`}
@@ -76,7 +76,7 @@ const AddPoemPage = () => {
             placeholder="Enter the poem content here, each line on a new line."
             rows={12}
             className={`textarea-field w-full p-2 border rounded ${
-              theme!=="light"
+              isDarkMode
                 ? 'border-gray-700 bg-gray-700 text-white'
                 : 'border-gray-300 bg-white text-black'
             }`}

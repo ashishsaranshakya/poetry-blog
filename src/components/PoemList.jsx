@@ -6,14 +6,14 @@ import { ThemeContext } from '../context/ThemeContext';
 
 const PoemList = () => {
   const { poems, loading } = useContext(PoemsContext);
-  const { theme } = useContext(ThemeContext);
+  const { isDarkMode } = useContext(ThemeContext);
 
   if (loading) {
     return <LoadingSpinner/>;
   }
 
   return (
-    <div className={`poem-list ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'} min-h-screen m-4 transition-all duration-300`}>
+    <div className={`poem-list p-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} min-h-screen transition-all duration-300`}>
       {poems.map((poem) => (
         <PoemDetail key={poem.id} poem={poem} />
       ))}

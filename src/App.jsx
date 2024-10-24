@@ -9,6 +9,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Favorites from './components/FavoritesPage';
 import { PoemsProvider } from './context/PoemsContext';
 import { ThemeProvider } from './context/ThemeContext';
+import HomePage from './components/HomePage';
+import PoemPage from './components/PoemPage';
 
 const App = () => {
   
@@ -20,7 +22,9 @@ const App = () => {
             <Header />
             <div className="content flex-grow p-4">
               <Routes>
-                <Route path="/" element={<PoemList />} />
+                <Route path="/" element={<HomePage />} />
+                <Route path="/poems" element={<PoemList />} />
+                <Route path="/poems/:id" element={<PoemPage />} />
                 <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
                 <Route path="/add-poem" element={<ProtectedRoute><AddPoemPage /></ProtectedRoute>} />
               </Routes>

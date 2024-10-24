@@ -6,7 +6,7 @@ import { ThemeContext } from '../context/ThemeContext';
 
 const Header = () => {
   const [user, setUser] = useState(null);
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
@@ -28,7 +28,7 @@ const Header = () => {
   };
 
   return (
-    <header className={`bg-gray-800 text-white p-4 ${theme === 'dark' ? 'dark-mode' : 'light-mode'}`}>
+    <header className={`bg-gray-800 text-white p-4 ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       <div className="container mx-auto flex justify-between items-center">
         <h1 className="text-2xl font-bold">My Writing Palace</h1>
 
@@ -36,6 +36,9 @@ const Header = () => {
           <ul className="flex space-x-4">
             <li>
               <Link to="/" className="hover:text-gray-300">Home</Link>
+            </li>
+            <li>
+              <Link to="/poems" className="hover:text-gray-300">Explore</Link>
             </li>
             <li>
               <Link to="/favorites" className="hover:text-gray-300">Favorites</Link>
@@ -51,7 +54,7 @@ const Header = () => {
             onClick={toggleTheme}
             className="bg-gray-600 text-white px-3 py-1 rounded hover:bg-gray-700"
           >
-            {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
+            {isDarkMode ? '🌙 Dark Mode' : '☀️ Light Mode'}
           </button>
 
           {user ? (
