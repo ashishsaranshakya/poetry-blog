@@ -31,33 +31,26 @@ const Header = () => {
   };
 
   return (
-    <header className={`bg-gray-800 text-white p-4 ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-      <div className="container mx-auto flex justify-between items-center">
-        <div className='flex space-x-2'>
+    <header className={`p-4 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="flex items-center space-x-2">
           <img src={icon} alt="icon" className="w-8 h-8" />
           <h1 className="text-2xl font-bold">My Writing Palace</h1>
         </div>
 
         <div className="flex items-center space-x-4">
-          <nav className='mr-4'>
-            <ul className="flex space-x-4">
-              <li>
-                <Link to="/" className="hover:text-gray-300">Home</Link>
-              </li>
-              <li>
-                <Link to="/explore" className="hover:text-gray-300">Explore</Link>
-              </li>
-              <li>
-                <Link to="/favorites" className="hover:text-gray-300">Favorites</Link>
-              </li>
-              <li>
-                {(!!user && user.uid === import.meta.env.VITE_USER_ID) && <Link to="/add-poem" className="hover:text-gray-300">Add Poem</Link>}
-              </li>
-            </ul>
+          <nav className="hidden md:flex space-x-4">
+            <Link to="/" className="hover:text-gray-500">Home</Link>
+            <Link to="/explore" className="hover:text-gray-500">Explore</Link>
+            <Link to="/favorites" className="hover:text-gray-500">Favorites</Link>
+            {(user && user.uid === import.meta.env.VITE_USER_ID) && (
+              <Link to="/add-poem" className="hover:text-gray-500">Add Poem</Link>
+            )}
           </nav>
+          
           <button
             onClick={toggleTheme}
-            className=" w-12 h-12 rounded-full hover:bg-gray-700 flex justify-center items-center"
+            className="w-12 h-12 rounded-full hover:bg-gray-700 flex justify-center items-center"
           >
             <p className={`text-3xl ${isDarkMode ? 'transform -rotate-45' : ''}`}>
               {isDarkMode ? '☾' : '☼'}
@@ -70,7 +63,7 @@ const Header = () => {
                 onClick={handleLogout}
                 className="flex items-center justify-center rounded-full hover:bg-gray-700 w-12 h-12"
               >
-                <img src={logout_icon} alt="icon" className="w-8 h-8" />
+                <img src={logout_icon} alt="logout" className="w-8 h-8" />
               </button>
             </div>
           ) : (
@@ -78,7 +71,7 @@ const Header = () => {
               onClick={handleLogin}
               className="flex items-center justify-center rounded-full hover:bg-gray-700 w-12 h-12"
               >
-                <img src={login_icon} alt="icon" className="w-8 h-8" />
+              <img src={login_icon} alt="login" className="w-8 h-8" />
             </button>
           )}
         </div>
