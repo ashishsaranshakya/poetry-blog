@@ -52,9 +52,11 @@ const Header = () => {
         <div className="flex items-center space-x-4">
           <button
             onClick={toggleTheme}
-            className="bg-gray-600 text-white px-3 py-1 rounded hover:bg-gray-700"
+            className="bg-gray-600 text-white w-12 h-12 rounded-full hover:bg-gray-700 flex justify-center items-center"
           >
-            {isDarkMode ? '🌙 Dark Mode' : '☀️ Light Mode'}
+            <p className={`text-2xl ${isDarkMode ? 'transform -rotate-45' : ''}`}>
+              {isDarkMode ? '☾' : '☼'}
+            </p>
           </button>
 
           {user ? (

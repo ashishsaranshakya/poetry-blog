@@ -1,18 +1,34 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { ThemeContext } from '../context/ThemeContext';
+import { PoemsContext } from '../context/PoemsContext';
 
 export const PoemBox = ({ poem }) => {
-	const { isDarkMode } = useContext(ThemeContext);
+  const { isDarkMode } = useContext(ThemeContext);
+  const { favorites, toggleFavorite } = useContext(PoemsContext);
 
-	return (
-		<div key={poem.id} className={`p-4 border rounded ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-white'}`}>
-			<h3 className="text-xl font-medium">{poem.title}</h3>
-			{poem.content.slice(0, 10).map((line, index) =>
-				line ? (<p key={index}>{line}</p>) : (<br key={index} />)
-			)}
-			<Link to={`/poems/${poem.id}`} className={`text-blue-500 underline mt-2 block`}>
-				Show More
-			</Link>
-		</div>);
-}
+  const isFavorite = favorites.includes(poem.id);
+
+  const handleFavoriteToggle = async () => {
+    await toggleFavorite(poem.id);
+  };
+
+  return (
+    <div key={poem.id} className={`relative p-4 border rounded ${isDarkMode ? 'border-gray-700 bg-gray-800 text-white' : 'border-gray-300 bg-white text-black'}`}>
+      
+      <button
+        onClick={handleFavoriteToggle}
+        className="absolute top-4 right-4 text-xl"
+      >
+        {isFavorite ? '❤️' : '🤍'}
+      </button>
+
+      <h3 className="text-xl font-medium mb-4">{poem.title}</h3>
+      <pre className="whitespace-pre-wrap">{poem.content.slice(0, 10).join('\n')}</pre>
+      
+      <Link to={`/poems/${poem.id}`} className={`text-blue-500 underline mt-2 block`}>
+        Show More
+      </Link>
+    </div>
+  );
+};
