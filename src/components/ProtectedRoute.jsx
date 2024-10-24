@@ -15,15 +15,19 @@ const ProtectedRoute = ({ children }) => {
 
   if (!user) {
     return (
-      <div>
-        <p>You must be logged in to add poems.</p>
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-12rem)]"> 
+        <p className="text-xl mb-4 text-center">You must be logged in to add poems.</p>
         <GoogleLogin />
       </div>
     );
   }
 
   if (user.uid !== import.meta.env.VITE_USER_ID) {
-    return <div>You do not have permission to add poems.</div>;
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-12rem)]">
+        <p className="text-xl text-center">You do not have permission to add poems.</p>
+      </div>
+    );
   }
 
   return children;

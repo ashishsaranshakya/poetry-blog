@@ -1,10 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { PoemsContext } from '../context/PoemsContext';
 import { ThemeContext } from '../context/ThemeContext';
 import { PoemBox } from './PoemBox';
+import { auth } from '../firebaseConfig';
 
 const HomePage = () => {
+  const [user, setUser] = useState(null);
   const { poems, favorites } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
 
@@ -12,9 +14,16 @@ const HomePage = () => {
   const featuredPoems = poems.filter((poem) => poem.isFeatured);
   const recentPoems = [...poems].sort((a, b) => b.createdAt - a.createdAt).slice(0, 4);
 
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div className={`p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
-      <h1 className="text-3xl font-bold mb-6">Welcome to the Poetry Blog</h1>
+      <h1 className="text-3xl font-bold mb-6">Welcome, {!!user ? user.displayName : "Poetic Nomad!"}</h1>
 
       {favoritePoems.length > 0 &&
         <section className="mb-8">
