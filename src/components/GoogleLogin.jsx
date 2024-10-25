@@ -9,7 +9,6 @@ const GoogleLogin = () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       setUser(result.user)
-      console.log("Logged in as:", result.user);
     } catch (error) {
       console.error('Google login failed:', error);
     }

@@ -23,7 +23,7 @@ export const PoemShortBox = ({ poem }) => {
         {isFavorite ? '❤️' : '🤍'}
       </button>
 
-      <h3 className="text-xl font-medium mb-4">{poem.title}</h3>
+      <h3 className="text-lg md:text-xl font-medium mb-4 mr-8">{poem.title}</h3>
       <pre className="whitespace-pre-wrap">{poem.content.slice(0, 10).join('\n')}</pre>
       
       <Link to={`/poems/${poem.id}`} className={`text-blue-500 underline mt-2 block`}>

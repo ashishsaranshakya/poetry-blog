@@ -41,7 +41,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <img src={icon} alt="icon" className="w-8 h-8" />
-          <h1 className="text-2xl font-bold">My Writing Palace</h1>
+          <h1 className="text-xl md:text-2xl font-bold">My Writing Palace</h1>
         </div>
 
         <div className="flex items-center space-x-4">
