@@ -45,9 +45,6 @@ const Header = () => {
         </div>
 
         <div className="flex items-center space-x-4">
-          <button onClick={toggleMenu} className="md:hidden">
-            <img src={hamburger_icon} alt="menu" className="w-8 h-8" />
-          </button>
 
           <nav className="hidden md:flex space-x-4">
             <Link to="/" className="hover:text-gray-500">Home</Link>
@@ -66,9 +63,12 @@ const Header = () => {
               {isDarkMode ? '☾' : '☼'}
             </p>
           </button>
+          <button onClick={toggleMenu} className="md:hidden w-12 h-12 rounded-full hover:bg-gray-700 flex justify-center items-center">
+            <img src={hamburger_icon} alt="menu" className="w-8 h-8" />
+          </button>
 
           {user ? (
-            <div className="flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-4">
               <button
                 onClick={handleLogout}
                 className="flex items-center justify-center rounded-full hover:bg-gray-700 w-12 h-12"
@@ -77,12 +77,14 @@ const Header = () => {
               </button>
             </div>
           ) : (
-            <button
-              onClick={handleLogin}
-              className="flex items-center justify-center rounded-full hover:bg-gray-700 w-12 h-12"
-            >
-              <img src={login_icon} alt="login" className="w-8 h-8" />
-            </button>
+            <div className="hidden md:flex items-center space-x-4">
+              <button
+                onClick={handleLogin}
+                className="flex items-center justify-center rounded-full hover:bg-gray-700 w-12 h-12"
+              >
+                <img src={login_icon} alt="login" className="w-8 h-8" />
+              </button>
+            </div>
           )}
         </div>
       </div>
@@ -103,6 +105,19 @@ const Header = () => {
               <Link to="/add-poem" className="hover:text-gray-500 block">Add Poem</Link>
             </li>
           )}
+          {user ? (
+              <div className="md:hidden">
+                <button onClick={handleLogout}>
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="md:hidden">
+                <button onClick={handleLogin}>
+                  Login
+                </button>
+              </div>
+            )}
         </ul>
       </nav>
     </header>

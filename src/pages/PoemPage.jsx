@@ -22,7 +22,7 @@ const PoemPage = () => {
     <div className={`relative p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
       <button
         onClick={handleFavoriteToggle}
-        className="absolute top-6 right-6 px-4 rounded"
+        className="absolute top-6 right-6 rounded"
       >
         <p className='text-2xl'>
           {poem.isFavorite ? '❤️' : '🤍'}
