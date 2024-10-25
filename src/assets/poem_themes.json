@@ -1,0 +1,15 @@
+[
+	{ "value": "love", "label": "Love" },
+	{ "value": "heartbreak", "label": "Heartbreak" },
+	{ "value": "introspection", "label": "Introspection" },
+	{ "value": "dreaming", "label": "Dreaming" },
+	{ "value": "philosophy", "label": "Philosophy" },
+	{ "value": "escapism", "label": "Escapism" },
+	{ "value": "mortality", "label": "Mortality" },
+	{ "value": "questioningReality", "label": "Questioning Reality" },
+	{ "value": "questioningSociety", "label": "Questioning Society" },
+	{ "value": "monotony", "label": "Monotony" },
+	{ "value": "regrets", "label": "Regrets" },
+	{ "value": "littleMoments", "label": "Little Moments" },
+	{ "value": "feeling", "label": "Feeling" }
+  ]

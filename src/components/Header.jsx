@@ -49,6 +49,7 @@ const Header = () => {
           <nav className="hidden md:flex space-x-4">
             <Link to="/" className="hover:text-gray-500">Home</Link>
             <Link to="/explore" className="hover:text-gray-500">Explore</Link>
+            <Link to="/search" className="hover:text-gray-500">Search</Link>
             <Link to="/favorites" className="hover:text-gray-500">Favorites</Link>
             {user && user.uid === import.meta.env.VITE_USER_ID && (
               <Link to="/add-poem" className="hover:text-gray-500">Add Poem</Link>
@@ -99,6 +100,9 @@ const Header = () => {
           </li>
           <li>
             <Link to="/explore" className="hover:text-gray-500 block">Explore</Link>
+          </li>
+          <li>
+            <Link to="/search" className="hover:text-gray-500 block">Search</Link>
           </li>
           <li>
             <Link to="/favorites" className="hover:text-gray-500 block">Favorites</Link>

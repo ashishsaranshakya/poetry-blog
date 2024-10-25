@@ -2,23 +2,7 @@ import React, { useState, useContext } from 'react';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { ThemeContext } from '../context/ThemeContext';
-import Select from 'react-select';
-
-const themes = [
-  { value: 'love', label: 'Love' },
-  { value: 'heartbreak', label: 'Heartbreak' },
-  { value: 'introspection', label: 'Introspection' },
-  { value: 'dreaming', label: 'Dreaming' },
-  { value: 'philosophy', label: 'Philosophy' },
-  { value: 'escapism', label: 'Escapism' },
-  { value: 'mortality', label: 'Mortality' },
-  { value: 'questioningReality', label: 'Questioning Reality' },
-  { value: 'questioningSociety', label: 'Questioning Society' },
-  { value: 'monotony', label: 'Monotony' },
-  { value: 'regrets', label: 'Regrets' },
-  { value: 'littleMoments', label: 'Little Moments' },
-  { value: 'feeling', label: 'Feeling' },
-];
+import MultiselectDropdown from '../components/MultiselectDropdown';
 
 const AddPoemPage = () => {
   const { isDarkMode } = useContext(ThemeContext);
@@ -60,39 +44,9 @@ const AddPoemPage = () => {
     }
   };
 
-  const customStyles = {
-    control: (provided) => ({
-      ...provided,
-      borderColor: isDarkMode ? 'gray' : 'lightgray',
-      backgroundColor: isDarkMode ? '#4A5568' : '#fff',
-      color: isDarkMode ? '#fff' : '#000',
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      backgroundColor: state.isFocused ? (isDarkMode ? '#2D3748' : '#E2E8F0') : (isDarkMode ? '#4A5568' : '#fff'),
-      color: isDarkMode ? '#fff' : '#000',
-    }),
-    multiValue: (provided) => ({
-      ...provided,
-      backgroundColor: isDarkMode ? '#2B6CB0' : '#63B3ED',
-    }),
-    multiValueLabel: (provided) => ({
-      ...provided,
-      color: '#fff',
-    }),
-    multiValueRemove: (provided) => ({
-      ...provided,
-      color: '#fff',
-      ':hover': {
-        backgroundColor: isDarkMode ? '#2C5282' : '#B2F5EA',
-        color: '#fff',
-      },
-    }),
-  };
-
   return (
-    <div className={`add-poem-page p-4 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`}>
-      <h2 className="text-xl font-bold mb-4">Add New Poem</h2>
+    <div className={`add-poem-page p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`}>
+      <h2 className="text-2xl font-bold mb-4">Add New Poem</h2>
       {error && <p className="text-red-500">{error}</p>}
       <form onSubmit={handleSubmit}>
 
@@ -125,14 +79,7 @@ const AddPoemPage = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-lg font-medium mb-2">Poem Themes</label>
-          <Select
-            value={selectedThemes}
-            onChange={setSelectedThemes}
-            options={themes}
-            isMulti
-            styles={customStyles}
-          />
+          <MultiselectDropdown selectedThemes={selectedThemes} setSelectedThemes={setSelectedThemes} />
         </div>
 
         <div className="mb-4">

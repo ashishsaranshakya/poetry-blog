@@ -11,6 +11,7 @@ import { PoemsProvider } from './context/PoemsContext';
 import { ThemeProvider } from './context/ThemeContext';
 import HomePage from './pages/HomePage';
 import PoemPage from './pages/PoemPage';
+import SearchPage from './pages/SearchPage';
 
 const App = () => {
   
@@ -25,6 +26,7 @@ const App = () => {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/explore" element={<ExplorePage />} />
                 <Route path="/poems/:id" element={<PoemPage />} />
+                <Route path="/search" element={<SearchPage />} />
                 <Route path="/favorites" element={
                   <ProtectedRoute message="Please log in to view your favorite poems.">
                     <Favorites />
