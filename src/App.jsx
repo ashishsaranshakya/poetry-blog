@@ -25,8 +25,16 @@ const App = () => {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/explore" element={<ExplorePage />} />
                 <Route path="/poems/:id" element={<PoemPage />} />
-                <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
-                <Route path="/add-poem" element={<ProtectedRoute><AddPoemPage /></ProtectedRoute>} />
+                <Route path="/favorites" element={
+                  <ProtectedRoute message="Please log in to view your favorite poems.">
+                    <Favorites />
+                  </ProtectedRoute>
+                } />
+                <Route path="/add-poem" element={
+                  <ProtectedRoute isAdmin message="You must be logged in to add poems.">
+                    <AddPoemPage />
+                  </ProtectedRoute>
+                } />
               </Routes>
             </div>
             <Footer />
