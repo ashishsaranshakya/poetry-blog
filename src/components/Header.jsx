@@ -57,6 +57,7 @@ const Header = () => {
 
           <button
             onClick={toggleTheme}
+            title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
             className="w-12 h-12 rounded-full hover:bg-gray-700 flex justify-center items-center"
           >
             <p className={`text-3xl ${isDarkMode ? 'transform -rotate-45' : ''}`}>
@@ -71,6 +72,7 @@ const Header = () => {
             <div className="hidden md:flex items-center space-x-4">
               <button
                 onClick={handleLogout}
+                title="Logout"
                 className="flex items-center justify-center rounded-full hover:bg-gray-700 w-12 h-12"
               >
                 <img src={logout_icon} alt="logout" className="w-8 h-8" />
@@ -80,6 +82,7 @@ const Header = () => {
             <div className="hidden md:flex items-center space-x-4">
               <button
                 onClick={handleLogin}
+                title="Login with Google"
                 className="flex items-center justify-center rounded-full hover:bg-gray-700 w-12 h-12"
               >
                 <img src={login_icon} alt="login" className="w-8 h-8" />
