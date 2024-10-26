@@ -19,7 +19,7 @@ const PoemPage = () => {
   };
 
   return (
-    <div className={`relative p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+    <div className={`relative p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} min-h-screen transition-all duration-300`}>
       <button
         onClick={handleFavoriteToggle}
         className="absolute top-6 right-6 rounded"
