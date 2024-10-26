@@ -10,7 +10,7 @@ const HomePage = () => {
   const { isDarkMode } = useContext(ThemeContext);
 
   const favoritePoems = poems.filter((poem) => favorites.includes(poem.id)).slice(0, 4);
-  const featuredPoems = poems.filter((poem) => poem.isFeatured);
+  const featuredPoems = poems.filter((poem) => poem.isFeatured).slice(0, 4);
   const recentPoems = [...poems].sort((a, b) => b.createdAt - a.createdAt).slice(0, 4);
 
   useEffect(() => {

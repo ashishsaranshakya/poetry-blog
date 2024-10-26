@@ -29,7 +29,7 @@ const PoemPage = () => {
         </p>
       </button>
 
-      <h2 className="text-2xl font-bold mb-4">{poem.title}</h2>
+      <h2 className="text-2xl font-bold mb-4">{poem.title.length > 0 ? poem.title : "Untitled"}</h2>
       {!!poem.themes && poem.themes.length > 0 && (
         <div className="mb-2">
           <span className="font-bold">Themes:</span> {poem.themes.join(', ')}

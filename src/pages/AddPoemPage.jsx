@@ -44,6 +44,17 @@ const AddPoemPage = () => {
     }
   };
 
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pastedText = e.clipboardData.getData('Text');
+    
+    let lines = pastedText.split('\n');
+    let result = lines.filter(line => line.trim() !== '');
+    const outputText = result.join('\n');
+    
+    setPoemContent(outputText);
+  };
+
   return (
     <div className={`add-poem-page p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} min-h-screen transition-all duration-300`}>
       <h2 className="text-2xl font-bold mb-4">Add New Poem</h2>
@@ -62,7 +73,6 @@ const AddPoemPage = () => {
                   ? 'border-gray-700 bg-gray-700 text-white'
                   : 'border-gray-300 bg-white text-black'
               }`}
-              required
             />
           </div>
           <div className='flex-1'>
@@ -83,7 +93,10 @@ const AddPoemPage = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-lg font-medium mb-2">Poem Content</label>
+          <div className='flex items-center mb-2'>
+            <label className="text-lg font-medium  mr-4">Poem Content</label>
+            <p className='text-sm font-normal'>(Note: All blank lines are removed during pasting)</p>
+          </div>
           <textarea
             value={poemContent}
             onChange={(e) => setPoemContent(e.target.value)}
@@ -94,6 +107,7 @@ const AddPoemPage = () => {
                 ? 'border-gray-700 bg-gray-700 text-white'
                 : 'border-gray-300 bg-white text-black'
             }`}
+            onPaste={handlePaste}
             required
           />
         </div>
