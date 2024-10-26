@@ -1,7 +1,7 @@
 import React from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 
-const SearchInput = ({ value, onChange }) => {
+const SearchInput = ({ value, onChange, isDisabled }) => {
 	  const { isDarkMode } = React.useContext(ThemeContext);
   return (
     <div>
@@ -10,6 +10,7 @@ const SearchInput = ({ value, onChange }) => {
 			type="text"
 			value={value}
 			onChange={(e) => onChange(e.target.value)}
+			disabled={isDisabled}
 			className={`input-field w-full p-2 border rounded ${
 			isDarkMode
 				? 'border-gray-700 bg-gray-700 text-white'

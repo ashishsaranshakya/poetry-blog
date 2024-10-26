@@ -93,7 +93,7 @@ const AddPoemPage = () => {
         </div>
 
         <div className="mb-4">
-          <div className='flex items-center mb-2'>
+          <div className='md:flex items-center mb-2'>
             <label className="text-lg font-medium  mr-4">Poem Content</label>
             <p className='text-sm font-normal'>(Note: All blank lines are removed during pasting)</p>
           </div>

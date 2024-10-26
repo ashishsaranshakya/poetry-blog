@@ -15,16 +15,19 @@ const SearchPage = () => {
 	const [isFeatured, setIsFeatured] = useState(false);
 	const [selectedThemes, setSelectedThemes] = useState([]);
 	const [inFavorites, setInFavorites] = useState(false);
+	const [searchUntitled, setSearchUntitled] = useState(false);
 	const [filteredPoems, setFilteredPoems] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 
 	useEffect(() => {
 		handleSearch();
-	}, [poems, title, selectedThemes, isFeatured, inFavorites]);
+	}, [poems, title, selectedThemes, isFeatured, inFavorites, searchUntitled]);
 
 	const handleSearch = () => {
 		let filteredPoems = poems.filter(poem => {
-			const titleMatch = poem.title.toLowerCase().includes(title.toLowerCase());
+			const titleMatch = searchUntitled
+				? !poem.title || poem.title.trim() === ""
+				: poem.title.toLowerCase().includes(title.toLowerCase());
 			const themeMatch = selectedThemes.length === 0 || selectedThemes.every(theme => poem.themes.includes(theme.label));
 			const featuredMatch = !isFeatured || poem.isFeatured;
 			return titleMatch && themeMatch && featuredMatch;
@@ -60,14 +63,14 @@ const SearchPage = () => {
 		<div className={`p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} min-h-screen transition-all duration-300`}>
 			<h2 className="text-2xl font-bold mb-4">Search Poems</h2>
 
-			<SearchInput value={title} onChange={setTitle} />
-			
+			<SearchInput value={title} onChange={setTitle} isDisabled={searchUntitled} />
+
 			<div className="mt-2">
 				<MultiselectDropdown selectedThemes={selectedThemes} setSelectedThemes={setSelectedThemes} />
 			</div>
-			
+
 			<div className="md:flex">
-				<div className="md:flex-1 mt-4 flex items-center">
+				<div className="md:flex-1 mt-4 flex items-center md:justify-start">
 					<input
 						type="checkbox"
 						id="featured"
@@ -78,7 +81,7 @@ const SearchPage = () => {
 					<label htmlFor="featured" className="text-lg">Only Featured Poems</label>
 				</div>
 
-				<div className="md:flex-1 mt-4 flex items-center">
+				<div className="md:flex-1 mt-4 flex items-center md:justify-center">
 					<input
 						type="checkbox"
 						id="favorites"
@@ -88,6 +91,18 @@ const SearchPage = () => {
 					/>
 					<label htmlFor="favorites" className="text-lg">Only Favorites</label>
 				</div>
+
+				<div className="md:flex-1 mt-4 flex items-center md:justify-end">
+					<input
+						type="checkbox"
+						id="untitled"
+						checked={searchUntitled}
+						onChange={(e) => setSearchUntitled(e.target.checked)}
+						className="mr-2"
+					/>
+					<label htmlFor="untitled" className="text-lg">Search Untitled Poems</label>
+				</div>
+
 				{/* <div className="md:flex-1  mt-4 md:flex md:items-center md:justify-end">
 					<button
 						onClick={handleSearch}
@@ -98,29 +113,35 @@ const SearchPage = () => {
 				</div> */}
 			</div>
 
-			<div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-8'>
-				{paginatedPoems.map((poem, index) => <PoemShortBox key={index} poem={poem} />)}
-			</div>
+			{filteredPoems.length === 0 ? (
+				<p className="text-lg my-10 text-center">No poems found. Please try a different search.</p>
+			) : (
+				<>
+					<div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-8'>
+						{paginatedPoems.map((poem, index) => <PoemShortBox key={index} poem={poem} />)}
+					</div>
 
-			<div className="flex justify-between items-center mt-6">
-				<button
-					onClick={handlePrevious}
-					disabled={currentPage === 1}
-					className={`px-4 py-2 rounded ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-500'} ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}
-				>
-					Previous
-				</button>
+					<div className="flex justify-between items-center mt-6">
+						<button
+							onClick={handlePrevious}
+							disabled={currentPage === 1}
+							className={`px-4 py-2 rounded ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-500'} ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}
+						>
+							Previous
+						</button>
 
-				<span className="text-lg">{`Page ${currentPage} of ${totalPages}`}</span>
+						<span className="text-lg">{`Page ${currentPage} of ${totalPages}`}</span>
 
-				<button
-					onClick={handleNext}
-					disabled={currentPage === totalPages}
-					className={`px-4 py-2 rounded ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-500'} ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}
-				>
-					Next
-				</button>
-			</div>
+						<button
+							onClick={handleNext}
+							disabled={currentPage === totalPages}
+							className={`px-4 py-2 rounded ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-500'} ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}
+						>
+							Next
+						</button>
+					</div>
+				</>
+			)}		
 		</div>
 	);
 };
