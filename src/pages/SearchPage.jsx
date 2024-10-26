@@ -2,9 +2,12 @@ import React, { useEffect, useState, useContext } from 'react';
 import SearchInput from '../components/SearchInput';
 import MultiselectDropdown from '../components/MultiselectDropdown';
 import { PoemsContext } from '../context/PoemsContext';
+import { ThemeContext } from '../context/ThemeContext';
 import { PoemShortBox } from '../components/PoemShortBox';
 
 const SearchPage = () => {
+	const { isDarkMode } = useContext(ThemeContext);
+
 	const {poems, favorites} = useContext(PoemsContext);
   const [title, setTitle] = useState('');
   const [isFeatured, setIsFeatured] = useState(false);
@@ -34,7 +37,7 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="p-4 max-w-2xl mx-auto">
+    <div className={`p-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} min-h-screen transition-all duration-300`}>
       <h2 className="text-2xl font-bold mb-4">Search Poems</h2>
       
 			<SearchInput value={title} onChange={setTitle} />
@@ -65,17 +68,17 @@ const SearchPage = () => {
 					/>
 					<label htmlFor="favorites" className="text-lg">Only Favorites</label>
 				</div>
-				<div className="md:flex-1  mt-4 md:flex md:items-center md:justify-end">
+				{/* <div className="md:flex-1  mt-4 md:flex md:items-center md:justify-end">
 					<button
 						onClick={handleSearch}
 						className="bg-blue-500 w-full text-white py-2 px-4 rounded hover:bg-blue-600"
 					>
 						Search
 					</button>
-				</div>
+				</div> */}
 			</div>
 
-      <div className="flex flex-col gap-4 mt-8">
+			<div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-8'>
 				{filteredPoems.map(poem => <PoemShortBox poem={poem}/>)}
       </div>
     </div>
