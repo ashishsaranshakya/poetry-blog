@@ -3,7 +3,7 @@ import SearchInput from '../components/SearchInput';
 import MultiselectDropdown from '../components/MultiselectDropdown';
 import { PoemsContext } from '../context/PoemsContext';
 import { ThemeContext } from '../context/ThemeContext';
-import { PoemShortBox } from '../components/PoemShortBox';
+import PoemShortBox from '../components/PoemShortBox';
 
 const SearchPage = () => {
 	const { isDarkMode } = useContext(ThemeContext);
@@ -37,7 +37,7 @@ const SearchPage = () => {
   };
 
   return (
-    <div className={`p-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} min-h-screen transition-all duration-300`}>
+    <div className={`p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} min-h-screen transition-all duration-300`}>
       <h2 className="text-2xl font-bold mb-4">Search Poems</h2>
       
 			<SearchInput value={title} onChange={setTitle} />
@@ -45,7 +45,6 @@ const SearchPage = () => {
 			<div className="mt-2">
         <MultiselectDropdown selectedThemes={selectedThemes} setSelectedThemes={setSelectedThemes} />
       </div>
-
 			<div className='md:flex'>
 				<div className="md:flex-1 mt-4 flex items-center">
 					<input
@@ -80,7 +79,7 @@ const SearchPage = () => {
 
 			<div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-8'>
 				{filteredPoems.map(poem => <PoemShortBox poem={poem}/>)}
-      </div>
+      		</div>
     </div>
   );
 };

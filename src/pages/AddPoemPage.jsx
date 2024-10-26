@@ -45,7 +45,7 @@ const AddPoemPage = () => {
   };
 
   return (
-    <div className={`add-poem-page p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`}>
+    <div className={`add-poem-page p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} min-h-screen transition-all duration-300`}>
       <h2 className="text-2xl font-bold mb-4">Add New Poem</h2>
       {error && <p className="text-red-500">{error}</p>}
       <form onSubmit={handleSubmit}>

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { PoemsContext } from '../context/PoemsContext';
-import PoemLongBox from '../components/PoemLongBox';
+import PoemShortBox from '../components/PoemShortBox';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { ThemeContext } from '../context/ThemeContext';
 
@@ -29,12 +29,12 @@ const ExplorePage = () => {
   }
 
   return (
-    <div className={`poem-list p-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} min-h-screen transition-all duration-300`}>
+    <div className={`poem-list p-6  ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} min-h-screen transition-all duration-300`}>
       <h2 className="text-2xl font-bold mb-4">Explore</h2>
 
-      {paginatedPoems.map((poem) => (
-        <PoemLongBox key={poem.id} poem={poem} />
-      ))}
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-8'>
+				{paginatedPoems.map(poem => <PoemShortBox poem={poem}/>)}
+      </div>
 
       <div className="flex justify-between items-center mt-6">
         <button

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ThemeContext } from '../context/ThemeContext';
 import { PoemsContext } from '../context/PoemsContext';
 
-export const PoemShortBox = ({ poem }) => {
+const PoemShortBox = ({ poem }) => {
   const { isDarkMode } = useContext(ThemeContext);
   const { favorites, toggleFavorite } = useContext(PoemsContext);
 
@@ -14,7 +14,7 @@ export const PoemShortBox = ({ poem }) => {
   };
 
   return (
-    <div key={poem.id} className={`relative p-4 border rounded ${isDarkMode ? 'border-gray-700 bg-gray-800 text-white' : 'border-gray-300 bg-white text-black'}`}>
+    <div key={poem.id} className={`relative p-4 border rounded ${isDarkMode ? 'border-gray-700 bg-gray-950 text-white' : 'border-gray-300 bg-white text-black'}`}>
       
       <button
         onClick={handleFavoriteToggle}
@@ -32,3 +32,5 @@ export const PoemShortBox = ({ poem }) => {
     </div>
   );
 };
+
+export default PoemShortBox;

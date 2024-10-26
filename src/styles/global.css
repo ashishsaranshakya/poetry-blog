@@ -16,6 +16,10 @@ body.dark-mode {
 	color: #ffffff;
 }
 
+.bg-gray-950 {
+	background-color: #121212;
+}
+
 .dark-mode .bg-gray-800 {
 	background-color: #1a1a1a;
 }

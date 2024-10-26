@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
 import { PoemsContext } from '../context/PoemsContext';
 import { ThemeContext } from '../context/ThemeContext';
-import { PoemShortBox } from '../components/PoemShortBox';
+import PoemShortBox from '../components/PoemShortBox';
 import { auth } from '../firebaseConfig';
 
 const HomePage = () => {
@@ -22,7 +21,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className={`p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+    <div className={`p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} min-h-screen transition-all duration-300`}>
       <h1 className="text-3xl font-bold mb-6">Welcome, {!!user ? user.displayName : "Poetic Nomad!"}</h1>
 
       {favoritePoems.length > 0 &&
