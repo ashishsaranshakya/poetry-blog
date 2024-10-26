@@ -29,14 +29,33 @@ export const PoemsProvider = ({ children }) => {
       const favoritesRef = collection(db, `users/${userId}/favorites`);
       const favoriteDocs = await getDocs(favoritesRef);
       const favoriteIds = favoriteDocs.docs.map((doc) => doc.id);
-      setFavorites(favoriteIds);      
+      setFavorites(favoriteIds);
+      syncLocalFavorites(userId, favoriteIds);
+    };
+
+    const syncLocalFavorites = async (userId, favoriteIds) => {
+      const localFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      if (localFavorites.length === 0) return;
+      
+      const uniqueFavorites = [...new Set([...favoriteIds, ...localFavorites])];
+      const newFavorites = uniqueFavorites.filter((poemId) => !favoriteIds.includes(poemId));
+      
+      for (const poemId of newFavorites) {
+        const favoriteRef = doc(db, `users/${userId}/favorites`, poemId);
+        await setDoc(favoriteRef, {poemId});
+      }
+      
+      setFavorites(uniqueFavorites);
+      localStorage.removeItem('favorites');
     };
 
     const unsubscribeAuth = auth.onAuthStateChanged((user) => {
       if (user) {
         loadFavorites(user.uid);
-      } else {
-        setFavorites([]);
+      }
+      else {
+        const localFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        setFavorites(localFavorites);
       }
     });
 
@@ -45,30 +64,27 @@ export const PoemsProvider = ({ children }) => {
 
   const toggleFavorite = async (poemId) => {
     const user = auth.currentUser;
-    if (!user) {
-      alert('You must be logged in to favorite a poem.');
-      return;
-    }
 
-    const favoriteRef = doc(db, `users/${user.uid}/favorites`, poemId);
+    if (user) {
+      const favoriteRef = doc(db, `users/${user.uid}/favorites`, poemId);
 
-    if (favorites.includes(poemId)) {
-      await deleteDoc(favoriteRef);
-      setFavorites(favorites.filter((id) => id !== poemId));
-      setPoems((prevPoems) =>
-        prevPoems.map((poem) =>
-          poem.id === poemId ? { ...poem, isFavorite: false } : poem
-        )
-      );
+      if (favorites.includes(poemId)) {
+        await deleteDoc(favoriteRef);
+        setFavorites(favorites.filter((id) => id !== poemId));
+      }
+      else {
+        await setDoc(favoriteRef, { poemId });
+        setFavorites([...favorites, poemId]);
+      }
     }
     else {
-      await setDoc(favoriteRef, { poemId });
-      setFavorites([...favorites, poemId]);
-      setPoems((prevPoems) =>
-        prevPoems.map((poem) =>
-          poem.id === poemId ? { ...poem, isFavorite: true } : poem
-        )
-      );
+      const localFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      const updatedFavorites = localFavorites.includes(poemId)
+        ? localFavorites.filter((id) => id !== poemId)
+        : [...localFavorites, poemId];
+
+      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      setFavorites(updatedFavorites);
     }
   };
 

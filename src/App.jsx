@@ -27,11 +27,7 @@ const App = () => {
                 <Route path="/explore" element={<ExplorePage />} />
                 <Route path="/poems/:id" element={<PoemPage />} />
                 <Route path="/search" element={<SearchPage />} />
-                <Route path="/favorites" element={
-                  <ProtectedRoute message="Please log in to view your favorite poems.">
-                    <Favorites />
-                  </ProtectedRoute>
-                } />
+                <Route path="/favorites" element={<Favorites />} />
                 <Route path="/add-poem" element={
                   <ProtectedRoute isAdmin message="You must be logged in to add poems.">
                     <AddPoemPage />
