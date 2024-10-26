@@ -4,12 +4,13 @@ import MultiselectDropdown from '../components/MultiselectDropdown';
 import { PoemsContext } from '../context/PoemsContext';
 import { ThemeContext } from '../context/ThemeContext';
 import PoemShortBox from '../components/PoemShortBox';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const ITEMS_PER_PAGE = 10;
 
 const SearchPage = () => {
 	const { isDarkMode } = useContext(ThemeContext);
-	const { poems, favorites } = useContext(PoemsContext);
+	const { poems, favorites, loading } = useContext(PoemsContext);
 	const [title, setTitle] = useState('');
 	const [isFeatured, setIsFeatured] = useState(false);
 	const [selectedThemes, setSelectedThemes] = useState([]);
@@ -19,7 +20,7 @@ const SearchPage = () => {
 
 	useEffect(() => {
 		handleSearch();
-	}, [title, selectedThemes, isFeatured, inFavorites]);
+	}, [poems, title, selectedThemes, isFeatured, inFavorites]);
 
 	const handleSearch = () => {
 		let filteredPoems = poems.filter(poem => {
@@ -50,6 +51,10 @@ const SearchPage = () => {
 	const handleNext = () => {
 		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
 	};
+
+	if (loading) {
+		return <LoadingSpinner />;
+	}
 
 	return (
 		<div className={`p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} min-h-screen transition-all duration-300`}>
