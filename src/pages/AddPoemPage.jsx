@@ -3,6 +3,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { ThemeContext } from '../context/ThemeContext';
 import MultiselectDropdown from '../components/MultiselectDropdown';
+import themes from '../assets/poem_themes.json';
 
 const AddPoemPage = () => {
   const { isDarkMode } = useContext(ThemeContext);
@@ -89,7 +90,8 @@ const AddPoemPage = () => {
         </div>
 
         <div className="mb-4">
-          <MultiselectDropdown selectedThemes={selectedThemes} setSelectedThemes={setSelectedThemes} />
+          <label className="block text-lg font-medium mb-2">Poem Themes</label>
+          <MultiselectDropdown isMulti options={themes} selectedOptions={selectedThemes} setSelectedOptions={setSelectedThemes} />
         </div>
 
         <div className="mb-4">
@@ -100,7 +102,7 @@ const AddPoemPage = () => {
           <textarea
             value={poemContent}
             onChange={(e) => setPoemContent(e.target.value)}
-            placeholder="Enter the poem content here, each line on a new line."
+            placeholder="Enter the poem content here"
             rows={12}
             className={`textarea-field w-full p-2 border rounded ${
               isDarkMode

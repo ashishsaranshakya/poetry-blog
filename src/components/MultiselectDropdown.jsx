@@ -2,10 +2,7 @@ import React, { useContext } from 'react';
 import Select from 'react-select';
 import { ThemeContext } from '../context/ThemeContext';
 
-import themes from '../assets/poem_themes.json';
-
-
-const MultiselectDropdown = ({ selectedThemes, setSelectedThemes }) => {
+const MultiselectDropdown = ({ options, selectedOptions, setSelectedOptions, isMulti = false }) => {
 	const { isDarkMode } = useContext(ThemeContext);
 
 const customStyles = {
@@ -39,16 +36,13 @@ const customStyles = {
 };
 
   return (
-    <div>
-      	<label className="block text-lg font-medium mb-2">Poem Themes</label>
-		<Select
-			value={selectedThemes}
-			onChange={setSelectedThemes}
-			options={themes}
-			isMulti
-			styles={customStyles}
-		/>
-    </div>
+    <Select
+      value={selectedOptions}
+      onChange={setSelectedOptions}
+      options={options}
+      isMulti={isMulti}
+      styles={customStyles}
+    />
   );
 };
 

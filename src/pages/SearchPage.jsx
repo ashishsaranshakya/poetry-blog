@@ -5,8 +5,16 @@ import { PoemsContext } from '../context/PoemsContext';
 import { ThemeContext } from '../context/ThemeContext';
 import PoemShortBox from '../components/PoemShortBox';
 import LoadingSpinner from '../components/LoadingSpinner';
+import themes from '../assets/poem_themes.json';
 
 const ITEMS_PER_PAGE = 10;
+const sortOptions = [
+	{ value: "", label: "Select..." },
+	{ value: "dateDesc", label: "Latest first" },
+	{ value: "dateAsc", label: "Oldest first" },
+	{ value: "alphaAsc", label: "Alphabetical (A-Z)" },
+	{ value: "alphaDesc", label: "Reverse Alphabetical (Z-A)" }
+];
 
 const SearchPage = () => {
 	const { isDarkMode } = useContext(ThemeContext);
@@ -18,10 +26,11 @@ const SearchPage = () => {
 	const [searchUntitled, setSearchUntitled] = useState(false);
 	const [filteredPoems, setFilteredPoems] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [sortOrder, setSortOrder] = useState(sortOptions[0]);
 
 	useEffect(() => {
 		handleSearch();
-	}, [poems, title, selectedThemes, isFeatured, inFavorites, searchUntitled]);
+	}, [poems, title, selectedThemes, isFeatured, inFavorites, searchUntitled, sortOrder]);
 
 	const handleSearch = () => {
 		let filteredPoems = poems.filter(poem => {
@@ -35,6 +44,23 @@ const SearchPage = () => {
 
 		if (inFavorites) {
 			filteredPoems = filteredPoems.filter(poem => favorites.includes(poem.id));
+		}
+
+		switch (sortOrder.value) {
+			case 'dateAsc':
+				filteredPoems.sort((a, b) => a.createdAt - b.createdAt);
+				break;
+			case 'dateDesc':
+				filteredPoems.sort((a, b) => b.createdAt - a.createdAt);
+				break;
+			case 'alphaAsc':
+				filteredPoems.sort((a, b) => a.title.localeCompare(b.title));
+				break;
+			case 'alphaDesc':
+				filteredPoems.sort((a, b) => b.title.localeCompare(a.title));
+				break;
+			default:
+				break;
 		}
 
 		setFilteredPoems(filteredPoems);
@@ -65,12 +91,20 @@ const SearchPage = () => {
 
 			<SearchInput value={title} onChange={setTitle} isDisabled={searchUntitled} />
 
-			<div className="mt-2">
-				<MultiselectDropdown selectedThemes={selectedThemes} setSelectedThemes={setSelectedThemes} />
+			<div className="my-2">
+				<label className="block text-lg font-medium mb-2">Poem Themes</label>
+				<MultiselectDropdown isMulti options={themes} selectedOptions={selectedThemes} setSelectedOptions={setSelectedThemes} />
 			</div>
 
 			<div className="md:flex">
-				<div className="md:flex-1 mt-4 flex items-center md:justify-start">
+				<div className="md:flex-1 mt-4 flex items-center md:justify-start w-full">
+					<label className="block text-lg font-medium mr-4">Sort by:</label>
+					<div className="flex-grow md:w-48">
+						<MultiselectDropdown options={sortOptions} selectedOptions={sortOrder} setSelectedOptions={setSortOrder} />
+					</div>
+				</div>
+
+				<div className="md:flex-1 mt-4 flex items-center md:justify-center">
 					<input
 						type="checkbox"
 						id="featured"
@@ -100,7 +134,7 @@ const SearchPage = () => {
 						onChange={(e) => setSearchUntitled(e.target.checked)}
 						className="mr-2"
 					/>
-					<label htmlFor="untitled" className="text-lg">Search Untitled Poems</label>
+					<label htmlFor="untitled" className="text-lg">Only Untitled Poems</label>
 				</div>
 
 				{/* <div className="md:flex-1  mt-4 md:flex md:items-center md:justify-end">
