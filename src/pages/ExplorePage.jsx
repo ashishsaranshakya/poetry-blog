@@ -33,7 +33,7 @@ const ExplorePage = () => {
       <h2 className="text-2xl font-bold mb-4">Explore</h2>
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-8'>
-				{paginatedPoems.map(poem => <PoemShortBox poem={poem}/>)}
+				{paginatedPoems.map((poem, index) => <PoemShortBox key={index} poem={poem}/>)}
       </div>
 
       <div className="flex justify-between items-center mt-6">

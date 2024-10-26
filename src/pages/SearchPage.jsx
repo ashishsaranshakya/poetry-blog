@@ -78,7 +78,7 @@ const SearchPage = () => {
 			</div>
 
 			<div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-8'>
-				{filteredPoems.map(poem => <PoemShortBox poem={poem}/>)}
+				{filteredPoems.map((poem, index) => <PoemShortBox key={index} poem={poem}/>)}
       		</div>
     </div>
   );
