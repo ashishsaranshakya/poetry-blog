@@ -9,8 +9,17 @@ const HomePage = () => {
   const { poems, favorites } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
 
-  const favoritePoems = poems.filter((poem) => favorites.includes(poem.id)).slice(0, 4);
-  const featuredPoems = poems.filter((poem) => poem.isFeatured).slice(0, 4);
+  const shuffleArray = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  const favoritePoems = shuffleArray(poems.filter((poem) => favorites.includes(poem.id))).slice(0, 4);
+  const featuredPoems = shuffleArray(poems.filter((poem) => poem.isFeatured)).slice(0, 4);
   const recentPoems = [...poems].sort((a, b) => b.createdAt - a.createdAt).slice(0, 4);
 
   useEffect(() => {
