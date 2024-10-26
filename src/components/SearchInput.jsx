@@ -13,7 +13,7 @@ const SearchInput = ({ value, onChange, isDisabled }) => {
 			disabled={isDisabled}
 			className={`input-field w-full p-2 border rounded ${
 			isDarkMode
-				? 'border-gray-700 bg-gray-700 text-white'
+				? 'border-gray-500 bg-gray-950 text-white'
 				: 'border-gray-300 bg-white text-black'
 			}`}
 			required

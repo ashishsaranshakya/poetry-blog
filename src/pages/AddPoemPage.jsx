@@ -71,7 +71,7 @@ const AddPoemPage = () => {
               onChange={(e) => setTitle(e.target.value)}
               className={`input-field w-full p-2 border rounded ${
                 isDarkMode
-                  ? 'border-gray-700 bg-gray-700 text-white'
+                  ? 'border-gray-500 bg-gray-950 text-white'
                   : 'border-gray-300 bg-white text-black'
               }`}
             />
@@ -83,7 +83,7 @@ const AddPoemPage = () => {
               checked={isFeatured}
               onChange={(e) => setIsFeatured(e.target.checked)}
               className={`w-10 h-10 cursor-pointer ${
-                isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
+                isDarkMode ? 'bg-gray-500 border-gray-600' : 'bg-white border-gray-300'
               } rounded`}
             />
           </div>
@@ -106,7 +106,7 @@ const AddPoemPage = () => {
             rows={12}
             className={`textarea-field w-full p-2 border rounded ${
               isDarkMode
-                ? 'border-gray-700 bg-gray-700 text-white'
+                ? 'border-gray-700 bg-gray-950 text-white'
                 : 'border-gray-300 bg-white text-black'
             }`}
             onPaste={handlePaste}
