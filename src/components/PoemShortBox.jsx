@@ -9,6 +9,8 @@ const PoemShortBox = ({ poem }) => {
 
   const isFavorite = favorites.includes(poem.id);
 
+  const content = poem.content.slice(0, 9).join('\n').concat((poem.content.length >= 10 && poem.content[9] !== '') ? '\n' + poem.content[9] : '').concat(poem.content.length > 10 ? '...' : '');
+
   const handleFavoriteToggle = async () => {
     await toggleFavorite(poem.id);
   };
@@ -23,11 +25,11 @@ const PoemShortBox = ({ poem }) => {
         {isFavorite ? '❤️' : '🤍'}
       </button>
 
-      <h3 className="text-lg md:text-xl font-medium mb-4 mr-8">{poem.title}</h3>
-      <pre className="whitespace-pre-wrap">{poem.content.slice(0, 10).join('\n')}</pre>
+      <h3 className="text-lg md:text-xl font-medium mb-4 mr-8">{poem.title.length>0 ? poem.title : "Untitled"}</h3>
+      <pre className="whitespace-pre-wrap">{content}</pre>
       
       <Link to={`/poems/${poem.id}`} className={`text-blue-500 underline mt-2 block`}>
-        Show More
+        Read Poem
       </Link>
     </div>
   );
