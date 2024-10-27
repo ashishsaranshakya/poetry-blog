@@ -52,7 +52,10 @@ const Header = () => {
             <Link to="/search" className="hover:text-gray-500">Search</Link>
             <Link to="/favorites" className="hover:text-gray-500">Favorites</Link>
             {user && user.uid === import.meta.env.VITE_USER_ID && (
-              <Link to="/add-poem" className="hover:text-gray-500">Add Poem</Link>
+              <>
+                <Link to="/add-poem" className="hover:text-gray-500">Add Poem</Link>
+                <Link to="/admin" className="hover:text-gray-500">Admin</Link>
+              </>
             )}
           </nav>
 
@@ -108,9 +111,14 @@ const Header = () => {
             <Link to="/favorites" className="hover:text-gray-500 block">Favorites</Link>
           </li>
           {user && user.uid === import.meta.env.VITE_USER_ID && (
-            <li>
-              <Link to="/add-poem" className="hover:text-gray-500 block">Add Poem</Link>
-            </li>
+            <>
+              <li>
+                <Link to="/add-poem" className="hover:text-gray-500 block">Add Poem</Link>
+              </li>
+              <li>
+                <Link to="/admin" className="hover:text-gray-500 block">Admin</Link>
+              </li>
+            </>
           )}
           {user ? (
               <div className="md:hidden">

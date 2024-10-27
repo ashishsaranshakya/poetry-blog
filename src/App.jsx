@@ -12,6 +12,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import HomePage from './pages/HomePage';
 import PoemPage from './pages/PoemPage';
 import SearchPage from './pages/SearchPage';
+import AdminPage from './pages/AdminPage';
 
 const App = () => {
   
@@ -31,6 +32,11 @@ const App = () => {
                 <Route path="/add-poem" element={
                   <ProtectedRoute isAdmin message="You must be logged in to add poems.">
                     <AddPoemPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin" element={
+                  <ProtectedRoute isAdmin message="You must be logged in to edit poems.">
+                    <AdminPage />
                   </ProtectedRoute>
                 } />
               </Routes>

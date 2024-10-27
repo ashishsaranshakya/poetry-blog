@@ -1,15 +1,15 @@
 [
-	{ "value": "love", "label": "Love" },
-	{ "value": "heartbreak", "label": "Heartbreak" },
-	{ "value": "introspection", "label": "Introspection" },
-	{ "value": "dreaming", "label": "Dreaming" },
-	{ "value": "philosophy", "label": "Philosophy" },
-	{ "value": "escapism", "label": "Escapism" },
-	{ "value": "mortality", "label": "Mortality" },
-	{ "value": "questioningReality", "label": "Questioning Reality" },
-	{ "value": "questioningSociety", "label": "Questioning Society" },
-	{ "value": "monotony", "label": "Monotony" },
-	{ "value": "regrets", "label": "Regrets" },
-	{ "value": "littleMoments", "label": "Little Moments" },
-	{ "value": "feeling", "label": "Feeling" }
+	{ "value": "Love", "label": "Love" },
+	{ "value": "Heartbreak", "label": "Heartbreak" },
+	{ "value": "Introspection", "label": "Introspection" },
+	{ "value": "Dreaming", "label": "Dreaming" },
+	{ "value": "Philosophy", "label": "Philosophy" },
+	{ "value": "Escapism", "label": "Escapism" },
+	{ "value": "Mortality", "label": "Mortality" },
+	{ "value": "Questioning Reality", "label": "Questioning Reality" },
+	{ "value": "Questioning Society", "label": "Questioning Society" },
+	{ "value": "Monotony", "label": "Monotony" },
+	{ "value": "Regrets", "label": "Regrets" },
+	{ "value": "Little Moments", "label": "Little Moments" },
+	{ "value": "Feeling", "label": "Feeling" }
   ]
