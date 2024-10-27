@@ -60,12 +60,12 @@ const MultiselectDropdown = ({ options, selectedOptions, setSelectedOptions, isM
     control: (provided) => ({
       ...provided,
       borderColor: isDarkMode ? 'gray' : 'lightgray',
-      backgroundColor: isDarkMode ? '#1a1a1a' : '#fff',
+      backgroundColor: isDarkMode ? '#1a1a1a' : '#e7e8ea',
       color: isDarkMode ? '#fff' : '#000',
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isFocused ? (isDarkMode ? '#2D3748' : '#E2E8F0') : (isDarkMode ? '#1a1a1a' : '#fff'),
+      backgroundColor: state.isFocused ? (isDarkMode ? '#2D3748' : '#E2E8F0') : (isDarkMode ? '#1a1a1a' : '#e7e8ea'),
       color: isDarkMode ? '#fff' : '#000',
     }),
     multiValue: (provided) => ({
@@ -86,7 +86,7 @@ const MultiselectDropdown = ({ options, selectedOptions, setSelectedOptions, isM
     }),
     menu: (provided) => ({
       ...provided,
-      backgroundColor: isDarkMode ? '#1a1a1a' : '#fff',
+      backgroundColor: isDarkMode ? '#1a1a1a' : '#e7e8ea',
       color: isDarkMode ? '#fff' : '#000'
     }),
 };

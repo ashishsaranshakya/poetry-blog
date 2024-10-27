@@ -89,7 +89,7 @@ export const PoemsProvider = ({ children }) => {
   };
 
   return (
-    <PoemsContext.Provider value={{ poems, loading, favorites, toggleFavorite }}>
+    <PoemsContext.Provider value={{ poems, setPoems, loading, favorites, toggleFavorite }}>
       {children}
     </PoemsContext.Provider>
   );

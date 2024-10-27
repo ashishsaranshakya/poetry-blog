@@ -13,6 +13,7 @@ import HomePage from './pages/HomePage';
 import PoemPage from './pages/PoemPage';
 import SearchPage from './pages/SearchPage';
 import AdminPage from './pages/AdminPage';
+import EditPage from './pages/EditPage';
 
 const App = () => {
   
@@ -37,6 +38,11 @@ const App = () => {
                 <Route path="/admin" element={
                   <ProtectedRoute isAdmin message="You must be logged in to edit poems.">
                     <AdminPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/edit/:id" element={
+                  <ProtectedRoute isAdmin message="You must be logged in to edit poems.">
+                    <EditPage />
                   </ProtectedRoute>
                 } />
               </Routes>
