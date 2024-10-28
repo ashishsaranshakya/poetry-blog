@@ -1,15 +1,16 @@
 # My Writing Palace
 
-Welcome to **My Writing Palace**! This is a poetry blog platform that allows users to explore, favorite, and add poems. The application is built with React, Tailwind CSS, and Firebase.
+Welcome to **My Writing Palace**! This poetry blog platform allows users to explore, favorite and manage poems. The application is built with React, Tailwind CSS, and Firebase.
 
 ## Features
 
-- **User Authentication**: Users can log in with Google to access personalized features.
-- **Favorites**: Save favorite poems for quick access.
-- **Add Poem**: Only a designated user can add new poems to the platform.
-- **Dark Mode**: Toggle between dark and light themes to suit your reading preference.
-- **Responsive Design**: Optimized for desktop and mobile devices.
-- **Data Persistence**: Poems and user favorites are stored using Firebase Cloud Firestore.
+- **User Authentication**: Log in with Google to unlock personalized features like adding and favoriting poems.
+- **Favorites with Syncing**: Favorite poems are stored based on user login. Local storage is used for guests, and favorites automatically sync upon login.
+- **Search, Filter, and Sort**: Quickly find poems with dynamic search and filtering options by themes, title, and recent posts.
+- **Manage Content**: Authorized users can manage poems, making it easy to manage content.
+- **Favorites Export**: Export any poem as a PNG image in a custom format. Or share it directly to your favorite social media platform.
+- **Data Persistence**: Firebase Cloud Firestore is used for secure storage of poems, user data, and favorites, ensuring seamless data access.
+- **Real-Time Updates**: Changes are reflected immediately, leveraging Firebase’s real-time sync.
 
 ## Tech Stack
 
@@ -17,6 +18,7 @@ Welcome to **My Writing Palace**! This is a poetry blog platform that allows use
 - **Backend & Auth**: Firebase Authentication, Firebase Cloud Firestore
 - **Routing**: React Router
 - **State Management**: React Context API
+- **Export**: HTML to canvas (for poem image exports)
 
 ## Getting Started
 
@@ -87,15 +89,16 @@ The app will start on `http://localhost:5173` (or as indicated in the terminal).
 ├── public                  # Public assets
 ├── src
 │   ├── assets              # Icons and images
-│   ├── components          # Reusable components (Header, Footer, etc.)
+│   ├── components          # Reusable components (Header, Footer, LoadingSpinner, etc.)
 │   ├── context             # Context files for state management (PoemContext, ThemeContext)
-│   ├── pages               # Application pages (HomePage, Favorites, AddPoem, etc.)
-|   ├── styles			    # Global styles
+│   ├── pages               # Application pages (HomePage, Favorites, AddPoem, AdminPage, etc.)
+│   ├── styles              # Global styles
+│   ├── utils               # Utility functions
 │   ├── firebaseConfig.js   # Firebase configuration and initialization
-│   ├── App.js              # App component
+│   ├── App.js              # Base application component
 │   └── main.jsx            # Entry point of the app
 ├── .env		            # Environment variables
-└── package.json			# NPM dependencies
+└── package.json            # NPM dependencies
 ```
 
 ## License
