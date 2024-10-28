@@ -255,18 +255,41 @@ const PoemExport = ({ title, content }) => {
 	};
 
 	const handleShare = () => {
-		const shareData = {
-			title: title || "Untitled Poem",
-			text: `Here's a poem titled "${title || "Untitled"}" by Ashish Saran Shakya:\n\n${content.join("\n")}`,
-		};
+		if (poemRef.current) {
+			const rect = poemRef.current.getBoundingClientRect();
+			const exportWidth = rect.width;
+			const exportHeight = rect.height;
 
-		if (navigator.share) {
-			navigator
-				.share(shareData)
-				.then(() => console.log("Poem shared successfully"))
-				.catch((error) => console.error("Error sharing the poem:", error));
-		} else {
-			alert("Sharing is not supported on this device.");
+			html2canvas(poemRef.current, {
+				scale: 2,
+				width: exportWidth,
+				height: exportHeight,
+				backgroundColor: null,
+				x: 0,
+				y: 0,
+				scrollX: window.scrollX,
+				scrollY: window.scrollY,
+			}).then((canvas) => {
+				canvas.toBlob((blob) => {
+					if (blob) {
+						const shareData = {
+							text: `Here's a poem titled "${title || "Untitled"}" by Ashish Saran Shakya:\n\n${content.join("\n")}`,
+							files: [new File([blob], `${title || "poem"}.png`, { type: 'image/png' })],
+						};
+	
+						if (navigator.share) {
+							navigator
+								.share(shareData)
+								.then(() => console.log("Poem shared successfully"))
+								.catch((error) => console.error("Error sharing the poem:", error));
+						} else {
+							alert("Sharing is not supported on this device.");
+						}
+					} else {
+						console.error("Failed to create image blob");
+					}
+				}, 'image/png');
+			});
 		}
 	};
 
@@ -275,7 +298,7 @@ const PoemExport = ({ title, content }) => {
 			<pre ref={hiddenRef} className="invisible absolute whitespace-pre" />
 			<div
 				ref={poemRef}
-				className={`inline-block pt-2 pb-6 px-6 m-0 ${isDarkMode ? "bg-gray-800 text-white" : "bg-gray-100 text-black"} overflow-hidden rounded-lg`}
+				className={`inline-block pt-2 pb-6 px-6 m-0 ${isDarkMode ? "bg-gray-800 text-white" : "bg-gray-100 text-black"} overflow-hidden`}
 				style={{
 					width: maxWidth,
 					transform: `scale(${scale})`,
