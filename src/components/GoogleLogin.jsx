@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '../firebaseConfig';
+import { PoemsContext } from '../context/PoemsContext';
 
 const GoogleLogin = () => {
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useContext(PoemsContext);
 
   const handleGoogleLogin = async () => {
     try {
@@ -13,14 +14,6 @@ const GoogleLogin = () => {
       console.error('Google login failed:', error);
     }
   };
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      setUser(currentUser);
-    });
-    
-    return () => unsubscribe();
-  }, []);
 
   return (
     <div>

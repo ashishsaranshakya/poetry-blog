@@ -1,24 +1,18 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { auth, googleProvider } from '../firebaseConfig';
 import { signInWithPopup, signOut } from 'firebase/auth';
 import { ThemeContext } from '../context/ThemeContext';
+import { PoemsContext } from '../context/PoemsContext';
 import icon from '../assets/icon.svg';
 import login_icon from '../assets/login.svg';
 import logout_icon from '../assets/logout.svg';
 import hamburger_icon from '../assets/hamburger_menu.svg';
 
 const Header = () => {
-  const [user, setUser] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      setUser(currentUser);
-    });
-    return () => unsubscribe();
-  }, []);
+  const { user } = useContext(PoemsContext);
 
   const handleLogin = async () => {
     try {

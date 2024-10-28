@@ -8,10 +8,11 @@ import download_white from '../assets/download_white.svg';
 
 const PoemPage = () => {
   const { id } = useParams();
-  const { poems, toggleFavorite } = useContext(PoemsContext);
+  const { poems, favorites, toggleFavorite } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
 
   const poem = poems.find((p) => p.id === id);
+  const isFavorite = favorites.includes(poem.id);
 
   const [isExportVisible, setExportVisible] = useState(false);
 
@@ -38,7 +39,7 @@ const PoemPage = () => {
         className="absolute top-6 right-6 rounded"
       >
         <p className='text-xl md:text-2xl'>
-          {poem.isFavorite ? '❤️' : '🤍'}
+          {isFavorite ? '❤️' : '🤍'}
         </p>
       </button>
 

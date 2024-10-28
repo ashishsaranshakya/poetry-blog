@@ -1,17 +1,9 @@
-import { useState, useEffect } from 'react';
-import { auth } from '../firebaseConfig';
+import { useContext } from 'react';
 import GoogleLogin from './GoogleLogin';
+import { PoemsContext } from '../context/PoemsContext';
 
 const ProtectedRoute = ({ children, message, isAdmin = false }) => {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      setUser(currentUser);
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const { user } = useContext(PoemsContext);
 
   if (!user) {
     return (

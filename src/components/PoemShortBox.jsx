@@ -1,20 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
 import { ThemeContext } from '../context/ThemeContext';
 import { PoemsContext } from '../context/PoemsContext';
 
 const PoemShortBox = ({ poem }) => {
-  const [user, setUser] = useState(null);
   const { isDarkMode } = useContext(ThemeContext);
-  const { favorites, toggleFavorite } = useContext(PoemsContext);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      setUser(currentUser);
-    });
-    return () => unsubscribe();
-  }, []);
+  const { user, favorites, toggleFavorite } = useContext(PoemsContext);
 
   const isFavorite = favorites.includes(poem.id);
 

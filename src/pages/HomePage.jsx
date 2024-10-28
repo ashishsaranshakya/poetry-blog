@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { PoemsContext } from '../context/PoemsContext';
 import { ThemeContext } from '../context/ThemeContext';
 import PoemShortBox from '../components/PoemShortBox';
-import { auth } from '../firebaseConfig';
 
 const HomePage = () => {
-  const [user, setUser] = useState(null);
-  const { poems, favorites } = useContext(PoemsContext);
+  const { user, poems, favorites } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
 
   const shuffleArray = (array) => {
@@ -21,13 +19,6 @@ const HomePage = () => {
   const favoritePoems = shuffleArray(poems.filter((poem) => favorites.includes(poem.id))).slice(0, 4);
   const featuredPoems = shuffleArray(poems.filter((poem) => poem.isFeatured)).slice(0, 4);
   const recentPoems = [...poems].sort((a, b) => b.createdAt - a.createdAt).slice(0, 4);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      setUser(currentUser);
-    });
-    return () => unsubscribe();
-  }, []);
 
   return (
     <div className={`p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>

@@ -8,8 +8,16 @@ export const PoemsContext = createContext();
 
 export const PoemsProvider = ({ children }) => {
   const [poems, setPoems] = useState([]);
+  const [user, setUser] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'poems'), (snapshot) => {
@@ -89,7 +97,7 @@ export const PoemsProvider = ({ children }) => {
   };
 
   return (
-    <PoemsContext.Provider value={{ poems, setPoems, loading, favorites, toggleFavorite }}>
+    <PoemsContext.Provider value={{ user, setUser, poems, setPoems, loading, favorites, toggleFavorite }}>
       {children}
     </PoemsContext.Provider>
   );
