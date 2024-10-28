@@ -86,7 +86,7 @@ const SearchPage = () => {
 	}
 
 	return (
-		<div className={`p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} min-h-screen transition-all duration-300`}>
+		<div className={`p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>
 			<h2 className="text-2xl font-bold mb-4">Search Poems</h2>
 
 			<SearchInput value={title} onChange={setTitle} isDisabled={searchUntitled} />

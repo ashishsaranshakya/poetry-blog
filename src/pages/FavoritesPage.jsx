@@ -31,7 +31,7 @@ const FavoritesPage = () => {
   };
 
   return (
-    <div className={`p-6 favorites-page ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} min-h-screen transition-all duration-300`}>
+    <div className={`p-6 favorites-page ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>
       <h2 className="text-2xl font-bold mb-4">Your Favorite Poems</h2>
 
       {paginatedFavorites.length > 0 ? (

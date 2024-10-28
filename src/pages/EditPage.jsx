@@ -38,7 +38,7 @@ const EditPage = () => {
     }
 
     if (!poems.find((p) => p.id === id)) {
-        return <div>Poem not found.</div>;
+        return <div className={`relative p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>Poem not found.</div>;
     }
 
     const handleSave = async () => {
