@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { PoemsContext } from '../context/PoemsContext';
 import { ThemeContext } from '../context/ThemeContext';
 import PoemExport from "../components/PoemExport";
+import download_black from '../assets/download_black.svg';
+import download_white from '../assets/download_white.svg';
 
 const PoemPage = () => {
   const { id } = useParams();
@@ -50,15 +52,15 @@ const PoemPage = () => {
 
       <button
         onClick={handleDownloadClick}
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+        className="absolute right-6 bottom-6 rounded"
       >
-        Download Poem
+        <img src={isDarkMode ? download_white : download_black} alt="logout" className="w-8 h-8" />
       </button>
 
       {isExportVisible && (
         <div className={`fixed inset-0 flex items-center justify-center z-50 ${isDarkMode ? 'bg-black bg-opacity-75' : 'bg-white bg-opacity-75'}`}>
-            <PoemExport {...poem} />
-            <button onClick={handleCloseExport} className="absolute top-2 right-2 text-xl">✖️</button>
+          <PoemExport {...poem} />
+          <button onClick={handleCloseExport} className="absolute top-2 right-2 text-xl">✖️</button>
         </div>
       )}
     </div>
