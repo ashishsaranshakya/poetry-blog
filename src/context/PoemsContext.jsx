@@ -96,8 +96,17 @@ export const PoemsProvider = ({ children }) => {
     }
   };
 
+  const deletePoem = async (poemId) => {
+    try {
+      await deleteDoc(doc(db, 'poems', poemId));
+      setPoems(poems.filter((poem) => poem.id !== poemId));
+    } catch (error) {
+      console.error("Error deleting poem:", error);
+    }
+  };
+
   return (
-    <PoemsContext.Provider value={{ user, setUser, poems, setPoems, loading, favorites, toggleFavorite }}>
+    <PoemsContext.Provider value={{ user, setUser, poems, setPoems, loading, favorites, toggleFavorite, deletePoem }}>
       {children}
     </PoemsContext.Provider>
   );
