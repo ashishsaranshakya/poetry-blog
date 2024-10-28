@@ -56,14 +56,10 @@ const PoemPage = () => {
       </button>
 
       {isExportVisible && (
-        <>
         <div className={`fixed inset-0 flex items-center justify-center z-50 ${isDarkMode ? 'bg-black bg-opacity-75' : 'bg-white bg-opacity-75'}`}>
-          <div classNamevj="relative rounded"> 
             <PoemExport {...poem} />
             <button onClick={handleCloseExport} className="absolute top-2 right-2 text-xl">✖️</button>
-          </div>
         </div>
-        </>
       )}
     </div>
   );
