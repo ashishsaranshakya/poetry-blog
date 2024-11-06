@@ -11,7 +11,7 @@ const PoemExport = ({ title, content }) => {
 
 	useEffect(() => {
 		if (hiddenRef.current) {
-			const lines = content.join("\n").split("\n");
+			const lines = content;
 			let longestWidth = 0;
 
 			lines.forEach((line) => {
