@@ -11,6 +11,7 @@ const AddPoemPage = () => {
   const [poemContent, setPoemContent] = useState('');
   const [isFeatured, setIsFeatured] = useState(false);
   const [selectedThemes, setSelectedThemes] = useState([]);
+  const [dateCreated, setDateCreated] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -26,7 +27,7 @@ const AddPoemPage = () => {
         title,
         content: lines,
         isFeatured,
-        createdAt: new Date(),
+        createdAt: dateCreated,
         themes: flattenedThemes,
       };
 
@@ -36,6 +37,7 @@ const AddPoemPage = () => {
       setTitle('');
       setPoemContent('');
       setIsFeatured(false);
+      setDateCreated(new Date());
       setSelectedThemes([]);
     } catch (error) {
       console.error('Error adding poem: ', error);
@@ -64,7 +66,7 @@ const AddPoemPage = () => {
 
         <div className="flex justify-between gap-10 mb-4">
           <div className="flex-1">
-            <label className="block text-lg mb-4 font-medium">Poem Title</label>
+            <label className="block text-lg mb-2 font-medium">Poem Title</label>
             <input
               type="text"
               value={title}
@@ -77,7 +79,7 @@ const AddPoemPage = () => {
             />
           </div>
           <div className='flex-1'>
-            <label className="block text-lg mb-4 font-medium">Featured</label>
+            <label className="block text-lg mb-2 font-medium">Featured</label>
             <input
               type="checkbox"
               checked={isFeatured}
@@ -94,9 +96,9 @@ const AddPoemPage = () => {
           <MultiselectDropdown isMulti options={themes} selectedOptions={selectedThemes} setSelectedOptions={setSelectedThemes} />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-2">
           <div className='md:flex items-center mb-2'>
-            <label className="text-lg font-medium  mr-4">Poem Content</label>
+            <label className="text-lg font-medium mr-4">Poem Content</label>
             <p className='text-sm font-normal'>(Note: All blank lines are removed during pasting)</p>
           </div>
           <textarea
@@ -112,6 +114,20 @@ const AddPoemPage = () => {
             onPaste={handlePaste}
             required
           />
+        </div>
+
+        <div className="mb-4">
+          <label className="block mb-2 font-medium">Date Created</label>
+          <input
+            type="date"
+            value={new Date(dateCreated).toISOString().substring(0, 10)}
+            onChange={(e) => setDateCreated(new Date(e.target.value))}
+            className={`w-full border p-2 rounded mb-4 ${
+              isDarkMode
+                ? 'border-gray-700 bg-gray-950 text-white'
+                : 'border-gray-300 bg-white text-black'
+              }`}
+            />
         </div>
 
         <button
