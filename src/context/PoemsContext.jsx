@@ -23,7 +23,8 @@ export const PoemsProvider = ({ children }) => {
     const unsubscribe = onSnapshot(collection(db, 'poems'), (snapshot) => {
       const fetchedPoems = snapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data(),
+        reads: doc.reads ?? 0,
+        ...doc.data()
       }));
       setPoems(fetchedPoems.sort(() => Math.random() - 0.5));
       setLoading(false);

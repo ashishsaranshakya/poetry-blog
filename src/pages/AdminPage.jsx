@@ -13,6 +13,8 @@ const sortOptions = [
 	{ value: "", label: "Select..." },
 	{ value: "dateDesc", label: "Latest first" },
 	{ value: "dateAsc", label: "Oldest first" },
+	{ value: "mostReads", label: "Most read" },
+	{ value: "leastReads", label: "Least read" },
 	{ value: "alphaAsc", label: "Alphabetical (A-Z)" },
 	{ value: "alphaDesc", label: "Reverse Alphabetical (Z-A)" }
 ];
@@ -54,6 +56,12 @@ const AdminPage = () => {
 				break;
 			case 'dateDesc':
 				filteredPoems.sort((a, b) => b.createdAt - a.createdAt);
+				break;
+			case 'mostReads':
+				filteredPoems.sort((a, b) => b.reads - a.reads);
+				break;
+			case 'leastReads':
+				filteredPoems.sort((a, b) => a.reads - b.reads);
 				break;
 			case 'alphaAsc':
 				filteredPoems.sort((a, b) => a.title.localeCompare(b.title));
@@ -146,9 +154,14 @@ const AdminPage = () => {
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
 				{paginatedPoems.map((poem) => (
 					<div key={poem.id} className={`relative p-4 border rounded ${isDarkMode ? 'border-gray-700 bg-gray-950 text-white' : 'border-gray-300 bg-white text-black'}`}>
-						<h3 className="text-xl font-semibold">{poem.title || "Untitled"}</h3>
-						<p className="text-gray-500 text-sm mb-2">Themes: {poem.themes.join(', ') || 'N/A'}</p>
-						<p className="text-sm mb-4">Created on: {formatFirebaseTimestamp(poem.createdAt)}</p>
+						<div className='flex flex-col md:flex-row md:justify-between mb-4'>
+							<div>
+								<h3 className="text-xl font-semibold">{poem.title || "Untitled"}</h3>
+								<p className="text-gray-500 text-sm mb-2">Themes: {poem.themes.join(', ') || 'N/A'}</p>
+								<p className="text-sm">Created on: {formatFirebaseTimestamp(poem.createdAt)}</p>
+							</div>
+							<h3 className="text-xl font-semibold">Reads: {poem.reads}</h3>
+						</div>
 						<div className='flex justify-between'>
 							<button
 							className="text-blue-500 underline mr-4"
