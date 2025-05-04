@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { db } from '../firebaseConfig';
-import { collection, onSnapshot, doc } from 'firebase/firestore';
+import { collection, onSnapshot, doc, getDoc, updateDoc, increment } from 'firebase/firestore';
 import { auth } from '../firebaseConfig';
 import { deleteDoc, setDoc, getDocs } from 'firebase/firestore';
 
@@ -31,6 +31,41 @@ export const PoemsProvider = ({ children }) => {
 
     return () => unsubscribe();
   }, []);
+
+  const countPoemRead = async (poemId) => {
+    const poemRef = doc(db, 'poems', poemId);
+
+    try {
+      const poemSnap = await getDoc(poemRef);
+      if (poemSnap.exists()) {
+        const poemData = poemSnap.data();
+        if (typeof poemData.reads !== 'number') {
+          await updateDoc(poemRef, { reads: 1 });
+        } else {
+          await updateDoc(poemRef, { reads: poemData.reads + 1 });
+        }
+      }
+    } catch (error) {
+      console.error("Error handling global read count:", error);
+      return;
+    }
+
+    if (user) {
+      const userPoemRef = doc(db, `users/${user.uid}/readPoems`, poemId);
+      try {
+        const userDocSnap = await getDoc(userPoemRef);
+        if (userDocSnap.exists()) {
+          await updateDoc(userPoemRef, {
+            count: increment(1)
+          });
+        } else {
+          await setDoc(userPoemRef, { count: 1 });
+        }
+      } catch (error) {
+        console.error("Error updating user-specific read count:", error);
+      }
+    }
+  };
 
   useEffect(() => {
     const loadFavorites = async (userId) => {
@@ -106,7 +141,7 @@ export const PoemsProvider = ({ children }) => {
   };
 
   return (
-    <PoemsContext.Provider value={{ user, setUser, poems, setPoems, loading, favorites, toggleFavorite, deletePoem }}>
+    <PoemsContext.Provider value={{ user, setUser, poems, setPoems, loading, favorites, toggleFavorite, deletePoem, countPoemRead: countPoemRead }}>
       {children}
     </PoemsContext.Provider>
   );

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { PoemsContext } from '../context/PoemsContext';
 import { ThemeContext } from '../context/ThemeContext';
@@ -8,8 +8,14 @@ import download_white from '../assets/download_white.svg';
 
 const PoemPage = () => {
   const { id } = useParams();
-  const { poems, favorites, toggleFavorite } = useContext(PoemsContext);
+  const { poems, favorites, toggleFavorite, countPoemRead } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
+  useEffect(() => {
+    const handleReadCount = async () => {
+      await countPoemRead(id);
+    };
+    handleReadCount();
+  }, [id]);
 
   const poem = poems.find((p) => p.id === id);
   const isFavorite = favorites.includes(poem.id);
