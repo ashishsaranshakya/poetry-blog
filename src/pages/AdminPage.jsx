@@ -165,6 +165,12 @@ const AdminPage = () => {
 						<div className='flex justify-between'>
 							<button
 							className="text-blue-500 underline mr-4"
+							onClick={() => navigate(`/poems/${poem.id}`)}
+							>
+							View
+							</button>
+							<button
+							className="text-blue-500 underline mr-4"
 							onClick={() => navigate(`/edit/${poem.id}`)}
 							>
 							Edit
