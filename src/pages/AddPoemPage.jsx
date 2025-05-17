@@ -1,11 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { ThemeContext } from '../context/ThemeContext';
 import MultiselectDropdown from '../components/MultiselectDropdown';
 import themes from '../assets/poem_themes.json';
+import { PoemsContext } from '../context/PoemsContext';
 
 const AddPoemPage = () => {
+  const { setTitle: setPageTitle } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
   const [title, setTitle] = useState('');
   const [poemContent, setPoemContent] = useState('');
@@ -14,6 +16,10 @@ const AddPoemPage = () => {
   const [dateCreated, setDateCreated] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+      setPageTitle("My Writing Palace | Add Poem");
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { PoemsContext } from '../context/PoemsContext';
 import { ThemeContext } from '../context/ThemeContext';
 import PoemShortBox from '../components/PoemShortBox';
 
 const HomePage = () => {
-  const { user, poems, favorites } = useContext(PoemsContext);
+  const { user, poems, favorites, setTitle } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
 
   const shuffleArray = (array) => {
@@ -15,6 +15,10 @@ const HomePage = () => {
     }
     return shuffled;
   };
+
+  useEffect(() => {
+    setTitle("My Writing Palace");
+  }, []);
 
   const favoritePoems = shuffleArray(poems.filter((poem) => favorites.includes(poem.id))).slice(0, 4);
   const featuredPoems = shuffleArray(poems.filter((poem) => poem.isFeatured)).slice(0, 4);

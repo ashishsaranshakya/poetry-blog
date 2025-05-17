@@ -10,7 +10,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 
 const EditPage = () => {
     const { id } = useParams();
-    const { poems, setPoems, loading } = useContext(PoemsContext);
+    const { poems, setPoems, loading, setTitle: setPageTitle } = useContext(PoemsContext);
 	const { isDarkMode } = useContext(ThemeContext);
 	const navigate = useNavigate();
 
@@ -32,6 +32,10 @@ const EditPage = () => {
             }
         }
     }, [id, poems, loading]);
+	
+	useEffect(() => {
+		  setPageTitle("My Writing Palace | Edit Poem");
+	}, []);
 
     if (loading) {
         return <LoadingSpinner/>;

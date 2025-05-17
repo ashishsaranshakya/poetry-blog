@@ -7,6 +7,7 @@ import { deleteDoc, setDoc, getDocs } from 'firebase/firestore';
 export const PoemsContext = createContext();
 
 export const PoemsProvider = ({ children }) => {
+  const [title, setTitle] = useState('My Writing Palace');
   const [poems, setPoems] = useState([]);
   const [user, setUser] = useState(null);
   const [favorites, setFavorites] = useState([]);
@@ -141,8 +142,12 @@ export const PoemsProvider = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
   return (
-    <PoemsContext.Provider value={{ user, setUser, poems, setPoems, loading, favorites, toggleFavorite, deletePoem, countPoemRead: countPoemRead }}>
+    <PoemsContext.Provider value={{ user, setUser, poems, setPoems, loading, favorites, toggleFavorite, deletePoem, countPoemRead: countPoemRead, title, setTitle }}>
       {children}
     </PoemsContext.Provider>
   );

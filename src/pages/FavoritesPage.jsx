@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { PoemsContext } from '../context/PoemsContext';
 import PoemShortBox from '../components/PoemShortBox';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -7,7 +7,7 @@ import { ThemeContext } from '../context/ThemeContext';
 const ITEMS_PER_PAGE = 10;
 
 const FavoritesPage = () => {
-  const { poems, favorites, loading } = useContext(PoemsContext);
+  const { poems, favorites, loading, setTitle } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,6 +15,10 @@ const FavoritesPage = () => {
   if (loading) {
     return <LoadingSpinner />;
   }
+
+  useEffect(() => {
+      setTitle("My Writing Palace | Favorites");
+  }, []);
 
   const favoritePoems = poems.filter((poem) => favorites.includes(poem.id));
   const totalFavorites = favoritePoems.length;

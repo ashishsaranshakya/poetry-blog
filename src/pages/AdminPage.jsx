@@ -21,7 +21,7 @@ const sortOptions = [
 
 const AdminPage = () => {
 	const { isDarkMode } = useContext(ThemeContext);
-	const { poems, loading, favorites, deletePoem } = useContext(PoemsContext);
+	const { poems, loading, favorites, deletePoem, setTitle: setPageTitle } = useContext(PoemsContext);
 	const navigate = useNavigate();
 	const [title, setTitle] = useState('');
 	const [isFeatured, setIsFeatured] = useState(false);
@@ -35,6 +35,10 @@ const AdminPage = () => {
 	useEffect(() => {
 		handleSearch();
 	}, [poems, title, selectedThemes, isFeatured, inFavorites, searchUntitled, sortOrder]);
+
+	useEffect(() => {
+		  setPageTitle("My Writing Palace | Add Poem");
+	}, []);
 
 	const handleSearch = () => {
 		let filteredPoems = poems.filter(poem => {
@@ -177,7 +181,12 @@ const AdminPage = () => {
 							</button>
 							<button
 							className="text-red-500 underline"
-							onClick={() => deletePoem(poem.id)}
+							onClick={() => {
+								const confirmed = window.confirm(`Are you sure you want to delete "${poem.title || 'Untitled'}"?`);
+								if (confirmed) {
+									deletePoem(poem.id);
+								}
+							}}
 							>
 							Delete
 							</button>

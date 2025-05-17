@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { PoemsContext } from '../context/PoemsContext';
 import PoemShortBox from '../components/PoemShortBox';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -7,7 +7,7 @@ import { ThemeContext } from '../context/ThemeContext';
 const ITEMS_PER_PAGE = 10;
 
 const ExplorePage = () => {
-  const { poems, loading } = useContext(PoemsContext);
+  const { poems, loading, setTitle } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -23,6 +23,10 @@ const ExplorePage = () => {
   const handleNext = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
+
+  useEffect(() => {
+      setTitle("My Writing Palace | Explore");
+  }, []);
 
   if (loading) {
     return <LoadingSpinner />;

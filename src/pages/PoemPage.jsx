@@ -8,13 +8,14 @@ import download_white from '../assets/download_white.svg';
 
 const PoemPage = () => {
   const { id } = useParams();
-  const { poems, favorites, toggleFavorite, countPoemRead } = useContext(PoemsContext);
+  const { poems, favorites, toggleFavorite, countPoemRead, setTitle } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
   useEffect(() => {
     const handleReadCount = async () => {
       await countPoemRead(id);
     };
     handleReadCount();
+    setTitle(poem.title.length > 0 ? poem.title : "Untitled");
   }, [id]);
 
   const poem = poems.find((p) => p.id === id);

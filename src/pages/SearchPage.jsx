@@ -18,7 +18,7 @@ const sortOptions = [
 
 const SearchPage = () => {
 	const { isDarkMode } = useContext(ThemeContext);
-	const { poems, favorites, loading } = useContext(PoemsContext);
+	const { poems, favorites, loading, setTitle: setPageTitle } = useContext(PoemsContext);
 	const [title, setTitle] = useState('');
 	const [isFeatured, setIsFeatured] = useState(false);
 	const [selectedThemes, setSelectedThemes] = useState([]);
@@ -30,6 +30,7 @@ const SearchPage = () => {
 
 	useEffect(() => {
 		handleSearch();
+		setPageTitle("My Writing Palace | Search");
 	}, [poems, title, selectedThemes, isFeatured, inFavorites, searchUntitled, sortOrder]);
 
 	const handleSearch = () => {
