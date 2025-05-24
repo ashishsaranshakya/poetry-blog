@@ -5,11 +5,15 @@ import { ThemeContext } from '../context/ThemeContext';
 import PoemExport from "../components/PoemExport";
 import download_black from '../assets/download_black.svg';
 import download_white from '../assets/download_white.svg';
+import LoadingSpinner from '../components/LoadingSpinner.jsx';
 
 const PoemPage = () => {
   const { id } = useParams();
-  const { poems, favorites, toggleFavorite, countPoemRead, setTitle } = useContext(PoemsContext);
+  const { loading, poems, favorites, toggleFavorite, countPoemRead, setTitle } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
+  if (loading) {
+		return <LoadingSpinner />;
+	}
   useEffect(() => {
     const handleReadCount = async () => {
       await countPoemRead(id);

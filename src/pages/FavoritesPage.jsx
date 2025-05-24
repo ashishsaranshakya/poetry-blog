@@ -12,10 +12,6 @@ const FavoritesPage = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
   useEffect(() => {
       setTitle("My Writing Palace | Favorites");
   }, []);
@@ -33,6 +29,10 @@ const FavoritesPage = () => {
   const handleNext = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className={`p-6 favorites-page ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>
