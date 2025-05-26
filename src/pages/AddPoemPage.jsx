@@ -5,6 +5,9 @@ import { ThemeContext } from '../context/ThemeContext';
 import MultiselectDropdown from '../components/MultiselectDropdown';
 import themes from '../assets/poem_themes.json';
 import { PoemsContext } from '../context/PoemsContext';
+import PoemExport from "../components/PoemExport";
+import download_black from '../assets/download_black.svg';
+import download_white from '../assets/download_white.svg';
 
 const AddPoemPage = () => {
   const { setTitle: setPageTitle } = useContext(PoemsContext);
@@ -16,10 +19,19 @@ const AddPoemPage = () => {
   const [dateCreated, setDateCreated] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isExportVisible, setExportVisible] = useState(false);
+  const [poem, setPoem] = useState({ title: '', content: [] });
 
   useEffect(() => {
       setPageTitle("My Writing Palace | Add Poem");
   }, []);
+
+  useEffect(() => {
+    setPoem({
+      title,
+      content: poemContent.split('\n')
+    });
+  }, [title, poemContent]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,6 +74,20 @@ const AddPoemPage = () => {
     const outputText = result.join('\n');
     
     setPoemContent(outputText);
+  };
+
+  const handleDownloadClick = (e) => {
+    e.preventDefault();
+    if(!poem.content || poem.content.join().length === 0) {
+      alert("No content to export.");
+      return;
+    }
+    setExportVisible(true);
+  };
+
+  const handleCloseExport = (e) => {
+    e.preventDefault();
+    setExportVisible(false);
   };
 
   return (
@@ -136,15 +162,31 @@ const AddPoemPage = () => {
             />
         </div>
 
-        <button
-          type="submit"
-          className={`${
-            loading ? 'bg-gray-500' : 'bg-blue-500'
-          } text-white px-4 py-2 rounded`}
-          disabled={loading}
-        >
-          {loading ? 'Submitting...' : 'Submit Poem'}
-        </button>
+        <div className="flex justify-between items-center">
+          <button
+            type="submit"
+            className={`${
+              loading ? 'bg-gray-500' : 'bg-blue-500'
+            } text-white px-4 py-2 rounded`}
+            disabled={loading}
+          >
+            {loading ? 'Submitting...' : 'Submit Poem'}
+          </button>
+          <>
+            <button
+              onClick={handleDownloadClick}
+            >
+              <img src={isDarkMode ? download_white : download_black} alt="download" className="w-8 h-8" />
+            </button>
+
+            {isExportVisible && (
+              <div className={`fixed inset-0 flex items-center justify-center z-50 ${isDarkMode ? 'bg-black bg-opacity-75' : 'bg-white bg-opacity-75'}`}>
+                <PoemExport {...poem} />
+                <button onClick={handleCloseExport} className="absolute top-4 right-4 text-xl">✖️</button>
+              </div>
+            )}
+          </>
+        </div>
       </form>
     </div>
   );

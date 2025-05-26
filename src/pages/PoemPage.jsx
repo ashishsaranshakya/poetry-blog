@@ -77,7 +77,7 @@ const PoemPage = () => {
 
       {isExportVisible && (
         <div className={`fixed inset-0 flex items-center justify-center z-50 ${isDarkMode ? 'bg-black bg-opacity-75' : 'bg-white bg-opacity-75'}`}>
-          <PoemExport {...poem} />
+          <PoemExport {...poem} showName />
           <button onClick={handleCloseExport} className="absolute top-4 right-4 text-xl">✖️</button>
         </div>
       )}

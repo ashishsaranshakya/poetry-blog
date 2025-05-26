@@ -2,7 +2,7 @@ import React, { useRef, useContext, useEffect, useState } from "react";
 import html2canvas from "html2canvas";
 import { ThemeContext } from "../context/ThemeContext";
 
-const PoemExport = ({ title, content }) => {
+const PoemExport = ({ title, content, showName }) => {
 	const poemRef = useRef(null);
 	const hiddenRef = useRef(null);
 	const { isDarkMode } = useContext(ThemeContext);
@@ -33,7 +33,8 @@ const PoemExport = ({ title, content }) => {
 		}
 	}, [content]);
 
-	const handleExport = () => {
+	const handleExport = (e) => {
+		e.preventDefault();
 		if (poemRef.current) {
 			const rect = poemRef.current.getBoundingClientRect();
 			const exportWidth = rect.width;
@@ -57,7 +58,8 @@ const PoemExport = ({ title, content }) => {
 		}
 	};
 
-	const handleShare = () => {
+	const handleShare = (e) => {
+		e.preventDefault();
 		if (poemRef.current) {
 			const rect = poemRef.current.getBoundingClientRect();
 			const exportWidth = rect.width;
@@ -77,7 +79,7 @@ const PoemExport = ({ title, content }) => {
 					if (blob) {
 						const shareData = {
 							text: `Here's a poem titled "${title || "Untitled"}" by Ashish Saran Shakya:\n\n${content.join("\n")}`,
-							files: [new File([blob], `${title || "poem"}.png`, { type: 'image/png' })],
+							files: [new File([blob], `${title || "Untitled"}.png`, { type: 'image/png' })],
 						};
 	
 						if (navigator.share) {
@@ -108,8 +110,8 @@ const PoemExport = ({ title, content }) => {
 					border: "1px solid transparent",
 				}}
 			>
-				<h2 className="text-2xl font-bold text-center mb-1">{title || "Untitled"}</h2>
-				<p className="text-center mb-4 italic">by Ashish Saran Shakya</p>
+				<h2 className={"text-2xl font-bold text-center " + (showName ? "mb-1" : "mb-4")}>{title || "Untitled"}</h2>
+				{showName && <p className="text-center mb-4 italic">by Ashish Saran Shakya</p>}
 				<pre className="whitespace-pre-wrap text-left mb-2">{content.join("\n")}</pre>
 			</div>
 			<div
