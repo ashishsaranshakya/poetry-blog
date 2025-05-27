@@ -42,10 +42,31 @@ const ExplorePage = () => {
 				return;
 			}
 
+			const searchTermLower = title.toLowerCase().trim();
 			const uniqueTitles = [...new Set(poems.map(poem => poem.title).filter(Boolean))];
-			const matchingTitles = uniqueTitles.filter(poemTitle =>
-				poemTitle.toLowerCase().startsWith(title.toLowerCase())
-			);
+			const matchingTitles = uniqueTitles.filter(poemTitle => {
+				const wordsInTitle = poemTitle.toLowerCase().split(/\s+/);
+				return wordsInTitle.some(word => word.startsWith(searchTermLower));
+			});
+
+			matchingTitles.sort((a, b) => {
+				const aLower = a.toLowerCase();
+				const bLower = b.toLowerCase();
+
+				const aStartsWithSearchTerm = aLower.startsWith(searchTermLower);
+				const bStartsWithSearchTerm = bLower.startsWith(searchTermLower);
+
+				if (aStartsWithSearchTerm && !bStartsWithSearchTerm) return -1;
+				if (!aStartsWithSearchTerm && bStartsWithSearchTerm) return 1;
+
+				const aHasExactWordMatch = aLower.split(/\s+/).some(word => word === searchTermLower);
+				const bHasExactWordMatch = bLower.split(/\s+/).some(word => word === searchTermLower);
+
+				if (aHasExactWordMatch && !bHasExactWordMatch) return -1;
+				if (!aHasExactWordMatch && bHasExactWordMatch) return 1;
+
+				return aLower.localeCompare(bLower);
+			});
 
 			setSuggestions(matchingTitles.slice(0, 7));
 		}, 200);
