@@ -11,7 +11,6 @@ import { PoemsProvider } from './context/PoemsContext';
 import { ThemeProvider } from './context/ThemeContext';
 import HomePage from './pages/HomePage';
 import PoemPage from './pages/PoemPage';
-import SearchPage from './pages/SearchPage';
 import AdminPage from './pages/AdminPage';
 import EditPage from './pages/EditPage';
 
@@ -28,7 +27,6 @@ const App = () => {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/explore" element={<ExplorePage />} />
                 <Route path="/poems/:id" element={<PoemPage />} />
-                <Route path="/search" element={<SearchPage />} />
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/add-poem" element={
                   <ProtectedRoute isAdmin message="You must be logged in to add poems.">
