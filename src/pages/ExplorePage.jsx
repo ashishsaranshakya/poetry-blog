@@ -28,11 +28,30 @@ const ExplorePage = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [sortOrder, setSortOrder] = useState(sortOptions[0]);
 	const [filtersEnabled, setFiltersEnabled] = useState(false);
+	const [suggestions, setSuggestions] = useState([]);
 
 	useEffect(() => {
 		handleSearch();
 		setPageTitle("My Writing Palace | Explore");
 	}, [poems, title, selectedThemes, isFeatured, inFavorites, searchUntitled, sortOrder]);
+
+	useEffect(() => {
+		const fetchSuggestionsTimeout = setTimeout(() => {
+			if (title.trim() === '') {
+				setSuggestions([]);
+				return;
+			}
+
+			const uniqueTitles = [...new Set(poems.map(poem => poem.title).filter(Boolean))];
+			const matchingTitles = uniqueTitles.filter(poemTitle =>
+				poemTitle.toLowerCase().startsWith(title.toLowerCase())
+			);
+
+			setSuggestions(matchingTitles.slice(0, 7));
+		}, 200);
+
+		return () => clearTimeout(fetchSuggestionsTimeout);
+	}, [title, poems]);
 
 	const countOccurrences = (text, term) => {
 		if (!text || !term) return 0;
@@ -96,6 +115,10 @@ const ExplorePage = () => {
 		setCurrentPage(1);
 	};
 
+	const handleSelectSuggestion = (selectedSuggestion) => {
+		setTitle(selectedSuggestion);
+	};
+
 	const totalPages = Math.ceil(filteredPoems.length / ITEMS_PER_PAGE);
 	const paginatedPoems = filteredPoems.slice(
 		(currentPage - 1) * ITEMS_PER_PAGE,
@@ -126,7 +149,13 @@ const ExplorePage = () => {
 
 			{filtersEnabled && (
 				<>
-					<SearchInput value={title} onChange={setTitle} isDisabled={searchUntitled} />
+					<SearchInput
+						value={title}
+						onChange={setTitle}
+						isDisabled={searchUntitled}
+						suggestions={suggestions}
+						onSelectSuggestion={handleSelectSuggestion}
+					/>
 
 					<div className="my-2">
 						<label className="block text-lg font-medium mb-2">Poem Themes</label>
@@ -214,7 +243,7 @@ const ExplorePage = () => {
 						</button>
 					</div>
 				</>
-			)}		
+			)}
 		</div>
 	);
 };
