@@ -43,32 +43,73 @@ const ExplorePage = () => {
 			}
 
 			const searchTermLower = title.toLowerCase().trim();
+			const allSuggestionsMap = new Map();
+
 			const uniqueTitles = [...new Set(poems.map(poem => poem.title).filter(Boolean))];
-			const matchingTitles = uniqueTitles.filter(poemTitle => {
-				const wordsInTitle = poemTitle.toLowerCase().split(/\s+/);
-				return wordsInTitle.some(word => word.startsWith(searchTermLower));
+			uniqueTitles.forEach(poemTitle => {
+				const titleLower = poemTitle.toLowerCase();
+				const wordsInTitle = titleLower.split(/\W+/).filter(Boolean);
+
+				if (titleLower.startsWith(searchTermLower)) {
+					allSuggestionsMap.set(poemTitle, { type: 'title', value: poemTitle });
+				}
+				else if (wordsInTitle.some(word => word.startsWith(searchTermLower))) {
+					allSuggestionsMap.set(poemTitle, { type: 'title', value: poemTitle });
+				}
 			});
 
-			matchingTitles.sort((a, b) => {
-				const aLower = a.toLowerCase();
-				const bLower = b.toLowerCase();
-
-				const aStartsWithSearchTerm = aLower.startsWith(searchTermLower);
-				const bStartsWithSearchTerm = bLower.startsWith(searchTermLower);
-
-				if (aStartsWithSearchTerm && !bStartsWithSearchTerm) return -1;
-				if (!aStartsWithSearchTerm && bStartsWithSearchTerm) return 1;
-
-				const aHasExactWordMatch = aLower.split(/\s+/).some(word => word === searchTermLower);
-				const bHasExactWordMatch = bLower.split(/\s+/).some(word => word === searchTermLower);
-
-				if (aHasExactWordMatch && !bHasExactWordMatch) return -1;
-				if (!aHasExactWordMatch && bHasExactWordMatch) return 1;
-
-				return aLower.localeCompare(bLower);
+			poems.forEach(poem => {
+				if (poem.content && poem.content.length > 0) {
+					poem.content.forEach(line => {
+						const lineTrimmed = line.trim();
+						const lineLower = lineTrimmed.toLowerCase();
+						if (lineLower.includes(searchTermLower)) {
+							allSuggestionsMap.set(lineTrimmed, { type: 'content', value: lineTrimmed });
+						}
+					});
+				}
 			});
 
-			setSuggestions(matchingTitles.slice(0, 7));
+			let combinedSuggestions = Array.from(allSuggestionsMap.values());
+
+			combinedSuggestions.sort((a, b) => {
+				const aLower = a.value.toLowerCase();
+				const bLower = b.value.toLowerCase();
+
+				const aIsContent = a.type === 'content';
+				const bIsContent = b.type === 'content';
+
+				if (!aIsContent && bIsContent) return -1;
+				if (aIsContent && !bIsContent) return 1;
+
+				if (a.type === 'title' && b.type === 'title') {
+					const aStartsWithSearchTerm = aLower.startsWith(searchTermLower);
+					const bStartsWithSearchTerm = bLower.startsWith(searchTermLower);
+
+					if (aStartsWithSearchTerm && !bStartsWithSearchTerm) return -1;
+					if (!aStartsWithSearchTerm && bStartsWithSearchTerm) return 1;
+
+					const aWords = aLower.split(/\W+/).filter(Boolean);
+					const bWords = bLower.split(/\W+/).filter(Boolean);
+					const aHasExactWordMatch = aWords.some(word => word === searchTermLower);
+					const bHasExactWordMatch = bWords.some(word => word === searchTermLower);
+
+					if (aHasExactWordMatch && !bHasExactWordMatch) return -1;
+					if (!aHasExactWordMatch && bHasExactWordMatch) return 1;
+
+					const aHasWordStartingWith = aWords.some(word => word.startsWith(searchTermLower));
+					const bHasWordStartingWith = bWords.some(word => word.startsWith(searchTermLower));
+
+					if (aHasWordStartingWith && !bHasWordStartingWith) return -1;
+					if (!aHasWordStartingWith && bHasWordStartingWith) return 1;
+
+					return aLower.localeCompare(bLower);
+				} else {
+					return aLower.localeCompare(bLower);
+				}
+			});
+
+			setSuggestions(combinedSuggestions.slice(0, 7));
 		}, 200);
 
 		return () => clearTimeout(fetchSuggestionsTimeout);

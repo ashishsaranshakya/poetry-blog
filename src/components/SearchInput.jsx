@@ -23,8 +23,8 @@ const SearchInput = ({ value, onChange, isDisabled, suggestions = [], onSelectSu
 		setShowSuggestions(true);
 	};
 
-	const handleSuggestionClick = (suggestion) => {
-		onSelectSuggestion(suggestion);
+	const handleSuggestionClick = (suggestionObject) => {
+		onSelectSuggestion(suggestionObject.value);
 		setShowSuggestions(false);
 	};
 
@@ -67,7 +67,7 @@ const SearchInput = ({ value, onChange, isDisabled, suggestions = [], onSelectSu
 										${isDarkMode ? 'hover:bg-gray-600 text-white' : 'hover:bg-gray-200 text-black'}`}
 							onMouseDown={() => handleSuggestionClick(suggestion)}
 						>
-							{suggestion}
+							{suggestion.value}
 						</li>
 					))}
 				</ul>

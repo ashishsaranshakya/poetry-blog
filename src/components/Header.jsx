@@ -98,9 +98,6 @@ const Header = () => {
             <Link to="/explore" className="hover:text-gray-500 block">Explore</Link>
           </li>
           <li>
-            <Link to="/search" className="hover:text-gray-500 block">Search</Link>
-          </li>
-          <li>
             <Link to="/favorites" className="hover:text-gray-500 block">Favorites</Link>
           </li>
           {user && user.uid === import.meta.env.VITE_USER_ID && (
