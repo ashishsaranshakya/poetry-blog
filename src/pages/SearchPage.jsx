@@ -33,38 +33,65 @@ const SearchPage = () => {
 		setPageTitle("My Writing Palace | Search");
 	}, [poems, title, selectedThemes, isFeatured, inFavorites, searchUntitled, sortOrder]);
 
+	const countOccurrences = (text, term) => {
+		if (!text || !term) return 0;
+		const regex = new RegExp(term, 'gi');
+		const matches = text.match(regex);
+		return matches ? matches.length : 0;
+	};
+
 	const handleSearch = () => {
-		let filteredPoems = poems.filter(poem => {
+		const searchTerm = title.toLowerCase().trim();
+
+		let results = poems.map(poem => {
+			const poemTitle = poem.title ? poem.title.toLowerCase() : '';
+			const poemContent = poem.content ? poem.content.join(' ').toLowerCase() : '';
+
+			let relevanceScore = 0;
+			const titleMatchesSearchTerm = searchTerm && poemTitle.includes(searchTerm);
+			const contentOccurrences = searchTerm ? countOccurrences(poemContent, searchTerm) : 0;
+
+			if (searchTerm) {
+				if (titleMatchesSearchTerm) {
+					relevanceScore += 1000;
+				}
+				relevanceScore += contentOccurrences;
+			}
+
+			return { ...poem, relevanceScore, titleMatchesSearchTerm };
+		});
+
+		let filtered = results.filter(poem => {
 			const titleMatch = searchUntitled
 				? !poem.title || poem.title.trim() === ""
-				: poem.title.toLowerCase().includes(title.toLowerCase());
+				: poem.titleMatchesSearchTerm || (searchTerm && poem.content && poem.content.join(' ').toLowerCase().includes(searchTerm)) || !searchTerm;
 			const themeMatch = selectedThemes.length === 0 || selectedThemes.every(theme => poem.themes.includes(theme.label));
 			const featuredMatch = !isFeatured || poem.isFeatured;
 			return titleMatch && themeMatch && featuredMatch;
 		});
 
 		if (inFavorites) {
-			filteredPoems = filteredPoems.filter(poem => favorites.includes(poem.id));
+			filtered = filtered.filter(poem => favorites.includes(poem.id));
 		}
 
-		switch (sortOrder.value) {
-			case 'dateAsc':
-				filteredPoems.sort((a, b) => a.createdAt - b.createdAt);
-				break;
-			case 'dateDesc':
-				filteredPoems.sort((a, b) => b.createdAt - a.createdAt);
-				break;
-			case 'alphaAsc':
-				filteredPoems.sort((a, b) => a.title.localeCompare(b.title));
-				break;
-			case 'alphaDesc':
-				filteredPoems.sort((a, b) => b.title.localeCompare(a.title));
-				break;
-			default:
-				break;
-		}
+		filtered.sort((a, b) => {
+			switch (sortOrder.value) {
+				case '':
+					return b.relevanceScore - a.relevanceScore;
+				case 'dateAsc':
+					return a.createdAt - b.createdAt;
+				case 'dateDesc':
+					return b.createdAt - a.createdAt;
+				case 'alphaAsc':
+					return (a.title || '').localeCompare(b.title || '');
+				case 'alphaDesc':
+					return b.title.localeCompare(a.title);
+				default:
+					return 0;
+			}
+		});
 
-		setFilteredPoems(filteredPoems);
+		setFilteredPoems(filtered);
 		setCurrentPage(1);
 	};
 
