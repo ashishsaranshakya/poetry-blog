@@ -7,6 +7,10 @@ import LoadingSpinner from '../components/LoadingSpinner.jsx';
 import SearchInput from '../components/SearchInput';
 import MultiselectDropdown from '../components/MultiselectDropdown';
 import themes from '../assets/poem_themes.json';
+import edit_icon_light from '../assets/edit_icon_light.svg';
+import edit_icon_dark from '../assets/edit_icon_dark.svg';
+import bin_icon_light from '../assets/bin_icon_light.svg';
+import bin_icon_dark from '../assets/bin_icon_dark.svg';
 
 const ITEMS_PER_PAGE = 10;
 const sortOptions = [
@@ -177,7 +181,7 @@ const AdminPage = () => {
 							className="text-blue-500 underline mr-4"
 							onClick={() => navigate(`/edit/${poem.id}`)}
 							>
-							Edit
+								<img src={isDarkMode ? edit_icon_dark : edit_icon_light} alt="menu" className="w-6 h-6" />
 							</button>
 							<button
 							className="text-red-500 underline"
@@ -188,7 +192,8 @@ const AdminPage = () => {
 								}
 							}}
 							>
-							Delete
+								<img src={isDarkMode ? bin_icon_dark : bin_icon_light} alt="menu" className="w-6 h-6" />
+							{/* Delete */}
 							</button>
 						</div>
 					</div>
