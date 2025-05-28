@@ -35,11 +35,10 @@ const Header = () => {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <img src={icon} alt="icon" className="w-8 h-8" />
-          <h1 className="text-xl md:text-2xl font-bold">My Writing Palace</h1>
+          <h1 className="text-xl md:text-2xl font-bold whitespace-nowrap">My Writing Palace</h1>
         </div>
 
-        <div className="flex items-center space-x-4">
-
+        <div className="flex items-center space-x-2">
           <nav className="hidden md:flex space-x-4">
             <Link to="/" className="hover:text-gray-500">Home</Link>
             <Link to="/explore" className="hover:text-gray-500">Explore</Link>
@@ -55,14 +54,14 @@ const Header = () => {
           <button
             onClick={toggleTheme}
             title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-            className="w-12 h-12 rounded-full hover:bg-gray-500 flex justify-center items-center"
+            className="w-10 h-10 rounded-full hover:bg-gray-500 flex justify-center items-center"
           >
-            <p className={`text-3xl ${isDarkMode ? 'transform -rotate-45' : ''}`}>
+            <p className={`text-2xl md:text-3xl ${isDarkMode ? 'transform -rotate-45' : ''}`}>
               {isDarkMode ? '☾' : '☼'}
             </p>
           </button>
-          <button onClick={toggleMenu} className="md:hidden w-12 h-12 rounded-full hover:bg-gray-500 flex justify-center items-center">
-            <img src={hamburger_icon} alt="menu" className="w-8 h-8" />
+          <button onClick={toggleMenu} className="md:hidden w-10 h-10 rounded-full hover:bg-gray-500 flex justify-center items-center">
+            <img src={hamburger_icon} alt="menu" className="w-6 h-6" />
           </button>
 
           {user ? (

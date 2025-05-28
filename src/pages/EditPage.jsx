@@ -68,7 +68,7 @@ const EditPage = () => {
 
 	return (
 		<div className={`relative p-4 rounded ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>
-			<h3 className="text-2xl font-semibold mb-4">Edit Poem</h3>
+			<h3 className="text-xl md:text-2xl font-bold whitespace-nowrap mb-2 md:mb-6">Edit Poem</h3>
 
 			<div className="flex justify-between gap-10 mb-4">
 				<div className="flex-1">

@@ -26,11 +26,11 @@ const HomePage = () => {
 
   return (
     <div className={`p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>
-      <h1 className="text-3xl font-bold mb-6">Welcome, {!!user ? user.displayName : "Poetic Nomad!"}</h1>
+      <h1 className="text-xl md:text-2xl font-bold whitespace-nowrap mb-2 md:mb-6">Welcome, {!!user ? user.displayName : "Poetic Nomad!"}</h1>
 
       {favoritePoems.length > 0 &&
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Your Favorites</h2>
+          <h2 className="text-xl md:text-2xl font-bold whitespace-nowrap mb-4">Your Favorites</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {favoritePoems.map((poem, index) => <PoemShortBox key={index} poem={poem} />)}
           </div>
@@ -39,7 +39,7 @@ const HomePage = () => {
 
       {featuredPoems.length > 0 &&
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Featured Poems</h2>
+          <h2 className="text-xl md:text-2xl font-bold whitespace-nowrap mb-4">Featured Poems</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {featuredPoems.map((poem, index) => <PoemShortBox key={index} poem={poem} />)}
           </div>
@@ -48,7 +48,7 @@ const HomePage = () => {
 
       {recentPoems.length > 0 &&
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Recent Poems</h2>
+          <h2 className="text-xl md:text-2xl font-bold whitespace-nowrap mb-4">Recent Poems</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {recentPoems.map((poem, index) => <PoemShortBox key={index} poem={poem} />)}
           </div>

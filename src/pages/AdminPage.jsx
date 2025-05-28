@@ -101,9 +101,9 @@ const AdminPage = () => {
 
 	return (
 		<div className={`relative p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>
-			<div className='flex flex-col md:flex-row md:justify-between md:items-center mb-6'>
-				<h2 className="text-2xl font-bold">Admin - Manage Poems</h2>
-				<h2 className="text-2xl font-bold">Total Poems: {filteredPoems.length}</h2>
+			<div className='flex flex-col md:flex-row md:justify-between md:items-center mb-2 md:mb-6'>
+				<h2 className="text-xl md:text-2xl font-bold whitespace-nowrap">Admin - Manage Poems</h2>
+				<h2 className="text-lg md:text-xl font-semibold whitespace-nowrap">Total Poems: {filteredPoems.length}</h2>
 			</div>
 
 			<SearchInput value={title} onChange={setTitle} isDisabled={searchUntitled} />

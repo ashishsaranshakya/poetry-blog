@@ -36,11 +36,11 @@ const FavoritesPage = () => {
 
   return (
     <div className={`p-6 favorites-page ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>
-      <h2 className="text-2xl font-bold mb-4">Your Favorite Poems</h2>
+      <h2 className="text-xl md:text-2xl font-bold whitespace-nowrap mb-4 md:mb-6">Your Favorite Poems</h2>
 
       {paginatedFavorites.length > 0 ? (
         <>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-8'>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             {paginatedFavorites.map((poem, index) => (
               <PoemShortBox key={index} poem={poem} />
             ))}
