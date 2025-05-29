@@ -11,6 +11,8 @@ import edit_icon_light from '../assets/edit_icon_light.svg';
 import edit_icon_dark from '../assets/edit_icon_dark.svg';
 import bin_icon_light from '../assets/bin_icon_light.svg';
 import bin_icon_dark from '../assets/bin_icon_dark.svg';
+import eye_light from '../assets/eye_light.svg';
+import eye_dark from '../assets/eye_dark.svg';
 
 const ITEMS_PER_PAGE = 10;
 const sortOptions = [
@@ -175,13 +177,13 @@ const AdminPage = () => {
 							className="text-blue-500 underline mr-4"
 							onClick={() => navigate(`/poems/${poem.id}`)}
 							>
-							View
+								<img src={isDarkMode ? eye_dark : eye_light} alt="view" className="w-6 h-6" />
 							</button>
 							<button
 							className="text-blue-500 underline mr-4"
 							onClick={() => navigate(`/edit/${poem.id}`)}
 							>
-								<img src={isDarkMode ? edit_icon_dark : edit_icon_light} alt="menu" className="w-6 h-6" />
+								<img src={isDarkMode ? edit_icon_dark : edit_icon_light} alt="edit" className="w-6 h-6" />
 							</button>
 							<button
 							className="text-red-500 underline"
@@ -192,8 +194,7 @@ const AdminPage = () => {
 								}
 							}}
 							>
-								<img src={isDarkMode ? bin_icon_dark : bin_icon_light} alt="menu" className="w-6 h-6" />
-							{/* Delete */}
+								<img src={isDarkMode ? bin_icon_dark : bin_icon_light} alt="delete" className="w-6 h-6" />
 							</button>
 						</div>
 					</div>

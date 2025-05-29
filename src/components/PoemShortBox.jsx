@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { ThemeContext } from '../context/ThemeContext';
 import { PoemsContext } from '../context/PoemsContext';
+import arrow_light from '../assets/arrow_light.svg';
+import arrow_dark from '../assets/arrow_dark.svg';
 
 const PoemShortBox = ({ poem }) => {
   const { isDarkMode } = useContext(ThemeContext);
@@ -34,15 +36,10 @@ const PoemShortBox = ({ poem }) => {
       <h3 className="text-lg md:text-xl font-medium mb-4 mr-8">{poem.title.length > 0 ? poem.title : 'Untitled'}</h3>
       <pre className="whitespace-pre-wrap">{content}</pre>
 
-      <div className="flex justify-between mt-auto pt-4">
-        <Link to={`/poems/${poem.id}`} className="text-blue-500 underline block">
-          Read Poem
+      <div className="absolute bottom-4 right-4">
+        <Link to={`/poems/${poem.id}`}>
+          <img src={isDarkMode ? arrow_dark : arrow_light} alt="read" className="w-6 h-6" />
         </Link>
-        {user && user.uid === import.meta.env.VITE_USER_ID && (
-          <Link to={`/edit/${poem.id}`} className="text-blue-500 underline block">
-            Edit Poem
-          </Link>
-        )}
       </div>
     </div>
   );
