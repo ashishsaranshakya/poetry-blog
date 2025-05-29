@@ -54,7 +54,7 @@ const PoemPage = () => {
         </p>
       </button>
 
-      <h2 className="text-xl md:text-2xl font-bold mb-2 mr-12">{poem.title.length > 0 ? poem.title : "Untitled"}</h2>
+      <h2 className="text-xl md:text-2xl font-bold font-typewriter mb-2 mr-12">{poem.title.length > 0 ? poem.title : "Untitled"}</h2>
       {!!poem.themes && poem.themes.length > 0 && (
         <div className="text-sm md:text-base mb-2">
           <span className="font-bold">Themes:</span> {poem.themes.join(', ')}
@@ -63,8 +63,8 @@ const PoemPage = () => {
       
       {poem.content.length > 0 && (
         <div>
-          <pre className="text-xs md:text-base whitespace-pre-wrap">{poem.content.slice(0, -1).join('\n')}</pre>
-          <pre className="text-xs md:text-base whitespace-pre-wrap mr-12">{poem.content[poem.content.length - 1]}</pre>
+          <pre className="text-xs md:text-base whitespace-pre-wrap font-typewriter">{poem.content.slice(0, -1).join('\n')}</pre>
+          <pre className="text-xs md:text-base whitespace-pre-wrap font-typewriter mr-12">{poem.content[poem.content.length - 1]}</pre>
         </div>
       )}
 

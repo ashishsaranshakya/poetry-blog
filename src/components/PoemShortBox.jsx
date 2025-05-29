@@ -14,8 +14,7 @@ const PoemShortBox = ({ poem }) => {
   const content = poem.content
     .slice(0, 9)
     .join('\n')
-    .concat(poem.content.length >= 10 && poem.content[9] !== '' ? '\n' + poem.content[9] : '')
-    .concat(poem.content.length > 10 ? '\n...' : '');
+    .concat(poem.content.length >= 10 && poem.content[9] !== '' ? '\n' + poem.content[9] : '');
 
   const handleFavoriteToggle = async () => {
     await toggleFavorite(poem.id);
@@ -33,8 +32,8 @@ const PoemShortBox = ({ poem }) => {
         {isFavorite ? '❤️' : '🤍'}
       </button>
 
-      <h3 className="text-lg md:text-xl font-medium mb-4 mr-8">{poem.title.length > 0 ? poem.title : 'Untitled'}</h3>
-      <pre className="whitespace-pre-wrap flex-grow">{content}</pre>
+      <h3 className="text-lg md:text-xl font-bold font-typewriter mb-4 mr-8">{poem.title.length > 0 ? poem.title : 'Untitled'}</h3>
+      <pre className="whitespace-pre-wrap flex-grow font-typewriter">{content}</pre>
 
       <div className="absolute bottom-4 right-4">
         <Link to={`/poems/${poem.id}`}>
