@@ -27,7 +27,7 @@ export const PoemsProvider = ({ children }) => {
         reads: doc.reads ?? 0,
         ...doc.data()
       }));
-      setPoems(fetchedPoems.sort(() => Math.random() - 0.5));
+      setPoems(fetchedPoems);
       setLoading(false);
     });
 

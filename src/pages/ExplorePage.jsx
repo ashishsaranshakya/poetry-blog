@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import SearchInput from '../components/SearchInput';
 import MultiselectDropdown from '../components/MultiselectDropdown';
 import { PoemsContext } from '../context/PoemsContext';
@@ -19,21 +20,135 @@ const sortOptions = [
 const ExplorePage = () => {
 	const { isDarkMode } = useContext(ThemeContext);
 	const { poems, favorites, loading, setTitle: setPageTitle } = useContext(PoemsContext);
-	const [title, setTitle] = useState('');
-	const [isFeatured, setIsFeatured] = useState(false);
-	const [selectedThemes, setSelectedThemes] = useState([]);
-	const [inFavorites, setInFavorites] = useState(false);
-	const [searchUntitled, setSearchUntitled] = useState(false);
-	const [filteredPoems, setFilteredPoems] = useState([]);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [sortOrder, setSortOrder] = useState(sortOptions[0]);
+
+	const [searchParams, setSearchParams] = useSearchParams();
+	const location = useLocation();
+
+	const title = searchParams.get('title') || '';
+	const selectedThemes = searchParams.get('themes')
+		? searchParams.get('themes').split(',').map(theme => ({ label: theme, value: theme }))
+		: [];
+	const isFeatured = searchParams.get('featured') === 'true';
+	const inFavorites = searchParams.get('favorites') === 'true';
+	const searchUntitled = searchParams.get('untitled') === 'true';
+	const sortOrderValue = searchParams.get('sort') || '';
+	const sortOrder = sortOptions.find(opt => opt.value === sortOrderValue) || sortOptions[0];
+	const currentPageFromURL = parseInt(searchParams.get('page') || '1', 10);
+
 	const [filtersEnabled, setFiltersEnabled] = useState(false);
 	const [suggestions, setSuggestions] = useState([]);
+	const [filteredPoems, setFilteredPoems] = useState([]);
+
+	const updateURLParams = (updates) => {
+		const newParams = new URLSearchParams(searchParams.toString());
+
+		const setOrDelete = (key, value) => {
+			if (typeof value === 'boolean' && value === false) {
+				newParams.delete(key);
+			}
+			else if (value !== undefined && value !== null && value !== '') {
+				newParams.set(key, value.toString());
+			} else {
+				newParams.delete(key);
+			}
+		};
+
+		if (updates.title !== undefined) setOrDelete('title', updates.title);
+		if (updates.selectedThemes !== undefined) {
+			if (updates.selectedThemes.length > 0) {
+				setOrDelete('themes', updates.selectedThemes.map(t => t.value).join(','));
+			} else {
+				newParams.delete('themes');
+			}
+		}
+		if (updates.isFeatured !== undefined) setOrDelete('featured', updates.isFeatured);
+		if (updates.inFavorites !== undefined) setOrDelete('favorites', updates.inFavorites);
+		if (updates.searchUntitled !== undefined) setOrDelete('untitled', updates.searchUntitled);
+		if (updates.sortOrder !== undefined) setOrDelete('sort', updates.sortOrder.value);
+		if (updates.page !== undefined) setOrDelete('page', updates.page > 1 ? updates.page : '');
+
+		setSearchParams(newParams, { replace: false });
+	};
+
+	const handleTitleChange = (newTitle) => updateURLParams({ title: newTitle, page: 1 });
+	const handleThemesChange = (newThemes) => updateURLParams({ selectedThemes: newThemes, page: 1 });
+	const handleFeaturedChange = (e) => updateURLParams({ isFeatured: e.target.checked, page: 1 });
+	const handleFavoritesChange = (e) => updateURLParams({ inFavorites: e.target.checked, page: 1 });
+	const handleUntitledChange = (e) => updateURLParams({ searchUntitled: e.target.checked, page: 1 });
+	const handleSortChange = (newSort) => updateURLParams({ sortOrder: newSort, page: 1 });
+	const handlePageChange = (newPage) => updateURLParams({ page: newPage });
 
 	useEffect(() => {
-		handleSearch();
+		const anyFilterActive =
+			title !== '' ||
+			selectedThemes.length > 0 ||
+			isFeatured ||
+			inFavorites ||
+			searchUntitled ||
+			sortOrder.value !== '';
+
+		setFiltersEnabled(anyFilterActive);
+	}, []);
+
+	useEffect(() => {
 		setPageTitle("My Writing Palace | Explore");
-	}, [poems, title, selectedThemes, isFeatured, inFavorites, searchUntitled, sortOrder]);
+
+		const searchTerm = title.toLowerCase().trim();
+
+		let results = poems.map(poem => {
+			const poemTitle = poem.title ? poem.title.toLowerCase() : '';
+			const poemContent = poem.content ? poem.content.join(' ').toLowerCase() : '';
+
+			let relevanceScore = 0;
+			const titleMatchesSearchTerm = searchTerm && poemTitle.includes(searchTerm);
+			const contentOccurrences = searchTerm ? countOccurrences(poemContent, searchTerm) : 0;
+
+			if (searchTerm) {
+				if (titleMatchesSearchTerm) {
+					relevanceScore += 1000;
+				}
+				relevanceScore += contentOccurrences;
+			}
+			return { ...poem, relevanceScore, titleMatchesSearchTerm };
+		});
+
+		let filtered = results.filter(poem => {
+			const isUntitledAndMatches = searchUntitled && (!poem.title || poem.title.trim() === "");
+			const isSearchTermPresentInTitleOrContent = searchTerm && (poem.titleMatchesSearchTerm || (poem.content && poem.content.join(' ').toLowerCase().includes(searchTerm)));
+			const noSearchTermEntered = !searchTerm;
+
+			const titleContentMatch = isUntitledAndMatches || isSearchTermPresentInTitleOrContent || noSearchTermEntered;
+
+			const themeMatch = selectedThemes.length === 0 || selectedThemes.every(theme => poem.themes && poem.themes.includes(theme.label));
+			const featuredMatch = !isFeatured || poem.isFeatured;
+			const favoritesMatch = !inFavorites || favorites.includes(poem.id);
+
+			return titleContentMatch && themeMatch && featuredMatch && favoritesMatch;
+		});
+
+		filtered.sort((a, b) => {
+			if (sortOrder.value === '') {
+				return b.relevanceScore - a.relevanceScore;
+			}
+
+			switch (sortOrder.value) {
+				case 'dateAsc':
+					return a.createdAt - b.createdAt;
+				case 'dateDesc':
+					return b.createdAt - a.createdAt;
+				case 'alphaAsc':
+					return (a.title || '').localeCompare(b.title || '');
+				case 'alphaDesc':
+					return (b.title || '').localeCompare(a.title || '');
+				default:
+					return 0;
+			}
+		});
+
+		setFilteredPoems(filtered);
+
+	}, [poems, searchParams, favorites, location.search]);
+
 
 	useEffect(() => {
 		const fetchSuggestionsTimeout = setTimeout(() => {
@@ -104,6 +219,7 @@ const ExplorePage = () => {
 					if (!aHasWordStartingWith && bHasWordStartingWith) return 1;
 
 					return aLower.localeCompare(bLower);
+
 				} else {
 					return aLower.localeCompare(bLower);
 				}
@@ -115,6 +231,7 @@ const ExplorePage = () => {
 		return () => clearTimeout(fetchSuggestionsTimeout);
 	}, [title, poems]);
 
+
 	const countOccurrences = (text, term) => {
 		if (!text || !term) return 0;
 		const regex = new RegExp(term, 'gi');
@@ -122,77 +239,23 @@ const ExplorePage = () => {
 		return matches ? matches.length : 0;
 	};
 
-	const handleSearch = () => {
-		const searchTerm = title.toLowerCase().trim();
 
-		let results = poems.map(poem => {
-			const poemTitle = poem.title ? poem.title.toLowerCase() : '';
-			const poemContent = poem.content ? poem.content.join(' ').toLowerCase() : '';
-
-			let relevanceScore = 0;
-			const titleMatchesSearchTerm = searchTerm && poemTitle.includes(searchTerm);
-			const contentOccurrences = searchTerm ? countOccurrences(poemContent, searchTerm) : 0;
-
-			if (searchTerm) {
-				if (titleMatchesSearchTerm) {
-					relevanceScore += 1000;
-				}
-				relevanceScore += contentOccurrences;
-			}
-
-			return { ...poem, relevanceScore, titleMatchesSearchTerm };
-		});
-
-		let filtered = results.filter(poem => {
-			const titleMatch = searchUntitled
-				? !poem.title || poem.title.trim() === ""
-				: poem.titleMatchesSearchTerm || (searchTerm && poem.content && poem.content.join(' ').toLowerCase().includes(searchTerm)) || !searchTerm;
-			const themeMatch = selectedThemes.length === 0 || selectedThemes.every(theme => poem.themes.includes(theme.label));
-			const featuredMatch = !isFeatured || poem.isFeatured;
-			return titleMatch && themeMatch && featuredMatch;
-		});
-
-		if (inFavorites) {
-			filtered = filtered.filter(poem => favorites.includes(poem.id));
-		}
-
-		filtered.sort((a, b) => {
-			switch (sortOrder.value) {
-				case '':
-					return b.relevanceScore - a.relevanceScore;
-				case 'dateAsc':
-					return a.createdAt - b.createdAt;
-				case 'dateDesc':
-					return b.createdAt - a.createdAt;
-				case 'alphaAsc':
-					return (a.title || '').localeCompare(b.title || '');
-				case 'alphaDesc':
-					return b.title.localeCompare(a.title);
-				default:
-					return 0;
-			}
-		});
-
-		setFilteredPoems(filtered);
-		setCurrentPage(1);
-	};
-
-	const handleSelectSuggestion = (selectedSuggestion) => {
-		setTitle(selectedSuggestion);
+	const handleSelectSuggestion = (selectedSuggestionObject) => {
+		updateURLParams({ title: selectedSuggestionObject.value, page: 1 });
 	};
 
 	const totalPages = Math.ceil(filteredPoems.length / ITEMS_PER_PAGE);
 	const paginatedPoems = filteredPoems.slice(
-		(currentPage - 1) * ITEMS_PER_PAGE,
-		currentPage * ITEMS_PER_PAGE
+		(currentPageFromURL - 1) * ITEMS_PER_PAGE,
+		currentPageFromURL * ITEMS_PER_PAGE
 	);
 
 	const handlePrevious = () => {
-		if (currentPage > 1) setCurrentPage(currentPage - 1);
+		if (currentPageFromURL > 1) handlePageChange(currentPageFromURL - 1);
 	};
 
 	const handleNext = () => {
-		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+		if (currentPageFromURL < totalPages) handlePageChange(currentPageFromURL + 1);
 	};
 
 	if (loading) {
@@ -213,22 +276,23 @@ const ExplorePage = () => {
 				<>
 					<SearchInput
 						value={title}
-						onChange={setTitle}
+						onChange={handleTitleChange}
 						isDisabled={searchUntitled}
 						suggestions={suggestions}
 						onSelectSuggestion={handleSelectSuggestion}
+						isDarkMode={isDarkMode}
 					/>
 
 					<div className="my-2">
 						<label className="block text-lg font-medium mb-2">Poem Themes</label>
-						<MultiselectDropdown isMulti options={themes} selectedOptions={selectedThemes} setSelectedOptions={setSelectedThemes} />
+						<MultiselectDropdown isMulti options={themes} selectedOptions={selectedThemes} setSelectedOptions={handleThemesChange} />
 					</div>
 
 					<div className="md:flex">
 						<div className="md:flex-1 mt-4 flex items-center md:justify-start w-full">
 							<label className="block text-lg font-medium mr-4">Sort by:</label>
 							<div className="flex-grow md:w-48">
-								<MultiselectDropdown options={sortOptions} selectedOptions={sortOrder} setSelectedOptions={setSortOrder} />
+								<MultiselectDropdown options={sortOptions} selectedOptions={sortOrder} setSelectedOptions={handleSortChange} />
 							</div>
 						</div>
 
@@ -237,7 +301,7 @@ const ExplorePage = () => {
 								type="checkbox"
 								id="featured"
 								checked={isFeatured}
-								onChange={(e) => setIsFeatured(e.target.checked)}
+								onChange={handleFeaturedChange}
 								className="mr-2"
 							/>
 							<label htmlFor="featured" className="text-lg">Only Featured Poems</label>
@@ -248,7 +312,7 @@ const ExplorePage = () => {
 								type="checkbox"
 								id="favorites"
 								checked={inFavorites}
-								onChange={(e) => setInFavorites(e.target.checked)}
+								onChange={handleFavoritesChange}
 								className="mr-2"
 							/>
 							<label htmlFor="favorites" className="text-lg">Only Favorites</label>
@@ -259,20 +323,11 @@ const ExplorePage = () => {
 								type="checkbox"
 								id="untitled"
 								checked={searchUntitled}
-								onChange={(e) => setSearchUntitled(e.target.checked)}
+								onChange={handleUntitledChange}
 								className="mr-2"
 							/>
 							<label htmlFor="untitled" className="text-lg">Only Untitled Poems</label>
 						</div>
-
-						{/* <div className="md:flex-1  mt-4 md:flex md:items-center md:justify-end">
-							<button
-								onClick={handleSearch}
-								className="bg-blue-500 w-full text-white py-2 px-4 rounded hover:bg-blue-600"
-							>
-								Search
-							</button>
-						</div> */}
 					</div>
 				</>
 			)}
@@ -288,18 +343,18 @@ const ExplorePage = () => {
 					<div className="flex justify-between items-center mt-6">
 						<button
 							onClick={handlePrevious}
-							disabled={currentPage === 1}
-							className={`px-4 py-2 rounded ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-500'} ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}
+							disabled={currentPageFromURL === 1}
+							className={`px-4 py-2 rounded ${currentPageFromURL === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-500'} ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}
 						>
 							Previous
 						</button>
 
-						<span className="text-lg">{`Page ${currentPage} of ${totalPages}`}</span>
+						<span className="text-lg">{`Page ${currentPageFromURL} of ${totalPages}`}</span>
 
 						<button
 							onClick={handleNext}
-							disabled={currentPage === totalPages}
-							className={`px-4 py-2 rounded ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-500'} ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}
+							disabled={currentPageFromURL === totalPages}
+							className={`px-4 py-2 rounded ${currentPageFromURL === totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-500'} ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}
 						>
 							Next
 						</button>
