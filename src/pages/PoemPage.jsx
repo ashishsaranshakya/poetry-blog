@@ -56,8 +56,8 @@ const PoemPage = () => {
 
       <h2 className="text-xl md:text-2xl font-bold font-typewriter mb-2 mr-12">{poem.title.length > 0 ? poem.title : "Untitled"}</h2>
       {!!poem.themes && poem.themes.length > 0 && (
-        <div className="text-sm md:text-base mb-2">
-          <span className="font-bold">Themes:</span> {poem.themes.join(', ')}
+        <div className="text-sm md:text-base italic font-typewriter mb-2">
+          <span className="font-semibold">Themes:</span> {poem.themes.join(', ')}
         </div>
       )}
       
@@ -72,7 +72,7 @@ const PoemPage = () => {
         onClick={handleDownloadClick}
         className="absolute right-6 bottom-6 rounded"
       >
-        <img src={isDarkMode ? download_white : download_black} alt="download" className="w-8 h-8" />
+        <img src={isDarkMode ? download_white : download_black} alt="download" className="w-6 h-6 md:w-8 md:h-8" />
       </button>
 
       {isExportVisible && (

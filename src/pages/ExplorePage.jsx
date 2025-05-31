@@ -349,7 +349,7 @@ const ExplorePage = () => {
 							Previous
 						</button>
 
-						<span className="text-lg">{`Page ${currentPageFromURL} of ${totalPages}`}</span>
+						<span className="text-lg">{`${currentPageFromURL}/${totalPages}`}</span>
 
 						<button
 							onClick={handleNext}
