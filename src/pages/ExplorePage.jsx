@@ -127,11 +127,9 @@ const ExplorePage = () => {
 		});
 
 		filtered.sort((a, b) => {
-			if (sortOrder.value === '') {
-				return b.relevanceScore - a.relevanceScore;
-			}
-
 			switch (sortOrder.value) {
+				case '':
+					return b.relevanceScore - a.relevanceScore;
 				case 'dateAsc':
 					return a.createdAt - b.createdAt;
 				case 'dateDesc':
