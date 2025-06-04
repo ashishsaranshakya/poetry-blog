@@ -11,25 +11,30 @@ const PoemPage = () => {
   const { id } = useParams();
   const { loading, poems, favorites, toggleFavorite, countPoemRead, setTitle } = useContext(PoemsContext);
   const { isDarkMode } = useContext(ThemeContext);
-  if (loading) {
-		return <LoadingSpinner />;
-	}
-  useEffect(() => {
-    const handleReadCount = async () => {
-      await countPoemRead(id);
-    };
-    handleReadCount();
-    setTitle(poem.title.length > 0 ? poem.title : "Untitled");
-  }, [id]);
 
   const poem = poems.find((p) => p.id === id);
-  const isFavorite = favorites.includes(poem.id);
 
   const [isExportVisible, setExportVisible] = useState(false);
+
+  useEffect(() => {
+    if (!loading) {
+      const handleReadCountAndTitle = async () => {
+        await countPoemRead(id);
+        setTitle(poem.title.length > 0 ? poem.title : "Untitled");
+      };
+      handleReadCountAndTitle();
+    }
+  }, [id, loading]);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   if (!poem) {
     return <div className={`relative p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>Poem not found.</div>;
   }
+
+  const isFavorite = favorites.includes(poem.id);
 
   const handleFavoriteToggle = async () => {
     await toggleFavorite(poem.id);

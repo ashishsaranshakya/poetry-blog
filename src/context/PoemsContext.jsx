@@ -65,15 +65,7 @@ export const PoemsProvider = ({ children }) => {
     const poemRef = doc(db, 'poems', poemId);
 
     try {
-      const poemSnap = await getDoc(poemRef);
-      if (poemSnap.exists()) {
-        const poemData = poemSnap.data();
-        if (typeof poemData.reads !== 'number') {
-          await updateDoc(poemRef, { reads: 1 });
-        } else {
-          await updateDoc(poemRef, { reads: poemData.reads + 1 });
-        }
-      }
+      await updateDoc(poemRef, { reads: increment(1) }, { merge: true });
     } catch (error) {
       console.error("Error handling global read count:", error);
     }
@@ -81,17 +73,17 @@ export const PoemsProvider = ({ children }) => {
     if (user) {
       const userPoemRef = doc(db, `users/${user.uid}/readPoems`, poemId);
       try {
-        const userDocSnap = await getDoc(userPoemRef);
-        if (userDocSnap.exists()) {
-          await updateDoc(userPoemRef, {
-            count: increment(1)
-          });
-        } else {
-          await setDoc(userPoemRef, { count: 1 });
-        }
+        await setDoc(userPoemRef, { count: increment(1) }, { merge: true });
       } catch (error) {
-        console.error("Error updating user-specific read count:", error);
+        console.error("Error updating user-specific read count in Firestore:", error);
       }
+    } else {
+    
+      let localReads = JSON.parse(localStorage.getItem('readPoems')) || {};
+      console.log(localReads);
+      localReads[poemId] = (localReads[poemId] || 0) + 1;
+      localStorage.setItem('readPoems', JSON.stringify(localReads));
+      console.log(`Poem ${poemId} read count updated in localStorage: ${localReads[poemId]}`);
     }
   };
 
@@ -104,26 +96,46 @@ export const PoemsProvider = ({ children }) => {
       syncLocalFavorites(userId, favoriteIds);
     };
 
-    const syncLocalFavorites = async (userId, favoriteIds) => {
+    const syncLocalFavorites = async (userId, firebaseFavoriteIds) => {
       const localFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
       if (localFavorites.length === 0) return;
-      
-      const uniqueFavorites = [...new Set([...favoriteIds, ...localFavorites])];
 
       for (const poemId of localFavorites) {
-        if (!favoriteIds.includes(poemId)) {
+        if (!firebaseFavoriteIds.includes(poemId)) {
           const favoriteRef = doc(db, `users/${userId}/favorites`, poemId);
-          await setDoc(favoriteRef, {poemId});
+          await setDoc(favoriteRef, { poemId });
         }
       }
-      
+
+      const uniqueFavorites = [...new Set([...firebaseFavoriteIds, ...localFavorites])];
       setFavorites(uniqueFavorites);
       localStorage.removeItem('favorites');
+    };
+
+    const syncLocalReads = async (userId) => {
+        const localReads = JSON.parse(localStorage.getItem('readPoems')) || {};
+        if (Object.keys(localReads).length === 0) return;
+
+        console.log("Syncing local read counts to Firestore for user:", userId);
+
+        for (const poemId in localReads) {
+            const count = localReads[poemId];
+            const userPoemRef = doc(db, `users/${userId}/readPoems`, poemId);
+            try {
+                await setDoc(userPoemRef, { count: increment(count) }, { merge: true });
+                console.log(`Synced poem ${poemId} with count ${count}`);
+            } catch (error) {
+                console.error(`Error syncing local read count for poem ${poemId}:`, error);
+            }
+        }
+        localStorage.removeItem('readPoems');
+        console.log("Local read counts synced and localStorage cleared.");
     };
 
     const unsubscribeAuth = auth.onAuthStateChanged((user) => {
       if (user) {
         loadFavorites(user.uid);
+        syncLocalReads(user.uid);
       }
       else {
         const localFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -135,10 +147,10 @@ export const PoemsProvider = ({ children }) => {
   }, []);
 
   const toggleFavorite = async (poemId) => {
-    const user = auth.currentUser;
+    const currentUser = auth.currentUser;
 
-    if (user) {
-      const favoriteRef = doc(db, `users/${user.uid}/favorites`, poemId);
+    if (currentUser) {
+      const favoriteRef = doc(db, `users/${currentUser.uid}/favorites`, poemId);
 
       if (favorites.includes(poemId)) {
         await deleteDoc(favoriteRef);
