@@ -26,7 +26,7 @@ const sortOptions = [
 ];
 
 const AdminPage = () => {
-	const { isDarkMode } = useContext(ThemeContext);
+	const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(ThemeContext);
 	const { poems, loading, favorites, deletePoem, setTitle: setPageTitle } = useContext(PoemsContext);
 	const navigate = useNavigate();
 
@@ -268,19 +268,23 @@ const AdminPage = () => {
 		return <LoadingSpinner />;
 	}
 
+	const pageTitleClass = getRelativeFontSizeClass(fontSizeClass, 3);
+	const headingClass = getRelativeFontSizeClass(fontSizeClass, 2);
+	const textClass = getRelativeFontSizeClass(fontSizeClass, 1);
+
 	return (
 		<div className={`relative p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>
-			<div className='flex justify-between items-center'>
-				<h2 className="text-xl md:text-2xl font-bold whitespace-nowrap">Admin - Manage Poems</h2>
+			<h2 className={`${pageTitleClass} font-bold whitespace-nowrap`}>Admin - Manage Poems</h2>
+			<div className="flex items-center justify-between space-x-4 mt-2 md:mt-0">
+				<h2 className={`${headingClass} font-semibold whitespace-nowrap`}>Total Poems: {filteredPoems.length}</h2>
 				<button
 					onClick={() => setFiltersEnabled(!filtersEnabled)}
-					className={`px-2 py-1 text-base md:text-lg rounded ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}
+					className={`px-2 py-1 ${headingClass} rounded ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}
 				>
 					{filtersEnabled ? 'Hide ' : 'Show '}
 					Filters
 				</button>
 			</div>
-			<h2 className="text-base md:text-lg font-semibold whitespace-nowrap mb-2 md:mb-4">Total Poems: {filteredPoems.length}</h2>
 
 			{filtersEnabled && (
 				<>
@@ -351,11 +355,11 @@ const AdminPage = () => {
 							<div key={poem.id} className={`relative p-4 border rounded ${isDarkMode ? 'border-gray-700 bg-gray-950 text-white' : 'border-gray-300 bg-white text-black'}`}>
 								<div className='flex flex-col md:flex-row md:justify-between mb-4'>
 									<div>
-										<h3 className="text-xl font-semibold">{poem.title || "Untitled"}</h3>
-										<p className="text-gray-500 text-sm mb-2">Themes: {poem.themes.join(', ') || 'N/A'}</p>
-										<p className="text-sm">Created on: {formatFirebaseTimestamp(poem.createdAt)}</p>
+										<h3 className={`${headingClass} ${fontStyleClass} font-semibold`}>{poem.title || "Untitled"}</h3>
+										<p className={`${textClass} ${fontStyleClass} italic text-gray-500`}>Themes: {poem.themes.join(', ') || 'N/A'}</p>
+										<p className={`${textClass} ${fontStyleClass}`}>Created on: {formatFirebaseTimestamp(poem.createdAt)}</p>
 									</div>
-									<h3 className="text-xl font-semibold">Reads: {poem.reads}</h3>
+									<h3 className={`${textClass} ${fontStyleClass} font-semibold whitespace-nowrap`}>Reads: {poem.reads}</h3>
 								</div>
 								<div className='flex justify-between'>
 									<button

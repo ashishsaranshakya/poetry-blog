@@ -10,7 +10,7 @@ import LoadingSpinner from '../components/LoadingSpinner.jsx';
 const PoemPage = () => {
   const { id } = useParams();
   const { loading, poems, favorites, toggleFavorite, countPoemRead, setTitle } = useContext(PoemsContext);
-  const { isDarkMode } = useContext(ThemeContext);
+  const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(ThemeContext);
 
   const poem = poems.find((p) => p.id === id);
 
@@ -48,34 +48,45 @@ const PoemPage = () => {
     setExportVisible(false);
   };
 
+  const poemTitleClass = getRelativeFontSizeClass(fontSizeClass, 3);
+
   return (
     <div className={`relative p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>
       <button
         onClick={handleFavoriteToggle}
-        className="absolute top-6 right-6 rounded"
+        className="absolute top-6 right-6 rounded z-20"
       >
         <p className='text-xl md:text-2xl'>
           {isFavorite ? '❤️' : '🤍'}
         </p>
       </button>
 
-      <h2 className="text-xl md:text-2xl font-bold font-typewriter mb-2 mr-12">{poem.title.length > 0 ? poem.title : "Untitled"}</h2>
-      {!!poem.themes && poem.themes.length > 0 && (
-        <div className="text-sm md:text-base italic font-typewriter mb-2">
-          <span className="font-semibold">Themes:</span> {poem.themes.join(', ')}
-        </div>
-      )}
-      
-      {poem.content.length > 0 && (
-        <div>
-          <pre className="text-xs md:text-base whitespace-pre-wrap font-typewriter">{poem.content.slice(0, -1).join('\n')}</pre>
-          <pre className="text-xs md:text-base whitespace-pre-wrap font-typewriter mr-12">{poem.content[poem.content.length - 1]}</pre>
-        </div>
-      )}
+      <div className="pr-4">
+        <h2 className={`${poemTitleClass} font-bold mb-2 mr-12 ${fontStyleClass} ${lineHeightClass}`}>
+          {poem.title.length > 0 ? poem.title : "Untitled"}
+        </h2>
+        {!!poem.themes && poem.themes.length > 0 && (
+          <div className={`${fontSizeClass} ${fontStyleClass} ${lineHeightClass} italic mb-2`}>
+            <span className="font-semibold">Themes:</span> {poem.themes.join(', ')}
+          </div>
+        )}
+        
+        {poem.content.length > 0 && (
+          <div>
+            <pre className={`${fontSizeClass} ${fontStyleClass} ${lineHeightClass} whitespace-pre-wrap`}>
+              {poem.content.slice(0, -1).join('\n')}
+            </pre>
+            <pre className={`${fontSizeClass} ${fontStyleClass} ${lineHeightClass} whitespace-pre-wrap mr-12 `}>
+              {poem.content[poem.content.length - 1]}
+            </pre>
+          </div>
+        )}
+      </div>
 
       <button
         onClick={handleDownloadClick}
-        className="absolute right-6 bottom-6 rounded"
+        className="absolute right-6 bottom-6 rounded z-20"
+        title="Download Poem"
       >
         <img src={isDarkMode ? download_white : download_black} alt="download" className="w-6 h-6 md:w-8 md:h-8" />
       </button>
@@ -83,7 +94,7 @@ const PoemPage = () => {
       {isExportVisible && (
         <div className={`fixed inset-0 flex items-center justify-center z-50 ${isDarkMode ? 'bg-black bg-opacity-75' : 'bg-white bg-opacity-75'}`}>
           <PoemExport {...poem} showName />
-          <button onClick={handleCloseExport} className="absolute top-4 right-4 text-xl">✖️</button>
+          <button onClick={handleCloseExport} className="absolute top-4 right-4 text-xl text-white">✖️</button>
         </div>
       )}
     </div>

@@ -4,7 +4,7 @@ import { ThemeContext } from '../context/ThemeContext';
 import { PoemsContext } from '../context/PoemsContext';
 
 const PoemShortBox = ({ poem }) => {
-  const { isDarkMode } = useContext(ThemeContext);
+  const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(ThemeContext);
   const { user, favorites, toggleFavorite } = useContext(PoemsContext);
 
   const isFavorite = favorites.includes(poem.id);
@@ -21,6 +21,8 @@ const PoemShortBox = ({ poem }) => {
     await toggleFavorite(poem.id);
   };
 
+  const poemTitleClass = getRelativeFontSizeClass(fontSizeClass, 1);
+
   return (
     <Link
       to={`/poems/${poem.id}`}
@@ -32,12 +34,17 @@ const PoemShortBox = ({ poem }) => {
       <button
         onClick={handleFavoriteToggle}
         className="absolute top-4 right-4 text-xl z-10"
+        title={isFavorite ? "Remove from favorites" : "Add to favorites"}
       >
         {isFavorite ? '❤️' : '🤍'}
       </button>
 
-      <h3 className="md:text-lg font-bold font-typewriter mb-4 mr-8">{poem.title.length > 0 ? poem.title : 'Untitled'}</h3>
-      <pre className="text-sm md:text-base whitespace-pre-wrap flex-grow font-typewriter">{content}</pre>
+      <h3 className={`${poemTitleClass} font-bold mb-4 mr-8 ${fontStyleClass} ${lineHeightClass}`}>
+        {poem.title.length > 0 ? poem.title : 'Untitled'}
+      </h3>
+      <pre className={`whitespace-pre-wrap flex-grow ${fontSizeClass} ${fontStyleClass} ${lineHeightClass}`}>
+        {content}
+      </pre>
     </Link>
   );
 };
