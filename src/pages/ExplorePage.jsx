@@ -18,7 +18,7 @@ const sortOptions = [
 ];
 
 const ExplorePage = () => {
-	const { isDarkMode } = useContext(ThemeContext);
+	const { isDarkMode, fontSizeClass, getRelativeFontSizeClass } = useContext(ThemeContext);
 	const { poems, favorites, loading, setTitle: setPageTitle } = useContext(PoemsContext);
 
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -263,11 +263,14 @@ const ExplorePage = () => {
 		return <LoadingSpinner />;
 	}
 
+	const pageTitleClass = getRelativeFontSizeClass(fontSizeClass, 3);
+	const headingClass = getRelativeFontSizeClass(fontSizeClass, 2);
+
 	return (
 		<div className={`p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>
-			<div className="flex items-center justify-between mb-2 md:mb-6">
-				<h2 className="text-xl md:text-2xl font-bold whitespace-nowrap">Explore Poems</h2>
-				<button onClick={() => setFiltersEnabled(!filtersEnabled)} className={`px-2 py-1 text-lg md:text-xl rounded ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}>
+			<div className="flex items-center justify-between mb-2">
+				<h2 className={`${pageTitleClass} font-bold whitespace-nowrap`}>Explore Poems</h2>
+				<button onClick={() => setFiltersEnabled(!filtersEnabled)} className={`px-2 py-1 ${headingClass} rounded ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}>
 					{filtersEnabled ? 'Hide ' : 'Show '}
 					Filters
 				</button>
@@ -337,7 +340,7 @@ const ExplorePage = () => {
 				<p className="text-lg my-10 text-center">No poems found. Please try a different search.</p>
 			) : (
 				<>
-					<div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-8'>
+					<div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4'>
 						{paginatedPoems.map((poem, index) => <PoemShortBox key={index} poem={poem} />)}
 					</div>
 

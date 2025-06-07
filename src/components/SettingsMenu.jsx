@@ -6,6 +6,7 @@ const SettingsMenu = ({ isOpen, onClose }) => {
 		isDarkMode,
 		theme,
     toggleTheme,
+    isSmallScreen,
     fontSizeClass,
     setFontSizeClass,
     fontStyleClass,
@@ -17,7 +18,9 @@ const SettingsMenu = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  const baseFontSizeOptions = ['text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl'];
+  const baseFontSizeOptions = !isSmallScreen ?
+    ['text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl']:
+    ['text-xs', 'text-sm', 'text-base'];
   const currentFontSizeIndex = baseFontSizeOptions.indexOf(fontSizeClass);
 
   const fontStyleOptions = [

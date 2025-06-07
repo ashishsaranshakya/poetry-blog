@@ -19,17 +19,6 @@ const Header = () => {
   const { isDarkMode, fontSizeClass, getRelativeFontSizeClass } = useContext(ThemeContext);
   const { user } = useContext(PoemsContext);
 
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < MD_BREAKPOINT);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSmallScreen(window.innerWidth < MD_BREAKPOINT);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   const handleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
@@ -52,7 +41,7 @@ const Header = () => {
     if (menuOpen) setMenuOpen(false);
   };
 
-  const heading1Class = getRelativeFontSizeClass(fontSizeClass, 3, isSmallScreen ? 5 : undefined)
+  const heading1Class = getRelativeFontSizeClass(fontSizeClass, 3)
 
   return (
     <header className={`bg-gray-800 text-white p-4 ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>

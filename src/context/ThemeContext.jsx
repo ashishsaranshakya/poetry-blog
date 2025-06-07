@@ -7,15 +7,18 @@ const fontSizesList = [
   'text-3xl', 'text-4xl', 'text-5xl', 'text-6xl', 'text-7xl', 'text-8xl', 'text-9xl'
 ];
 
+const MD_BREAKPOINT = 768;
+
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
   const [isDarkMode, setIsDarkMode] = useState(theme === 'dark');
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < MD_BREAKPOINT);
 
   const [fontSizeClass, setFontSizeClass] = useState(() => localStorage.getItem('globalPoemFontSize') || 'text-base');
   const [fontStyleClass, setFontStyleClass] = useState(() => localStorage.getItem('globalPoemFontStyle') || 'font-sans');
   const [lineHeightClass, setLineHeightClass] = useState(() => localStorage.getItem('globalPoemLineHeight') || 'leading-normal');
 
-  const getRelativeFontSizeClass = (baseSizeClass, offset, maxIndex = fontSizesList.length - 1) => {
+  const getRelativeFontSizeClass = (baseSizeClass, offset, maxIndex = !isSmallScreen ? fontSizesList.length - 1 : 5) => {
     const baseIndex = fontSizesList.indexOf(baseSizeClass);
     if (baseIndex === -1) {
       return baseSizeClass;
@@ -50,12 +53,22 @@ export const ThemeProvider = ({ children }) => {
     document.body.classList.toggle('dark-mode', theme === 'dark');
   }, [theme]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < MD_BREAKPOINT);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <ThemeContext.Provider
       value={{
         theme,
         toggleTheme,
         isDarkMode,
+        isSmallScreen,
         fontSizeClass,
         setFontSizeClass: setGlobalFontSize,
         fontStyleClass,

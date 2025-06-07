@@ -281,7 +281,7 @@ const AdminPage = () => {
 
 	return (
 		<div className={`relative p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>
-			<div className='flex flex-col md:flex-row md:justify-between md:items-center mb-2 md:mb-6'>
+			<div className='flex flex-col mb-2 md:mb-6'>
 				<h2 className={`${pageTitleClass} font-bold whitespace-nowrap`}>Admin - Manage Poems</h2>
 				<div className="flex items-center justify-between mt-2 md:mt-0">
 					<h2 className={`${headingClass} font-semibold whitespace-nowrap`}>Total Poems: {filteredPoems.length}</h2>
