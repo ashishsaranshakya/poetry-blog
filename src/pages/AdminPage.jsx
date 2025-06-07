@@ -107,13 +107,23 @@ const AdminPage = () => {
 	}, []);
 
 	useEffect(() => {
+		const currentTitle = searchParams.get('title') || '';
+		const currentSelectedThemes = searchParams.get('themes')
+			? searchParams.get('themes').split(',').map(theme => ({ label: theme, value: theme }))
+			: [];
+		const currentIsFeatured = searchParams.get('featured') === 'true';
+		const currentInFavorites = searchParams.get('favorites') === 'true';
+		const currentSearchUntitled = searchParams.get('untitled') === 'true';
+		const currentSortOrderValue = searchParams.get('sort') || '';
+		const currentSortOrder = sortOptions.find(opt => opt.value === currentSortOrderValue) || sortOptions[0];
+
 		let results = poems.map(poem => {
 			const poemTitle = poem.title ? poem.title.toLowerCase() : '';
 			const poemContent = poem.content ? poem.content.join(' ').toLowerCase() : '';
-			const searchTerm = title.toLowerCase().trim();
+			const searchTerm = currentTitle.toLowerCase().trim();
 
 			let relevanceScore = 0;
-			const titleMatchesSearchTerm = searchTerm && poemTitle.includes(searchTerm);
+			const titleMatchesSearchTerm = !!searchTerm && poemTitle.includes(searchTerm);
 			const contentOccurrences = searchTerm ? countOccurrences(poemContent, searchTerm) : 0;
 
 			if (searchTerm) {
@@ -126,23 +136,20 @@ const AdminPage = () => {
 		});
 
 		let currentFilteredPoems = results.filter(poem => {
-			const searchTerm = title.toLowerCase().trim();
-			const isUntitledAndMatches = searchUntitled && (!poem.title || poem.title.trim() === "");
-			const isSearchTermPresentInTitleOrContent = searchTerm && (poem.titleMatchesSearchTerm || (poem.content && poem.content.join(' ').toLowerCase().includes(searchTerm)));
-			const noSearchTermEntered = !searchTerm;
+			const searchTerm = currentTitle.toLowerCase().trim();
+			const titleContentMatch = currentSearchUntitled ?
+				!poem.title || poem.title.trim() === "" :
+				poem.titleMatchesSearchTerm || (searchTerm && poem.content && poem.content.join(' ').toLowerCase().includes(searchTerm)) || !searchTerm;
 
-			const titleContentMatch = isUntitledAndMatches || isSearchTermPresentInTitleOrContent || noSearchTermEntered;
-
-			const themeMatch = selectedThemes.length === 0 || selectedThemes.every(theme => poem.themes && poem.themes.includes(theme.label));
-			const featuredMatch = !isFeatured || poem.isFeatured;
-			const favoritesMatch = !inFavorites || favorites.includes(poem.id);
+			const themeMatch = currentSelectedThemes.length === 0 || currentSelectedThemes.every(theme => poem.themes && poem.themes.includes(theme.label));
+			const featuredMatch = !currentIsFeatured || poem.isFeatured;
+			const favoritesMatch = !currentInFavorites || favorites.includes(poem.id);
 
 			return titleContentMatch && themeMatch && featuredMatch && favoritesMatch;
 		});
 
 		currentFilteredPoems.sort((a, b) => {
-
-			switch (sortOrder.value) {
+			switch (currentSortOrder.value) {
 				case '':
 					return b.relevanceScore - a.relevanceScore;
 				case 'dateAsc':
@@ -163,7 +170,7 @@ const AdminPage = () => {
 		});
 
 		setFilteredPoems(currentFilteredPoems);
-	}, [poems, searchParams, favorites, location.search, title, selectedThemes, isFeatured, inFavorites, searchUntitled, sortOrder]);
+	}, [poems, favorites, location.search]);
 
 	useEffect(() => {
 		const fetchSuggestionsTimeout = setTimeout(() => {
@@ -247,7 +254,7 @@ const AdminPage = () => {
 	}, [title, poems]);
 
 	const handleSelectSuggestion = (selectedSuggestionObject) => {
-		updateURLParams({ title: selectedSuggestionObject.value, page: 1 });
+		updateURLParams({ title: selectedSuggestionObject, page: 1 });
 	};
 
 	const totalPages = Math.ceil(filteredPoems.length / ITEMS_PER_PAGE);
@@ -274,16 +281,18 @@ const AdminPage = () => {
 
 	return (
 		<div className={`relative p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>
-			<h2 className={`${pageTitleClass} font-bold whitespace-nowrap`}>Admin - Manage Poems</h2>
-			<div className="flex items-center justify-between space-x-4 mt-2 md:mt-0">
-				<h2 className={`${headingClass} font-semibold whitespace-nowrap`}>Total Poems: {filteredPoems.length}</h2>
-				<button
-					onClick={() => setFiltersEnabled(!filtersEnabled)}
-					className={`px-2 py-1 ${headingClass} rounded ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}
-				>
-					{filtersEnabled ? 'Hide ' : 'Show '}
-					Filters
-				</button>
+			<div className='flex flex-col md:flex-row md:justify-between md:items-center mb-2 md:mb-6'>
+				<h2 className={`${pageTitleClass} font-bold whitespace-nowrap`}>Admin - Manage Poems</h2>
+				<div className="flex items-center justify-between mt-2 md:mt-0">
+					<h2 className={`${headingClass} font-semibold whitespace-nowrap`}>Total Poems: {filteredPoems.length}</h2>
+					<button
+						onClick={() => setFiltersEnabled(!filtersEnabled)}
+						className={`px-2 py-1 ${headingClass} rounded ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}
+					>
+						{filtersEnabled ? 'Hide ' : 'Show '}
+						Filters
+					</button>
+				</div>
 			</div>
 
 			{filtersEnabled && (

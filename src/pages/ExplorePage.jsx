@@ -39,6 +39,13 @@ const ExplorePage = () => {
 	const [suggestions, setSuggestions] = useState([]);
 	const [filteredPoems, setFilteredPoems] = useState([]);
 
+	const countOccurrences = (text, term) => {
+		if (!text || !term) return 0;
+		const regex = new RegExp(term, 'gi');
+		const matches = text.match(regex);
+		return matches ? matches.length : 0;
+	};
+
 	const updateURLParams = (updates) => {
 		const newParams = new URLSearchParams(searchParams.toString());
 
@@ -79,6 +86,7 @@ const ExplorePage = () => {
 	const handlePageChange = (newPage) => updateURLParams({ page: newPage });
 
 	useEffect(() => {
+		setPageTitle("My Writing Palace | Explore");
 		const anyFilterActive =
 			title !== '' ||
 			selectedThemes.length > 0 ||
@@ -91,16 +99,23 @@ const ExplorePage = () => {
 	}, []);
 
 	useEffect(() => {
-		setPageTitle("My Writing Palace | Explore");
-
-		const searchTerm = title.toLowerCase().trim();
+		const currentTitle = searchParams.get('title') || '';
+		const currentSelectedThemes = searchParams.get('themes')
+			? searchParams.get('themes').split(',').map(theme => ({ label: theme, value: theme }))
+			: [];
+		const currentIsFeatured = searchParams.get('featured') === 'true';
+		const currentInFavorites = searchParams.get('favorites') === 'true';
+		const currentSearchUntitled = searchParams.get('untitled') === 'true';
+		const currentSortOrderValue = searchParams.get('sort') || '';
+		const currentSortOrder = sortOptions.find(opt => opt.value === currentSortOrderValue) || sortOptions[0];
 
 		let results = poems.map(poem => {
 			const poemTitle = poem.title ? poem.title.toLowerCase() : '';
 			const poemContent = poem.content ? poem.content.join(' ').toLowerCase() : '';
+			const searchTerm = currentTitle.toLowerCase().trim();
 
 			let relevanceScore = 0;
-			const titleMatchesSearchTerm = searchTerm && poemTitle.includes(searchTerm);
+			const titleMatchesSearchTerm = !!searchTerm && poemTitle.includes(searchTerm);
 			const contentOccurrences = searchTerm ? countOccurrences(poemContent, searchTerm) : 0;
 
 			if (searchTerm) {
@@ -112,22 +127,21 @@ const ExplorePage = () => {
 			return { ...poem, relevanceScore, titleMatchesSearchTerm };
 		});
 
-		let filtered = results.filter(poem => {
-			const isUntitledAndMatches = searchUntitled && (!poem.title || poem.title.trim() === "");
-			const isSearchTermPresentInTitleOrContent = searchTerm && (poem.titleMatchesSearchTerm || (poem.content && poem.content.join(' ').toLowerCase().includes(searchTerm)));
-			const noSearchTermEntered = !searchTerm;
+		let currentFilteredPoems = results.filter(poem => {
+			const searchTerm = currentTitle.toLowerCase().trim();
+			const titleContentMatch = currentSearchUntitled ?
+				!poem.title || poem.title.trim() === "" :
+				poem.titleMatchesSearchTerm || (searchTerm && poem.content && poem.content.join(' ').toLowerCase().includes(searchTerm)) || !searchTerm;
 
-			const titleContentMatch = isUntitledAndMatches || isSearchTermPresentInTitleOrContent || noSearchTermEntered;
-
-			const themeMatch = selectedThemes.length === 0 || selectedThemes.every(theme => poem.themes && poem.themes.includes(theme.label));
-			const featuredMatch = !isFeatured || poem.isFeatured;
-			const favoritesMatch = !inFavorites || favorites.includes(poem.id);
+			const themeMatch = currentSelectedThemes.length === 0 || currentSelectedThemes.every(theme => poem.themes && poem.themes.includes(theme.label));
+			const featuredMatch = !currentIsFeatured || poem.isFeatured;
+			const favoritesMatch = !currentInFavorites || favorites.includes(poem.id);
 
 			return titleContentMatch && themeMatch && featuredMatch && favoritesMatch;
 		});
 
-		filtered.sort((a, b) => {
-			switch (sortOrder.value) {
+		currentFilteredPoems.sort((a, b) => {
+			switch (currentSortOrder.value) {
 				case '':
 					return b.relevanceScore - a.relevanceScore;
 				case 'dateAsc':
@@ -143,10 +157,8 @@ const ExplorePage = () => {
 			}
 		});
 
-		setFilteredPoems(filtered);
-
-	}, [poems, searchParams, favorites, location.search]);
-
+		setFilteredPoems(currentFilteredPoems);
+	}, [poems, favorites, location.search]);
 
 	useEffect(() => {
 		const fetchSuggestionsTimeout = setTimeout(() => {
@@ -229,17 +241,8 @@ const ExplorePage = () => {
 		return () => clearTimeout(fetchSuggestionsTimeout);
 	}, [title, poems]);
 
-
-	const countOccurrences = (text, term) => {
-		if (!text || !term) return 0;
-		const regex = new RegExp(term, 'gi');
-		const matches = text.match(regex);
-		return matches ? matches.length : 0;
-	};
-
-
 	const handleSelectSuggestion = (selectedSuggestionObject) => {
-		updateURLParams({ title: selectedSuggestionObject.value, page: 1 });
+		updateURLParams({ title: selectedSuggestionObject, page: 1 });
 	};
 
 	const totalPages = Math.ceil(filteredPoems.length / ITEMS_PER_PAGE);
