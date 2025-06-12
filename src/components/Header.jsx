@@ -56,6 +56,7 @@ const Header = () => {
             <Link to="/" className="hover:text-gray-500">Home</Link>
             <Link to="/explore" className="hover:text-gray-500">Explore</Link>
             <Link to="/favorites" className="hover:text-gray-500">Favorites</Link>
+            <Link to="/about-author" className="hover:text-gray-500">About The Author</Link>
             {user && user.uid === import.meta.env.VITE_USER_ID && (
               <>
                 <Link to="/add-poem" className="hover:text-gray-500">Add Poem</Link>
@@ -105,6 +106,7 @@ const Header = () => {
           <li><Link to="/" className="hover:text-gray-500 block" onClick={() => setMenuOpen(false)}>Home</Link></li>
           <li><Link to="/explore" className="hover:text-gray-500 block" onClick={() => setMenuOpen(false)}>Explore</Link></li>
           <li><Link to="/favorites" className="hover:text-gray-500 block" onClick={() => setMenuOpen(false)}>Favorites</Link></li>
+          <li><Link to="/about-author" className="hover:text-gray-500 block" onClick={() => setMenuOpen(false)}>About The Author</Link></li>
           {user && user.uid === import.meta.env.VITE_USER_ID && (
             <>
               <li><Link to="/add-poem" className="hover:text-gray-500 block" onClick={() => setMenuOpen(false)}>Add Poem</Link></li>

@@ -13,6 +13,7 @@ import HomePage from './pages/HomePage';
 import PoemPage from './pages/PoemPage';
 import AdminPage from './pages/AdminPage';
 import EditPage from './pages/EditPage';
+import AboutAuthorPage from './pages/AboutAuthorPage';
 
 const App = () => {
   
@@ -28,6 +29,7 @@ const App = () => {
                 <Route path="/explore" element={<ExplorePage />} />
                 <Route path="/poems/:id" element={<PoemPage />} />
                 <Route path="/favorites" element={<Favorites />} />
+                <Route path="/about-author" element={<AboutAuthorPage />} />
                 <Route path="/add-poem" element={
                   <ProtectedRoute isAdmin message="You must be logged in to add poems.">
                     <AddPoemPage />
