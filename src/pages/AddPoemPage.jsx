@@ -6,8 +6,8 @@ import MultiselectDropdown from '../components/MultiselectDropdown';
 import themes from '../assets/poem_themes.json';
 import { PoemsContext } from '../context/PoemsContext';
 import PoemExport from "../components/PoemExport";
-import download_black from '../assets/download_black.svg';
-import download_white from '../assets/download_white.svg';
+import share_black from '../assets/share_black.svg';
+import share_white from '../assets/share_white.svg';
 
 const AddPoemPage = () => {
   const { setTitle: setPageTitle } = useContext(PoemsContext);
@@ -176,7 +176,7 @@ const AddPoemPage = () => {
             <button
               onClick={handleDownloadClick}
             >
-              <img src={isDarkMode ? download_white : download_black} alt="download" className="w-8 h-8" />
+              <img src={isDarkMode ? share_white : share_black} alt="download" className="w-8 h-8" />
             </button>
 
             {isExportVisible && (
