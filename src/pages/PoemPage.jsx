@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import { PoemsContext } from '../context/PoemsContext';
 import { ThemeContext } from '../context/ThemeContext';
 import PoemExport from "../components/PoemExport";
-import share_black from '../assets/share_black.svg';
-import share_white from '../assets/share_white.svg';
+import share_light from '../assets/share_light.svg';
+import share_dark from '../assets/share_dark.svg';
 import LoadingSpinner from '../components/LoadingSpinner.jsx';
 
 const PoemPage = () => {
@@ -88,7 +88,7 @@ const PoemPage = () => {
         className="absolute right-6 bottom-6 rounded z-20"
         title="Download Poem"
       >
-        <img src={isDarkMode ? share_white : share_black} alt="download" className="w-6 h-6 md:w-8 md:h-8" />
+        <img src={isDarkMode ? share_dark : share_light} alt="download" className="w-6 h-6 md:w-8 md:h-8" />
       </button>
 
       {isExportVisible && (

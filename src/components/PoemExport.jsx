@@ -1,8 +1,10 @@
 import React, { useRef, useContext, useEffect, useState } from "react";
 import html2canvas from "html2canvas";
 import { ThemeContext } from "../context/ThemeContext";
-import share_black from '../assets/share_black.svg';
-import share_white from '../assets/share_white.svg';
+import share_light from '../assets/share_light.svg';
+import share_dark from '../assets/share_dark.svg';
+import download_dark from '../assets/download_dark.svg';
+import download_light from '../assets/download_light.svg';
 
 const PoemExport = ({ title, content, showName }) => {
 	const poemRef = useRef(null);
@@ -121,15 +123,15 @@ const PoemExport = ({ title, content, showName }) => {
 			>
 				<button
 					onClick={handleExport}
-					className="hover:bg-gray-800 p-2 rounded"
+					className={`${isDarkMode ? "hover:bg-gray-800" : "hover:bg-gray-100"} p-2 rounded`}
 				>
-					<img src={isDarkMode ? share_white : share_black} alt="download" className="w-6 h-6 md:w-8 md:h-8" />
+					<img src={isDarkMode ? download_dark : download_light} alt="download" className="w-6 h-6 md:w-8 md:h-8" />
 				</button>
 				<button
 					onClick={handleShare}
-					className="hover:bg-gray-800 p-2 rounded"
+					className={`${isDarkMode ? "hover:bg-gray-800" : "hover:bg-gray-100"} p-2 rounded`}
 				>
-					<img src={isDarkMode ? share_white : share_black} alt="share" className="w-6 h-6 md:w-8 md:h-8" />
+					<img src={isDarkMode ? share_dark : share_light} alt="share" className="w-6 h-6 md:w-8 md:h-8" />
 				</button>
 			</div>
 		</div>
