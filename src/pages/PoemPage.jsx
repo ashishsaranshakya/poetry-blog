@@ -6,6 +6,8 @@ import PoemExport from "../components/PoemExport";
 import share_light from '../assets/share_light.svg';
 import share_dark from '../assets/share_dark.svg';
 import LoadingSpinner from '../components/LoadingSpinner.jsx';
+import PoemShortBox from '../components/PoemShortBox';
+import { getRelatedPoems } from '../utils/textSimilarity';
 
 const PoemPage = () => {
   const { id } = useParams();
@@ -50,6 +52,29 @@ const PoemPage = () => {
 
   const poemTitleClass = getRelativeFontSizeClass(fontSizeClass, 3);
 
+  // method: 'jaccard' | 'cosine' | 'tfidf' | 'ngram'
+  // let t = getRelatedPoems(poem, poems, "jaccard");
+  // console.log("Related Poems (Jaccard):");
+  // t.forEach(p => {
+  //   console.log(`Related Poem: ${p.title}, Similarity: ${p._similarity}`);
+  // })
+  // t = getRelatedPoems(poem, poems, "cosine");
+  // console.log("Related Poems (Cosine):");
+  // t.forEach(p => {
+  //   console.log(`Related Poem: ${p.title}, Similarity: ${p._similarity}`);
+  // })
+  // t = getRelatedPoems(poem, poems, "ngram", { n: 2 });
+  // console.log("Related Poems (Ngram):");
+  // t.forEach(p => {
+  //   console.log(`Related Poem: ${p.title}, Similarity: ${p._similarity}`);
+  // })
+  // t = getRelatedPoems(poem, poems, "tfidf", { allPoems: poems });
+  // console.log("Related Poems (TF-IDF):");
+  // t.forEach(p => {
+  //   console.log(`Related Poem: ${p.title}, Similarity: ${p._similarity}`);
+  // })
+  const relatedPoems = getRelatedPoems(poem, poems, "tfidf");
+
   return (
     <div className={`relative p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>
       <button
@@ -82,6 +107,17 @@ const PoemPage = () => {
           </div>
         )}
       </div>
+
+      {relatedPoems.length > 0 && (
+        <div className="mt-12">
+          <h3 className={`${poemTitleClass} font-bold mb-2 ${fontStyleClass} mb-2`}>Related Poems</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {relatedPoems.map((relatedPoem) => (
+              <PoemShortBox key={relatedPoem.id} poem={relatedPoem} />
+            ))}
+          </div>
+        </div>
+      )}
 
       <button
         onClick={handleDownloadClick}
