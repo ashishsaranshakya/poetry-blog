@@ -25,7 +25,7 @@ const PoemShortBox = ({ poem }) => {
 
   return (
     <Link
-      to={`/poems/${poem.id}`}
+      to={`/poem/${poem.id}`}
       key={poem.id}
       className={`relative p-4 border rounded flex flex-col justify-between cursor-pointer
         transform hover:scale-[1.02] hover:shadow-lg transition-all duration-300

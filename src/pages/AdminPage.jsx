@@ -373,7 +373,7 @@ const AdminPage = () => {
 								<div className='flex justify-between'>
 									<button
 										className="text-blue-500 underline"
-										onClick={() => navigate(`/poems/${poem.id}`)}
+										onClick={() => navigate(`/poem/${poem.id}`)}
 									>
 										<img src={isDarkMode ? eye_dark : eye_light} alt="view" className="w-6 h-6" />
 									</button>
