@@ -30,6 +30,13 @@ const PoemPage = () => {
     }
   }, [id, loading]);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }, [id]);
+
   if (loading) {
     return <LoadingSpinner />;
   }
