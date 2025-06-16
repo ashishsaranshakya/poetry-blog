@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /add-poem/
+Disallow: /edit/
+Allow: /
+
+Sitemap: https://poetry-blog.ashishsaranshakya.com/sitemap.xml
