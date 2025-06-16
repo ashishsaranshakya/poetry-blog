@@ -65,7 +65,7 @@ const PoemPage = () => {
         </p>
       </button>
 
-      <div className="pr-4">
+      <div className="relative pr-4">
         <h2 className={`${poemTitleClass} font-bold mb-2 mr-12 ${fontStyleClass} ${lineHeightClass}`}>
           {poem.title.length > 0 ? poem.title : "Untitled"}
         </h2>
@@ -85,6 +85,14 @@ const PoemPage = () => {
             </pre>
           </div>
         )}
+
+        <button
+          onClick={handleDownloadClick}
+          className="absolute bottom-0 right-0 rounded z-20"
+          title="Download Poem"
+        >
+          <img src={isDarkMode ? share_dark : share_light} alt="download" className="w-6 h-6 md:w-8 md:h-8" />
+        </button>
       </div>
 
       {relatedPoems.length > 0 && (
@@ -97,14 +105,6 @@ const PoemPage = () => {
           </div>
         </div>
       )}
-
-      <button
-        onClick={handleDownloadClick}
-        className="absolute right-6 bottom-6 rounded z-20"
-        title="Download Poem"
-      >
-        <img src={isDarkMode ? share_dark : share_light} alt="download" className="w-6 h-6 md:w-8 md:h-8" />
-      </button>
 
       {isExportVisible && (
         <div className={`fixed inset-0 flex items-center justify-center z-50 ${isDarkMode ? 'bg-black bg-opacity-75' : 'bg-white bg-opacity-75'}`}>
