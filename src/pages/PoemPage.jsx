@@ -14,6 +14,7 @@ const PoemPage = () => {
   const { loading, poems, favorites, toggleFavorite, countPoemRead, setTitle } = useContext(PoemsContext);
   const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(ThemeContext);
   const [relatedPoems, setRelatedPoems] = useState([]);
+  const [isRelatedPoemsExpanded, setIsRelatedPoemsExpanded] = useState(false); 
 
   const poem = poems.find((p) => p.id === id);
 
@@ -35,6 +36,7 @@ const PoemPage = () => {
       top: 0,
       behavior: 'smooth'
     });
+    setIsRelatedPoemsExpanded(false); 
   }, [id]);
 
   if (loading) {
@@ -103,13 +105,25 @@ const PoemPage = () => {
       </div>
 
       {relatedPoems.length > 0 && (
-        <div className="mt-12">
-          <h3 className={`${poemTitleClass} font-bold mb-2 ${fontStyleClass} mb-2`}>Related Poems</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {relatedPoems.map((relatedPoem) => (
-              <PoemShortBox key={relatedPoem.id} poem={relatedPoem} />
-            ))}
-          </div>
+        <div className="mt-12 border-t pt-4">
+          <button
+            onClick={() => setIsRelatedPoemsExpanded(!isRelatedPoemsExpanded)}
+            className={`flex items-center gap-x-4 w-full py-2 ${isDarkMode ? 'text-white' : 'text-black'} ${fontSizeClass} ${fontStyleClass} focus:outline-none`}
+            aria-expanded={isRelatedPoemsExpanded}
+          >
+            <h3 className={`font-bold ${isRelatedPoemsExpanded ? 'mb-0' : ''}`}>Related Poems</h3>
+            <span className="transform transition-transform duration-500">
+              {isRelatedPoemsExpanded ? '▲' : '▼'}
+            </span>
+          </button>
+          
+          {isRelatedPoemsExpanded && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+              {relatedPoems.map((relatedPoem) => (
+                <PoemShortBox key={relatedPoem.id} poem={relatedPoem} />
+              ))}
+            </div>
+          )}
         </div>
       )}
 
