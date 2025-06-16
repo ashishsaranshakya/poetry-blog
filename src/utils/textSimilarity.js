@@ -1,7 +1,3 @@
-// Text Similarity Utility Methods for Poems
-// All methods conform to: (poemA, poemB) => number (higher = more similar)
-
-// Helper: tokenize and clean text
 function tokenize(text) {
   return text
     .toLowerCase()
@@ -36,7 +32,6 @@ export function cosineSimilarity(poemA, poemB) {
 
 // 3. TF-IDF Cosine Similarity
 export function tfidfCosineSimilarity(poemA, poemB, allPoems) {
-  // allPoems: array of all poem texts (including A and B)
   const tokensA = tokenize(poemA);
   const tokensB = tokenize(poemB);
   const allWords = Array.from(new Set([...tokensA, ...tokensB]));
@@ -72,36 +67,27 @@ export function ngramOverlap(poemA, poemB, n = 2) {
   return intersection.size / union.size;
 }
 
-// Main selector function for plug-and-play
 // method: 'jaccard' | 'cosine' | 'tfidf' | 'ngram'
-// tfidf and ngram accept extra args
 export function getSimilarityScore(poemA, poemB, method = 'jaccard', options = {}) {
   if (method === 'jaccard') {
     return jaccardSimilarity(poemA, poemB);
   } else if (method === 'cosine') {
     return cosineSimilarity(poemA, poemB);
   } else if (method === 'tfidf') {
-    // options.allPoems required
     return tfidfCosineSimilarity(poemA, poemB, options.allPoems || []);
   } else if (method === 'ngram') {
-    // options.n (default 2)
     return ngramOverlap(poemA, poemB, options.n || 2);
   }
   return 0;
 }
 
-// Template: all methods are (poemA, poemB, ...optionalArgs) => number
-// You can plug any of these into your related-poems logic.
-  // Helper to get poem text as a string
 function poemToText(poem) {
   return (poem?.content || []).join(' ');
 }
 
 export function getRelatedPoems(poem, poems, SIMILARITY_METHOD = 'jaccard') {
-  // For tfidf, need all poems as text
   const allPoemTexts = poems.map(poemToText);
 
-  // Compute related poems using the selected method
   const currentPoemText = poemToText(poem);
   const currentThemes = new Set(poem.themes || []);
   return poems

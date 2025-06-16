@@ -13,6 +13,7 @@ const PoemPage = () => {
   const { id } = useParams();
   const { loading, poems, favorites, toggleFavorite, countPoemRead, setTitle } = useContext(PoemsContext);
   const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(ThemeContext);
+  const [relatedPoems, setRelatedPoems] = useState([]);
 
   const poem = poems.find((p) => p.id === id);
 
@@ -23,6 +24,7 @@ const PoemPage = () => {
       const handleReadCountAndTitle = async () => {
         await countPoemRead(id);
         setTitle(poem.title.length > 0 ? poem.title : "Untitled");
+        setRelatedPoems(getRelatedPoems(poem, poems, "cosine"))
       };
       handleReadCountAndTitle();
     }
@@ -51,29 +53,6 @@ const PoemPage = () => {
   };
 
   const poemTitleClass = getRelativeFontSizeClass(fontSizeClass, 3);
-
-  // method: 'jaccard' | 'cosine' | 'tfidf' | 'ngram'
-  // let t = getRelatedPoems(poem, poems, "jaccard");
-  // console.log("Related Poems (Jaccard):");
-  // t.forEach(p => {
-  //   console.log(`Related Poem: ${p.title}, Similarity: ${p._similarity}`);
-  // })
-  // t = getRelatedPoems(poem, poems, "cosine");
-  // console.log("Related Poems (Cosine):");
-  // t.forEach(p => {
-  //   console.log(`Related Poem: ${p.title}, Similarity: ${p._similarity}`);
-  // })
-  // t = getRelatedPoems(poem, poems, "ngram", { n: 2 });
-  // console.log("Related Poems (Ngram):");
-  // t.forEach(p => {
-  //   console.log(`Related Poem: ${p.title}, Similarity: ${p._similarity}`);
-  // })
-  // t = getRelatedPoems(poem, poems, "tfidf", { allPoems: poems });
-  // console.log("Related Poems (TF-IDF):");
-  // t.forEach(p => {
-  //   console.log(`Related Poem: ${p.title}, Similarity: ${p._similarity}`);
-  // })
-  const relatedPoems = getRelatedPoems(poem, poems, "tfidf");
 
   return (
     <div className={`relative p-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'} transition-all duration-300`}>
