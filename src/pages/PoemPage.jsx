@@ -25,7 +25,7 @@ const PoemPage = () => {
       const handleReadCountAndTitle = async () => {
         await countPoemRead(id);
         setTitle(poem.title.length > 0 ? poem.title : "Untitled");
-        setRelatedPoems(getRelatedPoems(poem, poems, "cosine"))
+        setRelatedPoems(getRelatedPoems(poem, poems, "ngram"));
       };
       handleReadCountAndTitle();
     }

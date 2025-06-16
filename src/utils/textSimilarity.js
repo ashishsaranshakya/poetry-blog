@@ -106,7 +106,7 @@ export function getRelatedPoems(poem, poems, SIMILARITY_METHOD = 'jaccard') {
       let themeScore = 0;
       if (poem.themes && p.themes) {
         const sharedThemes = p.themes.filter(theme => currentThemes.has(theme));
-        themeScore = sharedThemes.length * 0.25;
+        themeScore = sharedThemes.length * 0.1;
       }
       return { ...p, _similarity: contentScore + themeScore, themeScore, contentScore };
     })
