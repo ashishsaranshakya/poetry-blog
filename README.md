@@ -8,17 +8,18 @@ Welcome to **My Writing Palace**! This poetry blog platform allows users to expl
 - **Favorites with Syncing**: Favorite poems are stored based on user login. Local storage is used for guests, and favorites automatically sync upon login.
 - **Search, Filter, and Sort**: Quickly find poems with dynamic search and filtering options by themes, title, and recent posts.
 - **Manage Content**: Authorized users can manage poems, making it easy to manage content.
-- **Favorites Export**: Export any poem as a PNG image in a custom format. Or share it directly to your favorite social media platform.
+- **Favorites Export**: Export any poem as a PNG image in a custom format, or share it directly to your favorite social media platform.
 - **Data Persistence**: Firebase Cloud Firestore is used for secure storage of poems, user data, and favorites, ensuring seamless data access.
 - **Real-Time Updates**: Changes are reflected immediately, leveraging Firebase’s real-time sync.
 
 ## Tech Stack
 
-- **Frontend**: React, Tailwind CSS
-- **Backend & Auth**: Firebase Authentication, Firebase Cloud Firestore
+- **Frontend**: React, Tailwind CSS, Vite
+- **Backend & Auth**: Firebase Authentication, Firebase Cloud Firestore (serverless)
 - **Routing**: React Router
 - **State Management**: React Context API
-- **Export**: HTML to canvas (for poem image exports)
+- **Export**: html2canvas (for poem image exports)
+- **UI Components**: react-select
 
 ## Getting Started
 
@@ -50,7 +51,7 @@ Ensure you have the following installed on your local machine:
 		match /databases/{database}/documents {
 			match /poems/{poemId} {
 				// Anyone can read poems
-				allow read: if true; 
+				allow read: if true;
 				// Only allow authorized UIDs to write to poems
 				allow write: if request.auth.uid in ['authorized_uid'];
 			}
@@ -63,7 +64,7 @@ Ensure you have the following installed on your local machine:
 	```
 
 4. Create a `.env` file at the root of your project and add your Firebase configuration:
-    ```plaintext
+    ```env
     VITE_API_KEY=your_api_key
     VITE_AUTH_DOMAIN=your_auth_domain
     VITE_PROJECT_ID=your_project_id
@@ -83,22 +84,31 @@ npm run dev
 
 The app will start on `http://localhost:5173` (or as indicated in the terminal).
 
+### Other npm Scripts
+- `npm run build` – Build the app for production
+- `npm run preview` – Preview the production build
+
 ## Folder Structure
 
 ```plaintext
 ├── public                  # Public assets
 ├── src
-│   ├── assets              # Icons and images
+│   ├── assets              # Icons, images, and theme JSON
 │   ├── components          # Reusable components (Header, Footer, LoadingSpinner, etc.)
-│   ├── context             # Context files for state management (PoemContext, ThemeContext)
-│   ├── pages               # Application pages (HomePage, Favorites, AddPoem, AdminPage, etc.)
+│   ├── context             # Context files for state management (PoemsContext, SettingsContext)
+│   ├── pages               # Application pages (HomePage, FavoritesPage, AddPoemPage, AdminPage, etc.)
 │   ├── styles              # Global styles
 │   ├── utils               # Utility functions
 │   ├── firebaseConfig.js   # Firebase configuration and initialization
-│   ├── App.js              # Base application component
+│   ├── App.jsx             # Base application component
 │   └── main.jsx            # Entry point of the app
-├── .env		            # Environment variables
-└── package.json            # NPM dependencies
+├── .env                    # Environment variables
+├── package.json            # NPM dependencies and scripts
+├── tailwind.config.js      # Tailwind CSS configuration
+├── postcss.config.js       # PostCSS configuration
+├── vite.config.js          # Vite configuration
+├── eslint.config.js        # ESLint configuration
+└── README.md               # Project documentation
 ```
 
 ## License
