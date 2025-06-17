@@ -63,7 +63,7 @@ export const PoemsProvider = ({ children }) => {
 
   const countPoemRead = async (poemId) => {
     if (!!user && user.uid === import.meta.env.VITE_USER_ID) return;
-    
+    return;
     const poemRef = doc(db, 'poems', poemId);
 
     try {

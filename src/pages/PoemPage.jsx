@@ -6,11 +6,15 @@ import PoemExport from "../components/PoemExport";
 import share_light from '../assets/share_light.svg';
 import share_dark from '../assets/share_dark.svg';
 import LoadingSpinner from '../components/LoadingSpinner.jsx';
+import PoemShortBox from '../components/PoemShortBox';
+import { getRelatedPoems } from '../utils/textSimilarity';
 
 const PoemPage = () => {
   const { id } = useParams();
   const { loading, poems, favorites, toggleFavorite, countPoemRead, setTitle } = useContext(PoemsContext);
   const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(ThemeContext);
+  const [relatedPoems, setRelatedPoems] = useState([]);
+  const [isRelatedPoemsExpanded, setIsRelatedPoemsExpanded] = useState(false); 
 
   const poem = poems.find((p) => p.id === id);
 
@@ -21,10 +25,19 @@ const PoemPage = () => {
       const handleReadCountAndTitle = async () => {
         await countPoemRead(id);
         setTitle(poem.title.length > 0 ? poem.title : "Untitled");
+        setRelatedPoems(getRelatedPoems(poem, poems, "ngram"));
       };
       handleReadCountAndTitle();
     }
   }, [id, loading]);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    setIsRelatedPoemsExpanded(false); 
+  }, [id]);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -61,7 +74,7 @@ const PoemPage = () => {
         </p>
       </button>
 
-      <div className="pr-4">
+      <div className="relative pr-4">
         <h2 className={`${poemTitleClass} font-bold mb-2 mr-12 ${fontStyleClass} ${lineHeightClass}`}>
           {poem.title.length > 0 ? poem.title : "Untitled"}
         </h2>
@@ -81,15 +94,38 @@ const PoemPage = () => {
             </pre>
           </div>
         )}
+
+        <button
+          onClick={handleDownloadClick}
+          className="absolute bottom-0 right-0 rounded z-20"
+          title="Download Poem"
+        >
+          <img src={isDarkMode ? share_dark : share_light} alt="download" className="w-6 h-6 md:w-8 md:h-8" />
+        </button>
       </div>
 
-      <button
-        onClick={handleDownloadClick}
-        className="absolute right-6 bottom-6 rounded z-20"
-        title="Download Poem"
-      >
-        <img src={isDarkMode ? share_dark : share_light} alt="download" className="w-6 h-6 md:w-8 md:h-8" />
-      </button>
+      {relatedPoems.length > 0 && (
+        <div className="mt-12 border-t pt-4">
+          <button
+            onClick={() => setIsRelatedPoemsExpanded(!isRelatedPoemsExpanded)}
+            className={`flex items-center gap-x-4 w-full py-2 ${isDarkMode ? 'text-white' : 'text-black'} ${fontSizeClass} ${fontStyleClass} focus:outline-none`}
+            aria-expanded={isRelatedPoemsExpanded}
+          >
+            <h3 className={`font-bold ${isRelatedPoemsExpanded ? 'mb-0' : ''}`}>Related Poems</h3>
+            <span className="transform transition-transform duration-500">
+              {isRelatedPoemsExpanded ? '▲' : '▼'}
+            </span>
+          </button>
+          
+          {isRelatedPoemsExpanded && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+              {relatedPoems.map((relatedPoem) => (
+                <PoemShortBox key={relatedPoem.id} poem={relatedPoem} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {isExportVisible && (
         <div className={`fixed inset-0 flex items-center justify-center z-50 ${isDarkMode ? 'bg-black bg-opacity-75' : 'bg-white bg-opacity-75'}`}>
