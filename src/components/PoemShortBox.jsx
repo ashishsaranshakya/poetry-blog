@@ -3,17 +3,17 @@ import { Link } from 'react-router-dom';
 import { SettingsContext } from '../context/SettingsContext';
 import { PoemsContext } from '../context/PoemsContext';
 
-const PoemShortBox = ({ poem }) => {
+const PoemShortBox = ({ poem, linelimit = 10 }) => {
   const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(SettingsContext);
   const { user, favorites, toggleFavorite } = useContext(PoemsContext);
 
   const isFavorite = favorites.includes(poem.id);
 
   const content = poem.content
-    .slice(0, 9)
+    .slice(0, linelimit - 1)
     .join('\n')
-    .concat(poem.content.length >= 10 && poem.content[9] !== '' ? '\n' + poem.content[9] : '')
-    .concat(poem.content.length > 10 ? '\n...' : '');
+    .concat(poem.content.length >= linelimit && poem.content[linelimit - 1] !== '' ? '\n' + poem.content[linelimit - 1] : '')
+    .concat(poem.content.length > linelimit ? '\n...' : '');
 
   const handleFavoriteToggle = async (e) => {
     e.stopPropagation();

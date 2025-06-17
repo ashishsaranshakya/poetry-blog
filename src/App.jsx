@@ -14,6 +14,7 @@ import PoemPage from './pages/PoemPage';
 import AdminPage from './pages/AdminPage';
 import EditPage from './pages/EditPage';
 import AboutAuthorPage from './pages/AboutAuthorPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 const App = () => {
   
@@ -45,6 +46,7 @@ const App = () => {
                     <EditPage />
                   </ProtectedRoute>
                 } />
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </div>
             <Footer />
