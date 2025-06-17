@@ -8,6 +8,7 @@ import share_dark from '../assets/share_dark.svg';
 import LoadingSpinner from '../components/LoadingSpinner.jsx';
 import PoemShortBox from '../components/PoemShortBox';
 import { getRelatedPoems } from '../utils/textSimilarity';
+import TextToSpeech from '../components/TextToSpeech';
 
 const PoemPage = () => {
   const { id } = useParams();
@@ -73,6 +74,9 @@ const PoemPage = () => {
           {isFavorite ? '❤️' : '🤍'}
         </p>
       </button>
+      <div className="absolute top-20 right-6 rounded z-20">
+        <TextToSpeech text={poem.content.join('\n')} />
+      </div>
 
       <div className="relative pr-4">
         <h2 className={`${poemTitleClass} font-bold mb-2 mr-12 ${fontStyleClass} ${lineHeightClass}`}>
