@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ThemeContext } from '../context/ThemeContext';
+import { SettingsContext } from '../context/SettingsContext';
 
 const SearchInput = ({ value, onChange, isDisabled, suggestions = [], onSelectSuggestion }) => {
-	const { isDarkMode } = React.useContext(ThemeContext);
+	const { isDarkMode } = React.useContext(SettingsContext);
 	const [showSuggestions, setShowSuggestions] = useState(false);
 	const wrapperRef = useRef(null);
 

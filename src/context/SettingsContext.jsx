@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 
-export const ThemeContext = createContext();
+export const SettingsContext = createContext();
 
 const fontSizesList = [
   'text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl', 'text-2xl',
@@ -9,7 +9,7 @@ const fontSizesList = [
 
 const MD_BREAKPOINT = 768;
 
-export const ThemeProvider = ({ children }) => {
+export const SettingsProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
   const [isDarkMode, setIsDarkMode] = useState(theme === 'dark');
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < MD_BREAKPOINT);
@@ -63,7 +63,7 @@ export const ThemeProvider = ({ children }) => {
   }, []);
 
   return (
-    <ThemeContext.Provider
+    <SettingsContext.Provider
       value={{
         theme,
         toggleTheme,
@@ -79,6 +79,6 @@ export const ThemeProvider = ({ children }) => {
       }}
     >
       {children}
-    </ThemeContext.Provider>
+    </SettingsContext.Provider>
   );
 };

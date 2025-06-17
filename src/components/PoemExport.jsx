@@ -1,6 +1,6 @@
 import React, { useRef, useContext, useEffect, useState } from "react";
 import html2canvas from "html2canvas";
-import { ThemeContext } from "../context/ThemeContext";
+import { SettingsContext } from "../context/SettingsContext";
 import share_light from '../assets/share_light.svg';
 import share_dark from '../assets/share_dark.svg';
 import download_dark from '../assets/download_dark.svg';
@@ -9,7 +9,7 @@ import download_light from '../assets/download_light.svg';
 const PoemExport = ({ title, content, showName }) => {
 	const poemRef = useRef(null);
 	const hiddenRef = useRef(null);
-	const { isDarkMode } = useContext(ThemeContext);
+	const { isDarkMode } = useContext(SettingsContext);
 	const [maxWidth, setMaxWidth] = useState("auto");
 	const [scale, setScale] = useState(1);
 

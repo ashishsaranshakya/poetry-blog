@@ -8,7 +8,7 @@ import './styles/global.css';
 import ProtectedRoute from './components/ProtectedRoute';
 import Favorites from './pages/FavoritesPage';
 import { PoemsProvider } from './context/PoemsContext';
-import { ThemeProvider } from './context/ThemeContext';
+import { SettingsProvider } from './context/SettingsContext';
 import HomePage from './pages/HomePage';
 import PoemPage from './pages/PoemPage';
 import AdminPage from './pages/AdminPage';
@@ -18,7 +18,7 @@ import AboutAuthorPage from './pages/AboutAuthorPage';
 const App = () => {
   
   return (
-    <ThemeProvider>
+    <SettingsProvider>
       <PoemsProvider>
         <Router>
           <div className="app flex flex-col min-h-screen">
@@ -51,7 +51,7 @@ const App = () => {
           </div>
         </Router>
       </PoemsProvider>
-    </ThemeProvider>
+    </SettingsProvider>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PoemsContext } from '../context/PoemsContext';
-import { ThemeContext } from '../context/ThemeContext';
+import { SettingsContext } from '../context/SettingsContext';
 import MultiselectDropdown from '../components/MultiselectDropdown';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
@@ -11,7 +11,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 const EditPage = () => {
     const { id } = useParams();
     const { poems, setPoems, loading, setTitle: setPageTitle } = useContext(PoemsContext);
-	const { isDarkMode } = useContext(ThemeContext);
+	const { isDarkMode } = useContext(SettingsContext);
 	const navigate = useNavigate();
 
     const [title, setTitle] = useState('');

@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { auth, googleProvider } from '../firebaseConfig';
 import { signInWithPopup, signOut } from 'firebase/auth';
-import { ThemeContext } from '../context/ThemeContext';
+import { SettingsContext } from '../context/SettingsContext';
 import { PoemsContext } from '../context/PoemsContext';
 import SettingsMenu from './SettingsMenu';
 import icon from '../assets/icon.svg';
@@ -16,7 +16,7 @@ const MD_BREAKPOINT = 768;
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
-  const { isDarkMode, fontSizeClass, getRelativeFontSizeClass } = useContext(ThemeContext);
+  const { isDarkMode, fontSizeClass, getRelativeFontSizeClass } = useContext(SettingsContext);
   const { user } = useContext(PoemsContext);
 
   const handleLogin = async () => {

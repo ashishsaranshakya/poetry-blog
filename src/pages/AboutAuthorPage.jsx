@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { ThemeContext } from '../context/ThemeContext';
+import { SettingsContext } from '../context/SettingsContext';
 
 const AboutAuthorPage = () => {
-  const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(ThemeContext);
+  const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(SettingsContext);
 
   const headingFontSize = getRelativeFontSizeClass(fontSizeClass, 3);
   const textFontSize = getRelativeFontSizeClass(fontSizeClass, -1);

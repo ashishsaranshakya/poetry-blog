@@ -3,7 +3,7 @@ import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import SearchInput from '../components/SearchInput';
 import MultiselectDropdown from '../components/MultiselectDropdown';
 import { PoemsContext } from '../context/PoemsContext';
-import { ThemeContext } from '../context/ThemeContext';
+import { SettingsContext } from '../context/SettingsContext';
 import { formatFirebaseTimestamp } from '../utils/dateUtils.js';
 import LoadingSpinner from '../components/LoadingSpinner.jsx';
 import themes from '../assets/poem_themes.json';
@@ -26,7 +26,7 @@ const sortOptions = [
 ];
 
 const AdminPage = () => {
-	const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(ThemeContext);
+	const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(SettingsContext);
 	const { poems, loading, favorites, deletePoem, setTitle: setPageTitle } = useContext(PoemsContext);
 	const navigate = useNavigate();
 

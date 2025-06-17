@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { PoemsContext } from '../context/PoemsContext';
-import { ThemeContext } from '../context/ThemeContext';
+import { SettingsContext } from '../context/SettingsContext';
 import PoemExport from "../components/PoemExport";
 import share_light from '../assets/share_light.svg';
 import share_dark from '../assets/share_dark.svg';
@@ -12,7 +12,7 @@ import { getRelatedPoems } from '../utils/textSimilarity';
 const PoemPage = () => {
   const { id } = useParams();
   const { loading, poems, favorites, toggleFavorite, countPoemRead, setTitle } = useContext(PoemsContext);
-  const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(ThemeContext);
+  const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(SettingsContext);
   const [relatedPoems, setRelatedPoems] = useState([]);
   const [isRelatedPoemsExpanded, setIsRelatedPoemsExpanded] = useState(false); 
 

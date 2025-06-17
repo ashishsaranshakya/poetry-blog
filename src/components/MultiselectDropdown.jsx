@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import Select from 'react-select';
-import { ThemeContext } from '../context/ThemeContext';
+import { SettingsContext } from '../context/SettingsContext';
 
 const MultiselectDropdown = ({ options, selectedOptions, setSelectedOptions, isMulti = false, isNested = false }) => {
-	const { isDarkMode } = useContext(ThemeContext);
+	const { isDarkMode } = useContext(SettingsContext);
 
   const customStyles = {
     singleValue: (provided) => ({

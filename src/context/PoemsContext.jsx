@@ -63,7 +63,7 @@ export const PoemsProvider = ({ children }) => {
 
   const countPoemRead = async (poemId) => {
     if (!!user && user.uid === import.meta.env.VITE_USER_ID) return;
-    return;
+    
     const poemRef = doc(db, 'poems', poemId);
 
     try {
@@ -82,7 +82,6 @@ export const PoemsProvider = ({ children }) => {
     } else {
     
       let localReads = JSON.parse(localStorage.getItem('readPoems')) || {};
-      console.log(localReads);
       localReads[poemId] = (localReads[poemId] || 0) + 1;
       localStorage.setItem('readPoems', JSON.stringify(localReads));
       console.log(`Poem ${poemId} read count updated in localStorage: ${localReads[poemId]}`);
@@ -117,8 +116,6 @@ export const PoemsProvider = ({ children }) => {
     const syncLocalReads = async (userId) => {
         const localReads = JSON.parse(localStorage.getItem('readPoems')) || {};
         if (Object.keys(localReads).length === 0) return;
-
-        console.log("Syncing local read counts to Firestore for user:", userId);
 
         for (const poemId in localReads) {
             const count = localReads[poemId];

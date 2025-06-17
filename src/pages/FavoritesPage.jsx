@@ -2,13 +2,13 @@ import React, { useContext, useState, useEffect } from 'react';
 import { PoemsContext } from '../context/PoemsContext';
 import PoemShortBox from '../components/PoemShortBox';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { ThemeContext } from '../context/ThemeContext';
+import { SettingsContext } from '../context/SettingsContext';
 
 const ITEMS_PER_PAGE = 10;
 
 const FavoritesPage = () => {
   const { poems, favorites, loading, setTitle } = useContext(PoemsContext);
-  const { isDarkMode } = useContext(ThemeContext);
+  const { isDarkMode } = useContext(SettingsContext);
 
   const [currentPage, setCurrentPage] = useState(1);
 

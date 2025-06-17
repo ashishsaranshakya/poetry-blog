@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { PoemsContext } from '../context/PoemsContext';
-import { ThemeContext } from '../context/ThemeContext';
+import { SettingsContext } from '../context/SettingsContext';
 import PoemShortBox from '../components/PoemShortBox';
 
 const HomePage = () => {
   const { user, poems, favorites, setTitle } = useContext(PoemsContext);
-  const { isDarkMode } = useContext(ThemeContext);
+  const { isDarkMode } = useContext(SettingsContext);
 
   const shuffleArray = (array) => {
     const shuffled = [...array];

@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { ThemeContext } from '../context/ThemeContext';
+import { SettingsContext } from '../context/SettingsContext';
 import { PoemsContext } from '../context/PoemsContext';
 
 const PoemShortBox = ({ poem }) => {
-  const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(ThemeContext);
+  const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(SettingsContext);
   const { user, favorites, toggleFavorite } = useContext(PoemsContext);
 
   const isFavorite = favorites.includes(poem.id);

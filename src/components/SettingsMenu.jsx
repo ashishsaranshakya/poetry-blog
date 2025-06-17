@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { ThemeContext } from '../context/ThemeContext';
+import { SettingsContext } from '../context/SettingsContext';
 
 const SettingsMenu = ({ isOpen, onClose }) => {
   const {
@@ -13,7 +13,7 @@ const SettingsMenu = ({ isOpen, onClose }) => {
     setFontStyleClass,
     lineHeightClass,
     setLineHeightClass
-	} = useContext(ThemeContext);
+	} = useContext(SettingsContext);
   const [themeSelected, setThemeSelected] = useState(theme);
 
   if (!isOpen) return null;
@@ -68,7 +68,6 @@ const SettingsMenu = ({ isOpen, onClose }) => {
           <select
             value={themeSelected}
 					  onChange={(e) => {
-						  console.log("Selected theme:", e.target.value);
 						  toggleTheme(e.target.value)
 						  setThemeSelected(e.target.value);
 					  }}

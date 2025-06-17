@@ -3,7 +3,7 @@ import { useSearchParams, useLocation } from 'react-router-dom';
 import SearchInput from '../components/SearchInput';
 import MultiselectDropdown from '../components/MultiselectDropdown';
 import { PoemsContext } from '../context/PoemsContext';
-import { ThemeContext } from '../context/ThemeContext';
+import { SettingsContext } from '../context/SettingsContext';
 import PoemShortBox from '../components/PoemShortBox';
 import LoadingSpinner from '../components/LoadingSpinner';
 import themes from '../assets/poem_themes.json';
@@ -18,7 +18,7 @@ const sortOptions = [
 ];
 
 const ExplorePage = () => {
-	const { isDarkMode, fontSizeClass, getRelativeFontSizeClass } = useContext(ThemeContext);
+	const { isDarkMode, fontSizeClass, getRelativeFontSizeClass } = useContext(SettingsContext);
 	const { poems, favorites, loading, setTitle: setPageTitle } = useContext(PoemsContext);
 
 	const [searchParams, setSearchParams] = useSearchParams();

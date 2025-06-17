@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import { ThemeContext } from '../context/ThemeContext';
+import { SettingsContext } from '../context/SettingsContext';
 import MultiselectDropdown from '../components/MultiselectDropdown';
 import themes from '../assets/poem_themes.json';
 import { PoemsContext } from '../context/PoemsContext';
@@ -11,7 +11,7 @@ import share_dark from '../assets/share_dark.svg';
 
 const AddPoemPage = () => {
   const { setTitle: setPageTitle } = useContext(PoemsContext);
-  const { isDarkMode } = useContext(ThemeContext);
+  const { isDarkMode } = useContext(SettingsContext);
   const [title, setTitle] = useState('');
   const [poemContent, setPoemContent] = useState('');
   const [isFeatured, setIsFeatured] = useState(false);
