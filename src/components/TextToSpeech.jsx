@@ -3,14 +3,14 @@ import { SettingsContext } from '../context/SettingsContext';
 import speaker_icon_light from '../assets/speaker_light.svg';
 import speaker_icon_dark from '../assets/speaker_dark.svg';
 
-const PauseIcon = (isDarkMode) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width={30} height={30}>
+const PauseIcon = (isDarkMode, side = 30) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width={side} height={side}>
     <rect stroke={isDarkMode ? "white" : "black"} x="6" y="4" width="4" height="16" rx="1"/>
     <rect stroke={isDarkMode ? "white" : "black"} x="14" y="4" width="4" height="16" rx="1"/>
   </svg>
 );
-const PlayIcon = (isDarkMode) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width={30} height={30}>
+const PlayIcon = (isDarkMode, side = 30) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width={side} height={side}>
     <polygon points="5,3 19,12 5,21" stroke={isDarkMode ? "white" : "black"} />
   </svg>
 );
@@ -19,7 +19,7 @@ const TextToSpeech = ({ text }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [hasPlayed, setHasPlayed] = useState(false);
   const utteranceRef = useRef(null);
-  const { isDarkMode, ttsVoices, ttsVoice, setTtsVoice, ttsRate, setTtsRate } = useContext(SettingsContext);
+  const { isDarkMode, ttsVoices, ttsVoice, setTtsVoice, ttsRate, setTtsRate, isSmallScreen } = useContext(SettingsContext);
 
   const handlePlay = () => {
     if (!text) return;
@@ -52,21 +52,24 @@ const TextToSpeech = ({ text }) => {
     };
   }, []);
 
-  let Icon = <img src={isDarkMode ? speaker_icon_dark : speaker_icon_light} alt="Speaker Icon" width={30} height={30} />;
+  const side = isSmallScreen ? '24' : '30';
+  let Icon = <img src={isDarkMode ? speaker_icon_dark : speaker_icon_light} alt="Speaker Icon" width={side - 4} height={side - 4} />;
   if (isSpeaking) {
-    Icon = PauseIcon(isDarkMode);
+    Icon = PauseIcon(isDarkMode, side);
   } else if (hasPlayed) {
-    Icon = PlayIcon(isDarkMode);
+    Icon = PlayIcon(isDarkMode, side);
   }
 
   return (
-    <button
-        onClick={isSpeaking ? handleStop : handlePlay}
-        className={`rounded focus:outline-none transition-colors`}
-        aria-label={isSpeaking ? 'Pause reading' : hasPlayed ? 'Play reading' : 'Read aloud'}
-        >
-        {Icon}
-    </button>
+    <div className='w-7 h-7 md:w-8 md:h-8 flex items-center justify-center'>
+      <button
+          onClick={isSpeaking ? handleStop : handlePlay}
+          className={`rounded focus:outline-none transition-colors`}
+          aria-label={isSpeaking ? 'Pause reading' : hasPlayed ? 'Play reading' : 'Read aloud'}
+          >
+          {Icon}
+      </button>
+    </div>
   );
 };
 

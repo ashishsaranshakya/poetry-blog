@@ -74,7 +74,7 @@ const PoemPage = () => {
           {isFavorite ? '❤️' : '🤍'}
         </p>
       </button>
-      <div className="absolute top-20 right-6 rounded z-20">
+      <div className="absolute top-16 right-6 rounded z-20">
         <TextToSpeech text={poem.content.join('\n')} />
       </div>
 
