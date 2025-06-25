@@ -1,14 +1,18 @@
 # My Writing Palace
 
-Welcome to **My Writing Palace**! This poetry blog platform allows users to explore, favorite and manage poems. The application is built with React, Tailwind CSS, and Firebase.
+**My Writing Palace** is a personal project and poetry blog, built to share my original poems with a wider audience. The platform is designed for readers to easily discover, favorite and revisit my work, while also serving as a showcase of modern web development practices using React, Tailwind CSS, and Firebase.
 
 ## Features
 
-- **User Authentication**: Log in with Google to unlock personalized features like adding and favoriting poems.
+- **Personalized Home Page**: The home page features sections for "Your Favorites," "Featured Poems," and "Recent Poems," all personalized and shuffled for variety.
+- **Advanced Explore Page Filters**: Filter poems by title, themes, featured status, favorites, and untitled poems. Includes advanced sorting and smart search suggestions.
 - **Favorites with Syncing**: Favorite poems are stored based on user login. Local storage is used for guests, and favorites automatically sync upon login.
-- **Search, Filter, and Sort**: Quickly find poems with dynamic search and filtering options by themes, title, and recent posts.
-- **Manage Content**: Authorized users can manage poems, making it easy to manage content.
-- **Favorites Export**: Export any poem as a PNG image in a custom format, or share it directly to your favorite social media platform.
+- **Related Poems Section**: View and expand a list of related poems based on text similarity on each poem's page.
+- **Reader Personalization**: Customize the theme (light/dark), font size, font style (sans-serif, serif, typewriter), and line spacing. Preferences are saved in local storage.
+- **User Authentication**: Log in with Google to unlock personalized features like adding and favoriting poems.
+- **Poem Export**: Export any poem as a PNG image in a custom format, or share it directly to your favorite social media platform.
+- **Pagination for Explore and Favorites**: Easily browse large collections of poems with pagination controls on both the Explore and Favorites pages.
+- **Manage Content**: Authorized users can manage poems, making it easy to maintain content.
 - **Data Persistence**: Firebase Cloud Firestore is used for secure storage of poems, user data, and favorites, ensuring seamless data access.
 - **Real-Time Updates**: Changes are reflected immediately, leveraging Firebase’s real-time sync.
 
@@ -42,7 +46,7 @@ Ensure you have the following installed on your local machine:
     ```
 
 3. Set up Firebase:
-   - Go to [Firebase Console](https://console.firebase.google.com/) and create a new project.
+   - Go to the [Firebase Console](https://console.firebase.google.com/) and create a new project.
    - Enable Authentication (Google Sign-In).
    - Create a Firestore database and configure security rules.
 	```js
@@ -52,11 +56,19 @@ Ensure you have the following installed on your local machine:
 			match /poems/{poemId} {
 				// Anyone can read poems
 				allow read: if true;
+				// Allow anyone to only update the 'reads' field
+				allow update: if 
+					request.resource.data.diff(resource.data).changedKeys().hasOnly(['reads']) && 
+					request.resource.data.reads is int;
 				// Only allow authorized UIDs to write to poems
 				allow write: if request.auth.uid in ['authorized_uid'];
 			}
 			// Allow users to read and write their own favorites
 			match /users/{userId}/favorites/{document=**} {
+				allow read, write: if request.auth.uid == userId;
+			}
+			// Allow users to read and write their own readPoems
+			match /users/{userId}/readPoems/{document=**} {
 				allow read, write: if request.auth.uid == userId;
 			}
 		}
@@ -103,6 +115,7 @@ The app will start on `http://localhost:5173` (or as indicated in the terminal).
 │   ├── App.jsx             # Base application component
 │   └── main.jsx            # Entry point of the app
 ├── .env                    # Environment variables
+├── index.html              # Main HTML entry point
 ├── package.json            # NPM dependencies and scripts
 ├── tailwind.config.js      # Tailwind CSS configuration
 ├── postcss.config.js       # PostCSS configuration
@@ -113,4 +126,4 @@ The app will start on `http://localhost:5173` (or as indicated in the terminal).
 
 ## License
 
-This project is open-source and available under the [MIT License](LICENSE).
+This project is open-source and available under the [MIT License](LICENSE)
