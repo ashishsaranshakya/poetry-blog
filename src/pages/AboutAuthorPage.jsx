@@ -23,6 +23,10 @@ const AboutAuthorPage = () => {
           <p>
             He is open to collaboration, feedback, and thoughtful conversation. Readers are welcome to connect with him via Instagram, to share interpretations, reactions, or just a moment of resonance.
           </p>
+          <p>
+            To learn more about Ashish's professional work, visit his 
+            <a href="https://ashishsaranshakya.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline ml-1">portfolio</a>.
+          </p>
         </div>
       </div>
     </div>
