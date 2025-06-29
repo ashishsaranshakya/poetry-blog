@@ -10,7 +10,7 @@ const Footer = () => {
             About Me
           </Link>
           <span>|</span>
-          <a href="https://instagram.com/ashishsaranshakya" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline ml-1">Instagram</a>
+          <a href="https://www.instagram.com/ashishsaranshakya" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline ml-1">Instagram</a>
         </div>
         <p>&copy; {new Date().getFullYear()} Ashish Saran Shakya. All rights reserved.</p>
       </div>
