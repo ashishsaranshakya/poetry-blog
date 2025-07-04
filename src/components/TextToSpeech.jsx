@@ -32,7 +32,12 @@ const TextToSpeech = ({ text }) => {
     const utterance = new window.SpeechSynthesisUtterance(text);
     utterance.rate = ttsRate;
     const selectedVoice = ttsVoices.find(v => v.voiceURI === ttsVoice);
-    if (selectedVoice) utterance.voice = selectedVoice;
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+      if (selectedVoice.lang) {
+        utterance.lang = selectedVoice.lang;
+      }
+    }
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
     utteranceRef.current = utterance;

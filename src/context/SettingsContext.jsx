@@ -83,9 +83,10 @@ export const SettingsProvider = ({ children }) => {
     const synth = window.speechSynthesis;
     const populateVoices = () => {
       const availableVoices = synth.getVoices();
-      setTtsVoices(availableVoices);
-      if (!ttsVoice && availableVoices.length > 0) {
-        setTtsVoice(availableVoices[0].voiceURI);
+      const englishVoices = availableVoices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+      setTtsVoices(englishVoices);
+      if (!ttsVoice && englishVoices.length > 0) {
+        setTtsVoice(englishVoices[0].voiceURI);
       }
     };
     populateVoices();
