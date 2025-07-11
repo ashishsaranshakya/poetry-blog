@@ -12,7 +12,12 @@ const SettingsMenu = ({ isOpen, onClose }) => {
     fontStyleClass,
     setFontStyleClass,
     lineHeightClass,
-    setLineHeightClass
+    setLineHeightClass,
+    ttsVoices,
+    ttsVoice,
+    setTtsVoice,
+    ttsRate,
+    setTtsRate
 	} = useContext(SettingsContext);
   const [themeSelected, setThemeSelected] = useState(theme);
 
@@ -132,6 +137,35 @@ const SettingsMenu = ({ isOpen, onClose }) => {
               </option>
             ))}
           </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="text-lg font-semibold mb-2 mr-4">TTS Voice:</label>
+          <select
+            value={ttsVoice || ''}
+            onChange={e => setTtsVoice(e.target.value)}
+            className={`w-full max-w-[250px] mx-auto px-2 py-1 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+                        ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-black'}`}
+          >
+            {ttsVoices.map(v => (
+              <option key={v.voiceURI} value={v.voiceURI}>
+                {v.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="mb-4">
+          <label className="text-lg font-semibold mb-2 mr-4">TTS Speed:</label>
+          <input
+            type="range"
+            min="0.5"
+            max="2"
+            step="0.1"
+            value={ttsRate}
+            onChange={e => setTtsRate(Number(e.target.value))}
+            className="mx-2 align-middle w-32"
+          />
+          <span>{ttsRate.toFixed(1)}x</span>
         </div>
       </div>
     </div>
