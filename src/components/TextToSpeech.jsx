@@ -15,35 +15,58 @@ const PlayIcon = (isDarkMode, side = 30) => (
   </svg>
 );
 
-const TextToSpeech = ({ text }) => {
+const TextToSpeech = ({ text, title }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [hasPlayed, setHasPlayed] = useState(false);
   const utteranceRef = useRef(null);
   const { isDarkMode, ttsVoices, ttsVoice, setTtsVoice, ttsRate, setTtsRate, isSmallScreen } = useContext(SettingsContext);
 
   const handlePlay = () => {
-    if (!text) return;
+    if (!text && !title) return;
     const synth = window.speechSynthesis;
     if (synth.speaking) {
       synth.cancel();
       setIsSpeaking(false);
       return;
     }
-    const utterance = new window.SpeechSynthesisUtterance(text);
-    utterance.rate = ttsRate;
     const selectedVoice = ttsVoices.find(v => v.voiceURI === ttsVoice);
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
-      if (selectedVoice.lang) {
-        utterance.lang = selectedVoice.lang;
+
+    const createUtterance = (content, onend) => {
+      const utter = new window.SpeechSynthesisUtterance(content);
+      utter.rate = ttsRate;
+      if (selectedVoice) {
+        utter.voice = selectedVoice;
+        if (selectedVoice.lang) utter.lang = selectedVoice.lang;
       }
-    }
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-    utteranceRef.current = utterance;
-    synth.speak(utterance);
+      utter.onend = onend;
+      utter.onerror = () => setIsSpeaking(false);
+      return utter;
+    };
+
+    const poeticPoem = text ? text.replace(/\n+/g, '. ') : '';
+
     setIsSpeaking(true);
     setHasPlayed(true);
+
+    if (title) {
+      const titleUtter = createUtterance(title, () => {
+        setTimeout(() => {
+          if (poeticPoem) {
+            const poemUtter = createUtterance(poeticPoem, () => setIsSpeaking(false));
+            utteranceRef.current = poemUtter;
+            synth.speak(poemUtter);
+          } else {
+            setIsSpeaking(false);
+          }
+        }, 200);
+      });
+      utteranceRef.current = titleUtter;
+      synth.speak(titleUtter);
+    } else if (poeticPoem) {
+      const poemUtter = createUtterance(poeticPoem, () => setIsSpeaking(false));
+      utteranceRef.current = poemUtter;
+      synth.speak(poemUtter);
+    }
   };
 
   const handleStop = () => {
