@@ -62,7 +62,7 @@ const PoemExport = ({ title, content, showName }) => {
 		}
 	};
 
-	const handleShare = (e) => {
+	const handleShare = async (e) => {
 		e.preventDefault();
 		if (poemRef.current) {
 			const rect = poemRef.current.getBoundingClientRect();
@@ -79,23 +79,28 @@ const PoemExport = ({ title, content, showName }) => {
 				scrollX: window.scrollX,
 				scrollY: window.scrollY,
 			}).then((canvas) => {
-				canvas.toBlob((blob) => {
+				canvas.toBlob(async (blob) => {
 					if (blob) {
+						const file = new File([blob], `${title || "Untitled"}.png`, { type: 'image/png' });
 						const shareData = {
 							text: `Here's a poem titled "${title || "Untitled"}" by Ashish Saran Shakya:\n\n${content.join("\n")}`,
-							files: [new File([blob], `${title || "Untitled"}.png`, { type: 'image/png' })],
+							files: [file],
 						};
-	
-						if (navigator.share) {
-							navigator
-								.share(shareData)
-								.then(() => console.log("Poem shared successfully"))
-								.catch((error) => console.error("Error sharing the poem:", error));
+
+						if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+							try {
+								await navigator.share(shareData);
+								console.log("Poem shared successfully");
+							} catch (error) {
+								console.error("Error sharing the poem:", error);
+								alert("Sharing failed. Please try again or use the download button.");
+							}
 						} else {
-							alert("Sharing is not supported on this device.");
+							alert("Sharing is not supported on this device. Please use the download button.");
 						}
 					} else {
 						console.error("Failed to create image blob");
+						alert("Failed to create image for sharing or download.");
 					}
 				}, 'image/png');
 			});
