@@ -9,7 +9,7 @@ import download_light from '../assets/download_light.svg';
 const PoemExport = ({ title, content, showName }) => {
 	const poemRef = useRef(null);
 	const hiddenRef = useRef(null);
-	const { isDarkMode } = useContext(SettingsContext);
+	const { isDarkMode, fontSizeClass, fontStyleClass, getRelativeFontSizeClass } = useContext(SettingsContext);
 	const [maxWidth, setMaxWidth] = useState("auto");
 	const [scale, setScale] = useState(1);
 
@@ -102,21 +102,23 @@ const PoemExport = ({ title, content, showName }) => {
 		}
 	};
 
+	const pageTitleClass = getRelativeFontSizeClass(fontSizeClass, 2);
+
 	return (
 		<div className="flex flex-col items-center">
 			<pre ref={hiddenRef} className="invisible absolute whitespace-pre" />
 			<div
 				ref={poemRef}
-				className={`inline-block pt-2 pb-6 px-6 m-0 ${isDarkMode ? "bg-gray-800 text-white" : "bg-gray-100 text-black"} overflow-hidden`}
+				className={`inline-block pt-2 pb-6 px-6 m-0 ${isDarkMode ? "bg-gray-800 text-white" : "bg-gray-100 text-black"} overflow-hidden ${fontSizeClass} ${fontStyleClass}`}
 				style={{
 					width: maxWidth,
 					transform: `scale(${scale})`,
 					border: "1px solid transparent",
 				}}
 			>
-				<h2 className={"text-2xl font-bold text-center " + (showName ? "mb-1" : "mb-4")}>{title || "Untitled"}</h2>
+				<h2 className={`text-2xl font-bold text-center ${(showName ? "mb-1" : "mb-4")} ${pageTitleClass} ${fontStyleClass}`}>{title || "Untitled"}</h2>
 				{showName && <p className="text-center mb-4 italic">by Ashish Saran Shakya</p>}
-				<pre className="whitespace-pre-wrap text-left mb-2">{content.join("\n")}</pre>
+				<pre className={`whitespace-pre-wrap text-left mb-2 ${fontSizeClass} ${fontStyleClass}`}>{content.join("\n")}</pre>
 			</div>
 			<div
 				className="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex justify-center space-x-4"
