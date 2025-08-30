@@ -18,6 +18,13 @@ export const SettingsProvider = ({ children }) => {
   const [fontStyleClass, setFontStyleClass] = useState(() => localStorage.getItem('globalPoemFontStyle') || 'font-sans');
   const [lineHeightClass, setLineHeightClass] = useState(() => localStorage.getItem('globalPoemLineHeight') || 'leading-normal');
 
+  const [ttsVoices, setTtsVoices] = useState([]);
+  const [ttsVoice, setTtsVoiceState] = useState(() => localStorage.getItem('ttsVoice') || null);
+  const [ttsRate, setTtsRateState] = useState(() => {
+    const stored = localStorage.getItem('ttsRate');
+    return stored ? Number(stored) : 1;
+  });
+
   const getRelativeFontSizeClass = (baseSizeClass, offset, maxIndex = !isSmallScreen ? fontSizesList.length - 1 : 5) => {
     const baseIndex = fontSizesList.indexOf(baseSizeClass);
     if (baseIndex === -1) {
@@ -49,6 +56,16 @@ export const SettingsProvider = ({ children }) => {
     localStorage.setItem('globalPoemLineHeight', heightClass);
   };
 
+  const setTtsVoice = (voice) => {
+    setTtsVoiceState(voice);
+    localStorage.setItem('ttsVoice', voice);
+  };
+
+  const setTtsRate = (rate) => {
+    setTtsRateState(rate);
+    localStorage.setItem('ttsRate', rate);
+  };
+
   useEffect(() => {
     document.body.classList.toggle('dark-mode', theme === 'dark');
   }, [theme]);
@@ -60,6 +77,23 @@ export const SettingsProvider = ({ children }) => {
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const synth = window.speechSynthesis;
+    const populateVoices = () => {
+      const availableVoices = synth.getVoices();
+      const englishVoices = availableVoices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+      setTtsVoices(englishVoices);
+      if (!ttsVoice && englishVoices.length > 0) {
+        setTtsVoice(englishVoices[0].voiceURI);
+      }
+    };
+    populateVoices();
+    synth.onvoiceschanged = populateVoices;
+    return () => {
+      synth.onvoiceschanged = null;
+    };
   }, []);
 
   return (
@@ -75,7 +109,12 @@ export const SettingsProvider = ({ children }) => {
         setFontStyleClass: setGlobalFontStyle,
         lineHeightClass,
         setLineHeightClass: setGlobalLineHeight,
-        getRelativeFontSizeClass, 
+        getRelativeFontSizeClass,
+        ttsVoices,
+        ttsVoice,
+        setTtsVoice,
+        ttsRate,
+        setTtsRate
       }}
     >
       {children}
