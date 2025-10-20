@@ -1,6 +1,6 @@
-# My Writing Palace
+# Penned Paradox
 
-**My Writing Palace** is a personal project and poetry blog, built to share my original poems with a wider audience. The platform is designed for readers to easily discover, favorite and revisit my work, while also serving as a showcase of modern web development practices using React, Tailwind CSS, and Firebase.
+This is a personal project, built to share my original poems. The platform is designed for readers to easily discover, favorite and revisit my work, while also serving as a showcase of modern web development practices using React, Tailwind CSS, and Firebase.
 
 ## Features
 

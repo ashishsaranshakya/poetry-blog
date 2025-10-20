@@ -13,6 +13,7 @@ import bin_icon_light from '../assets/bin_icon_light.svg';
 import bin_icon_dark from '../assets/bin_icon_dark.svg';
 import eye_light from '../assets/eye_light.svg';
 import eye_dark from '../assets/eye_dark.svg';
+import { TITLE } from '../utils/Constants';
 
 const ITEMS_PER_PAGE = 10;
 const sortOptions = [
@@ -94,7 +95,7 @@ const AdminPage = () => {
 	const handlePageChange = (newPage) => updateURLParams({ page: newPage });
 
 	useEffect(() => {
-		setPageTitle("My Writing Palace | Admin");
+		setPageTitle(`${TITLE} | Admin`);
 		const anyFilterActive =
 			title !== '' ||
 			selectedThemes.length > 0 ||

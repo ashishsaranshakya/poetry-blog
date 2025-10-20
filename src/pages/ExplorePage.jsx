@@ -7,6 +7,7 @@ import { SettingsContext } from '../context/SettingsContext';
 import PoemShortBox from '../components/PoemShortBox';
 import LoadingSpinner from '../components/LoadingSpinner';
 import themes from '../assets/poem_themes.json';
+import { TITLE } from '../utils/Constants';
 
 const ITEMS_PER_PAGE = 10;
 const sortOptions = [
@@ -86,7 +87,7 @@ const ExplorePage = () => {
 	const handlePageChange = (newPage) => updateURLParams({ page: newPage });
 
 	useEffect(() => {
-		setPageTitle("My Writing Palace | Explore");
+		setPageTitle(`${TITLE} | Explore`);
 		const anyFilterActive =
 			title !== '' ||
 			selectedThemes.length > 0 ||

@@ -3,6 +3,7 @@ import { PoemsContext } from '../context/PoemsContext';
 import PoemShortBox from '../components/PoemShortBox';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { SettingsContext } from '../context/SettingsContext';
+import { TITLE } from '../utils/Constants';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -13,7 +14,7 @@ const FavoritesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-      setTitle("My Writing Palace | Favorites");
+      setTitle(`${TITLE} | Favorites`);
   }, []);
 
   const favoritePoems = poems.filter((poem) => favorites.includes(poem.id));

@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect } from 'react';
 import { db } from '../firebaseConfig';
 import { collection, onSnapshot, doc, getDoc, updateDoc, increment, deleteDoc, setDoc, getDocs } from 'firebase/firestore';
 import { auth } from '../firebaseConfig';
+import { TITLE } from '../utils/Constants';
 
 export const PoemsContext = createContext();
 
@@ -30,7 +31,7 @@ function seededShuffle(array, seed) {
 }
 
 export const PoemsProvider = ({ children }) => {
-  const [title, setTitle] = useState('My Writing Palace');
+  const [title, setTitle] = useState(TITLE);
   const [poems, setPoems] = useState([]);
   const [user, setUser] = useState(null);
   const [favorites, setFavorites] = useState([]);

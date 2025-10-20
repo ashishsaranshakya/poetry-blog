@@ -1,8 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { SettingsContext } from '../context/SettingsContext';
+import { PoemsContext } from '../context/PoemsContext';
+import { TITLE } from "../utils/Constants";
 
 const AboutAuthorPage = () => {
   const { isDarkMode, fontSizeClass, fontStyleClass, lineHeightClass, getRelativeFontSizeClass } = useContext(SettingsContext);
+  const { setTitle: setPageTitle } = useContext(PoemsContext);
+
+  useEffect(() => {
+      setPageTitle(TITLE);
+  }, []);
 
   const headingFontSize = getRelativeFontSizeClass(fontSizeClass, 3);
   const textFontSize = getRelativeFontSizeClass(fontSizeClass, -1);

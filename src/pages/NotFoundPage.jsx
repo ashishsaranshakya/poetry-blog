@@ -5,13 +5,14 @@ import { Link } from 'react-router-dom';
 import page_not_found from '../assets/page_not_found.svg';
 import PoemShortBox from '../components/PoemShortBox';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { TITLE } from '../utils/Constants';
 
 const NotFoundPage = () => {
   const { isDarkMode } = useContext(SettingsContext);
   const { loading, setTitle, poems } = useContext(PoemsContext);
 
   useEffect(() => {
-    setTitle("My Writing Palace | Page Not Found");
+    setTitle(`${TITLE} | Page Not Found`);
   }, [setTitle]);
 
   const lostPoems = useMemo(() =>

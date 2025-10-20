@@ -8,6 +8,7 @@ import { PoemsContext } from '../context/PoemsContext';
 import PoemExport from "../components/PoemExport";
 import share_light from '../assets/share_light.svg';
 import share_dark from '../assets/share_dark.svg';
+import { TITLE } from '../utils/Constants';
 
 const AddPoemPage = () => {
   const { setTitle: setPageTitle } = useContext(PoemsContext);
@@ -23,7 +24,7 @@ const AddPoemPage = () => {
   const [poem, setPoem] = useState({ title: '', content: [] });
 
   useEffect(() => {
-      setPageTitle("My Writing Palace | Add Poem");
+      setPageTitle(`${TITLE} | Add Poem`);
   }, []);
 
   useEffect(() => {

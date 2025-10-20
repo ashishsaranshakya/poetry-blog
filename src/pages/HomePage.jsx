@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { PoemsContext } from '../context/PoemsContext';
 import { SettingsContext } from '../context/SettingsContext';
 import PoemShortBox from '../components/PoemShortBox';
+import { TITLE } from '../utils/Constants';
 
 const HomePage = () => {
   const { user, poems, favorites, setTitle } = useContext(PoemsContext);
@@ -17,7 +18,7 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    setTitle("My Writing Palace");
+    setTitle(TITLE);
   }, []);
 
   const favoritePoems = shuffleArray(poems.filter((poem) => favorites.includes(poem.id))).slice(0, 4);

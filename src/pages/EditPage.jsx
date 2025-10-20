@@ -7,6 +7,7 @@ import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import poem_themes from '../assets/poem_themes.json';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { TITLE } from '../utils/Constants';
 
 const EditPage = () => {
     const { id } = useParams();
@@ -34,7 +35,7 @@ const EditPage = () => {
     }, [id, poems, loading]);
 	
 	useEffect(() => {
-		  setPageTitle("My Writing Palace | Edit Poem");
+		  setPageTitle(`${TITLE} | Edit Poem`);
 	}, []);
 
     if (loading) {

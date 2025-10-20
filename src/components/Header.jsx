@@ -10,6 +10,7 @@ import login_icon from '../assets/login.svg';
 import logout_icon from '../assets/logout.svg';
 import hamburger_icon from '../assets/hamburger_menu.svg';
 import settings_icon from '../assets/settings.svg';
+import { TITLE } from '../utils/Constants';
 
 const MD_BREAKPOINT = 768;
 
@@ -48,7 +49,7 @@ const Header = () => {
       <div className="mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2">
           <img src={icon} alt="icon" className="w-8 h-8" />
-          <h1 className={`${heading1Class} font-bold whitespace-nowrap`}>My Writing Palace</h1>
+          <h1 className={`${heading1Class} font-bold whitespace-nowrap`}>{TITLE}</h1>
         </Link>
 
         <div className="flex items-center space-x-2">
