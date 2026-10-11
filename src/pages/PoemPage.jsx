@@ -90,11 +90,8 @@ const PoemPage = () => {
         
         {poem.content.length > 0 && (
           <div>
-            <pre className={`${fontSizeClass} ${fontStyleClass} ${lineHeightClass} whitespace-pre-wrap`}>
-              {poem.content.slice(0, -1).join('\n')}
-            </pre>
             <pre className={`${fontSizeClass} ${fontStyleClass} ${lineHeightClass} whitespace-pre-wrap mr-12 `}>
-              {poem.content[poem.content.length - 1]}
+              {poem.content.join('\n')}
             </pre>
           </div>
         )}

@@ -287,6 +287,12 @@ const AdminPage = () => {
 				<div className="flex items-center justify-between mt-2 md:mt-0">
 					<h2 className={`${headingClass} font-semibold whitespace-nowrap`}>Total Poems: {filteredPoems.length}</h2>
 					<button
+						onClick={() => navigate('/admin/import')}
+						className={`px-3 py-1 ${textClass} rounded ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}
+					>
+						Import JSON
+					</button>
+					<button
 						onClick={() => setFiltersEnabled(!filtersEnabled)}
 						className={`px-2 py-1 ${headingClass} rounded ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'}`}
 					>

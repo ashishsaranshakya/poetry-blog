@@ -15,6 +15,7 @@ import AdminPage from './pages/AdminPage';
 import EditPage from './pages/EditPage';
 import AboutAuthorPage from './pages/AboutAuthorPage';
 import NotFoundPage from './pages/NotFoundPage';
+import ImportPoemsPage from './pages/ImportPoemsPage';
 
 const App = () => {
   
@@ -39,6 +40,11 @@ const App = () => {
                 <Route path="/admin" element={
                   <ProtectedRoute isAdmin message="You must be logged in to edit poems.">
                     <AdminPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/import" element={
+                  <ProtectedRoute isAdmin message="You must be logged in to import poems.">
+                    <ImportPoemsPage />
                   </ProtectedRoute>
                 } />
                 <Route path="/edit/:id" element={
